@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Excel Workbook Manager — User Guide</title>
+  <style>
+    /* ── Reset & base ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      font-size: 14px;
+      color: #1a1a2e;
+      background: #f5f7fa;
+      line-height: 1.7;
+    }
+    a { color: #0A2D4D; }
+
+    /* ── Layout ───────────────────────────────────────────────── */
+    .page-wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      background: #ffffff;
+      box-shadow: 0 2px 24px rgba(0,0,0,.10);
+    }
+
+    /* ── Hero header ──────────────────────────────────────────── */
+    .hero {
+      background: #0A2D4D;
+      background-image:
+        repeating-linear-gradient(0deg,   transparent, transparent 21px, rgba(255,255,255,.04) 21px, rgba(255,255,255,.04) 22px),
+        repeating-linear-gradient(90deg,  transparent, transparent 29px, rgba(255,255,255,.04) 29px, rgba(255,255,255,.04) 30px);
+      padding: 52px 48px 44px;
+      position: relative;
+      border-bottom: 4px solid #F4A017;
+    }
+    .hero-monogram {
+      font-size: 64px;
+      font-weight: 900;
+      color: #F4A017;
+      line-height: 1;
+      float: left;
+      margin-right: 24px;
+      text-shadow: 0 2px 12px rgba(0,0,0,.4);
+      font-family: "Segoe UI", Georgia, serif;
+    }
+    .hero-text h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+    .hero-text .subtitle {
+      color: #FFD060;
+      font-size: 14px;
+      font-style: italic;
+    }
+    .hero-meta {
+      margin-top: 18px;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .badge {
+      background: rgba(244,160,23,.18);
+      border: 1px solid #F4A017;
+      color: #FFD060;
+      border-radius: 20px;
+      padding: 3px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .4px;
+    }
+    .badge.navy {
+      background: rgba(255,255,255,.08);
+      border-color: rgba(255,255,255,.25);
+      color: #ccd9e8;
+    }
+    .clearfix::after { content:""; display:table; clear:both; }
+
+    /* ── TOC sidebar + content ────────────────────────────────── */
+    .body-wrap {
+      display: flex;
+      align-items: flex-start;
+    }
+    .toc {
+      width: 230px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      padding: 32px 0 32px 28px;
+      border-right: 1px solid #e4e8ef;
+    }
+    .toc h4 {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #8899aa;
+      margin-bottom: 10px;
+    }
+    .toc ol {
+      padding-left: 16px;
+    }
+    .toc li {
+      margin-bottom: 6px;
+    }
+    .toc a {
+      text-decoration: none;
+      color: #0A2D4D;
+      font-size: 13px;
+    }
+    .toc a:hover { color: #F4A017; }
+
+    .content {
+      flex: 1;
+      padding: 36px 48px 64px;
+      min-width: 0;
+    }
+
+    /* ── Section headings ─────────────────────────────────────── */
+    .section {
+      margin-bottom: 48px;
+    }
+    h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #0A2D4D;
+      border-bottom: 2px solid #F4A017;
+      padding-bottom: 6px;
+      margin-bottom: 20px;
+    }
+    h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: #0A2D4D;
+      margin: 22px 0 8px;
+    }
+    p { margin-bottom: 12px; }
+    ul, ol { padding-left: 22px; margin-bottom: 12px; }
+    li { margin-bottom: 5px; }
+
+    /* ── Tab cards ────────────────────────────────────────────── */
+    .tab-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 4px;
+    }
+    .tab-card {
+      border: 1px solid #dde3ed;
+      border-radius: 8px;
+      padding: 16px 18px;
+      background: #fafbfd;
+      transition: box-shadow .15s;
+    }
+    .tab-card:hover { box-shadow: 0 2px 10px rgba(10,45,77,.10); }
+    .tab-card .tab-name {
+      font-weight: 700;
+      color: #0A2D4D;
+      font-size: 13px;
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .tab-card .tab-name .icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      background: #0A2D4D;
+      color: #F4A017;
+      font-size: 13px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .tab-card p {
+      font-size: 12.5px;
+      color: #444;
+      margin: 0;
+    }
+
+    /* ── Step boxes ───────────────────────────────────────────── */
+    .steps {
+      counter-reset: step;
+      list-style: none;
+      padding: 0;
+    }
+    .steps li {
+      counter-increment: step;
+      display: flex;
+      gap: 14px;
+      margin-bottom: 14px;
+      align-items: flex-start;
+    }
+    .steps li::before {
+      content: counter(step);
+      background: #0A2D4D;
+      color: #F4A017;
+      font-weight: 700;
+      font-size: 13px;
+      min-width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .steps li .step-body strong {
+      display: block;
+      color: #0A2D4D;
+    }
+    .steps li .step-body {
+      font-size: 13.5px;
+    }
+
+    /* ── Code / path blocks ───────────────────────────────────── */
+    code {
+      background: #eef2f7;
+      border: 1px solid #dde3ed;
+      border-radius: 4px;
+      padding: 1px 7px;
+      font-size: 12.5px;
+      font-family: Consolas, "Courier New", monospace;
+      color: #0A2D4D;
+    }
+    .code-block {
+      background: #0A2D4D;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 12px 0;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 12.5px;
+      color: #FFD060;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    /* ── Info / warning callouts ─────────────────────────────── */
+    .callout {
+      border-left: 4px solid #F4A017;
+      background: #fffbf0;
+      border-radius: 0 6px 6px 0;
+      padding: 12px 16px;
+      margin: 14px 0;
+      font-size: 13px;
+    }
+    .callout.info {
+      border-color: #0A2D4D;
+      background: #f0f4fa;
+    }
+    .callout strong { color: #0A2D4D; }
+
+    /* ── Profile table ────────────────────────────────────────── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin: 12px 0;
+    }
+    th {
+      background: #0A2D4D;
+      color: #FFD060;
+      font-weight: 700;
+      text-align: left;
+      padding: 9px 14px;
+    }
+    td {
+      padding: 8px 14px;
+      border-bottom: 1px solid #eaecf0;
+    }
+    tr:nth-child(even) td { background: #f8f9fb; }
+    tr:hover td { background: #eef3fa; }
+
+    /* ── Footer ───────────────────────────────────────────────── */
+    .footer {
+      background: #0A2D4D;
+      color: #7a99bb;
+      text-align: center;
+      padding: 28px 20px;
+      font-size: 12.5px;
+      border-top: 3px solid #F4A017;
+    }
+    .footer strong { color: #FFD060; }
+  </style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <!-- ── Hero ───────────────────────────────────────────────── -->
+  <header class="hero clearfix">
+    <div class="hero-monogram">M</div>
+    <div class="hero-text">
+      <h1>Excel Workbook Manager</h1>
+      <p class="subtitle">A desktop automation tool for actuarial Excel workflows</p>
+      <div class="hero-meta">
+        <span class="badge">Beta v5</span>
+        <span class="badge navy">Built by Moses</span>
+        <span class="badge navy">11 Tabs</span>
+        <span class="badge navy">Requires Excel + Windows</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Body ───────────────────────────────────────────────── -->
+  <div class="body-wrap">
+
+    <!-- TOC -->
+    <nav class="toc">
+      <h4>Contents</h4>
+      <ol>
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#requirements">Requirements</a></li>
+        <li><a href="#quickstart">Quick Start</a></li>
+        <li><a href="#tabs">All Features</a></li>
+        <li><a href="#relinker">Smart Relinker</a></li>
+        <li><a href="#rollover">Period Rollover</a></li>
+        <li><a href="#profiles">Config Profiles</a></li>
+        <li><a href="#depmap">Dependency Map</a></li>
+        <li><a href="#tabrefresh">Tab Refresh</a></li>
+        <li><a href="#tips">Tips &amp; Notes</a></li>
+        <li><a href="#author">About</a></li>
+      </ol>
+    </nav>
+
+    <!-- Content -->
+    <main class="content">
+
+      <!-- ── Overview ─────────────────────────────────────────── -->
+      <section class="section" id="overview">
+        <h2>Overview</h2>
+        <p>
+          <strong>Excel Workbook Manager</strong> is a standalone Windows desktop application
+          that sits alongside Excel and automates repetitive workbook management tasks —
+          particularly those that arise during period-end actuarial processes such as
+          IFRS 17 reporting.
+        </p>
+        <p>
+          Rather than manually hunting through Excel menus, it provides a unified control panel
+          to close workbooks, relink external references, refresh calculation tabs, scan for
+          errors, and much more — all without touching a macro or VBA editor.
+        </p>
+        <div class="callout info">
+          <strong>No installation required.</strong>
+          The tool ships as a single <code>.exe</code> file.
+          Copy it to any Windows machine that has Excel installed and double-click to run.
+        </div>
+      </section>
+
+      <!-- ── Requirements ─────────────────────────────────────── -->
+      <section class="section" id="requirements">
+        <h2>Requirements</h2>
+        <ul>
+          <li>Windows 10 or 11</li>
+          <li>Microsoft Excel (desktop, any recent version)</li>
+          <li>Excel must be <strong>open and running</strong> before launching the tool</li>
+          <li>No Python installation needed on the target machine</li>
+        </ul>
+        <div class="callout">
+          <strong>Important:</strong> Always open Excel first, then launch the tool.
+          If Excel is not running you will see a startup error.
+        </div>
+      </section>
+
+      <!-- ── Quick Start ───────────────────────────────────────── -->
+      <section class="section" id="quickstart">
+        <h2>Quick Start</h2>
+        <ol class="steps">
+          <li>
+            <div class="step-body">
+              <strong>Open Excel</strong>
+              Load the workbooks you want to work with — the tool reads whatever is currently open.
+            </div>
+          </li>
+          <li>
+            <div class="step-body">
+              <strong>Launch ExcelWorkbookManager.exe</strong>
+              A splash screen appears briefly; the main window opens automatically.
+            </div>
+          </li>
+          <li>
+            <div class="step-body">
+              <strong>Click "Refresh All Lists"</strong>
+              The bottom-left button re-scans all open workbooks. Use it any time you open or
+              close a file in Excel.
+            </div>
+          </li>
+          <li>
+            <div class="step-body">
+              <strong>Select a tab and work</strong>
+              Each tab is self-contained. Hover over <strong>ℹ</strong> buttons for inline
+              explanations.
+            </div>
+          </li>
+        </ol>
+      </section>
+
+      <!-- ── All Features ─────────────────────────────────────── -->
+      <section class="section" id="tabs">
+        <h2>All Features (11 Tabs)</h2>
+        <div class="tab-grid">
+
+          <div class="tab-card">
+            <div class="tab-name"><div class="icon">✕</div>Close Workbooks</div>
+            <p>Lists all open workbooks with size and path. Select one or many and close them
+               in bulk. Prevents the "close one-by-one" routine when finishing a period.</p>
+          </div>
+
+          <div class="tab-card">
+            <div class="tab-name"><div class="icon">🔗</div>Link Explorer</div>
+            <p>Scans all open workbooks and displays every external link (source path, type,
+               status). Quickly identify broken, missing or unexpected references.</p>
+          </div>
+
+          <div class="tab-card">
+            <div class="tab-name"><div class="icon">↻</div>Tab Refresh</div>
+            <p>Select individual sheets and run multiple recalculation passes in any order.
+               Optionally tracks cell-level changes and saves a change log — either to a
+               new Excel file or directly as a new tab in the source workbook.</p>
+          </div>
+
+          <div class="tab-card">
+            <div class="tab-name"><div class="icon">⇄</div>Smart Relinker</div>
+            <p>Redirect external links using Period Shift (automatic year + period token
+               replacement), multi-rule Find &amp; Replace, or a saved profile. Includes
+               a live Excel-grid preview for manual path editing before applying.</p>
+          </div>
+
+          <div class="tab-card">
+            <div class="tab-name"><div class="icon">⚡</div>Period Rollover</div>
+            <p>One-click wizard to roll <em>all selected workbooks</em> from one period to
+               the next. Applies period shift + rename rules + optional Tab Refresh in
+               a single operation.</p>
+          </div>
+
+          <div class="tab-card">
+            <div class="tab-name"><div class="icon">🗺</div>Dependency Map</div>
+            <p>Builds an expandable tree showing which workbook links to which.
+               Identifies open vs external files. Exportable to Excel for documentation.</p>
+          </div>
+
+          <div class="tab-card">
+            <div class="tab-name"><div class="icon">⚠</div>Error Scanner</div>
+            <p>Scans selected sheets for formula errors (<code>#REF!</code>, <code>#N/A</code>,
+               <code>#VALUE!</code> etc.) and lists every affected cell. Jump directly to
+               any flagged cell from the results list.</p>
+          </div>
+
+          <div class="tab-card">
+            <div class="tab-name"><div class="icon">📋</div>Sheet Navigator</div>
+            <p>Searchable list of every sheet across all open workbooks. Click any row to
+               activate that sheet instantly — no more scrolling through tab bars.</p>
+          </div>
+
+          <div class="tab-card">
+            <div class="tab-name"><div class="icon">🔍</div>Volatile Scanner</div>
+            <p>Locates cells using volatile functions (<code>NOW</code>, <code>TODAY</code>,
+               <code>RAND</code>, <code>INDIRECT</code>, <code>OFFSET</code> etc.) that force
+               full recalculation on every change — a common source of slowness.</p>
+          </div>
+
+          <div class="tab-card">
+            <div class="tab-name"><div class="icon">📌</div>Named Ranges</div>
+            <p>Lists all named ranges and their references across open workbooks.
+               Filter, inspect and jump to any named range in one click.</p>
+          </div>
+
+          <div class="tab-card">
+            <div class="tab-name"><div class="icon">❤</div>Workbook Health</div>
+            <p>Runs a multi-check diagnostic (broken links, error cells, volatile functions,
+               external references, hidden sheets) and produces a traffic-light summary
+               report for each workbook.</p>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ── Smart Relinker ────────────────────────────────────── -->
+      <section class="section" id="relinker">
+        <h2>Smart Relinker — How It Works</h2>
+        <p>
+          The Smart Relinker is designed around the IFRS 17 folder convention where both the
+          <em>year folder</em> and the <em>period token</em> in file names change every quarter:
+        </p>
+        <div class="code-block">I:\IFRS 17\2025\202512\Working\Non-model\RI Hub\RI Hub AoM 25FY.xlsx
+          ↓  Period Shift: 202512 → 202603  +  Rename rule: 25FY → 26Q1
+I:\IFRS 17\2026\202603\Working\Non-model\RI Hub\RI Hub AoM 26Q1.xlsx</div>
+
+        <h3>Period Shift mode</h3>
+        <p>Enter an Old Period and a New Period (6-digit YYYYMM).
+           The tool automatically replaces:</p>
+        <ul>
+          <li>The year folder — e.g. <code>\2025\</code> → <code>\2026\</code></li>
+          <li>Every occurrence of the period token — e.g. <code>202512</code> → <code>202603</code></li>
+        </ul>
+        <p>
+          File name suffixes like <code>25FY</code> or <code> FY</code> are <strong>not</strong>
+          changed by the period shift alone — add them as <strong>Extra Rename Rules</strong>
+          in the rules list below the mode selector.
+        </p>
+
+        <h3>Custom Find &amp; Replace mode</h3>
+        <p>
+          Define a list of Find / Replace pairs applied in sequence to every selected link path.
+          Useful for one-off corrections or non-standard folder structures.
+        </p>
+
+        <h3>Open in Excel preview</h3>
+        <p>
+          Before applying, click <strong>Open in Excel</strong> to see the full Before / After
+          table in a live spreadsheet. Edit the yellow <em>New Path</em> column directly in
+          Excel cells, then click <strong>Import from Excel</strong> to bring the edits back.
+        </p>
+      </section>
+
+      <!-- ── Period Rollover ───────────────────────────────────── -->
+      <section class="section" id="rollover">
+        <h2>Period Rollover Wizard</h2>
+        <p>
+          Use this tab when you need to roll <em>multiple workbooks at once</em> from one
+          reporting period to the next. It combines relinking, rename rules, and
+          tab refresh in a single guided flow.
+        </p>
+        <ol class="steps">
+          <li>
+            <div class="step-body">
+              <strong>Select workbooks</strong>
+              All open workbooks are listed and pre-selected. Deselect any you want to skip.
+            </div>
+          </li>
+          <li>
+            <div class="step-body">
+              <strong>Set periods or load a profile</strong>
+              Enter Old Period and New Period, or pick a saved profile from the dropdown
+              (which pre-fills both periods and all rename rules automatically).
+            </div>
+          </li>
+          <li>
+            <div class="step-body">
+              <strong>Add extra rename rules if needed</strong>
+              e.g. <code>25FY</code> → <code>26Q1</code>. These are already included if
+              you loaded a standard quarterly profile.
+            </div>
+          </li>
+          <li>
+            <div class="step-body">
+              <strong>Preview All Changes</strong>
+              Review the full list of Before / After paths across every selected workbook.
+            </div>
+          </li>
+          <li>
+            <div class="step-body">
+              <strong>Apply Rollover</strong>
+              Applies all relinks. If <em>Run Tab Refresh after relink</em> is checked,
+              every sheet in every affected workbook is recalculated automatically.
+            </div>
+          </li>
+        </ol>
+      </section>
+
+      <!-- ── Config Profiles ───────────────────────────────────── -->
+      <section class="section" id="profiles">
+        <h2>Config Profiles</h2>
+        <p>
+          Profiles save a complete set of relinking rules (period shift + rename rules) so
+          you never need to re-enter them each quarter. They are stored in
+          <code>profiles.json</code> alongside the <code>.exe</code> file.
+        </p>
+
+        <h3>Built-in quarterly profiles</h3>
+        <table>
+          <thead>
+            <tr><th>Profile name</th><th>Period shift</th><th>Rename rules included</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>FY 2025 → Q1 2026</td>
+              <td>202512 → 202603</td>
+              <td>25FY→26Q1 &nbsp;·&nbsp; &nbsp;FY&nbsp;→&nbsp;Q1</td>
+            </tr>
+            <tr>
+              <td>Q1 2026 → HY 2026</td>
+              <td>202603 → 202606</td>
+              <td>26Q1→26HY &nbsp;·&nbsp; &nbsp;Q1&nbsp;→&nbsp;HY</td>
+            </tr>
+            <tr>
+              <td>HY 2026 → Q3 2026</td>
+              <td>202606 → 202609</td>
+              <td>26HY→26Q3 &nbsp;·&nbsp; &nbsp;HY&nbsp;→&nbsp;Q3</td>
+            </tr>
+            <tr>
+              <td>Q3 2026 → FY 2026</td>
+              <td>202609 → 202612</td>
+              <td>26Q3→26FY &nbsp;·&nbsp; &nbsp;Q3&nbsp;→&nbsp;FY</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Adding your own profiles</h3>
+        <p>
+          Open <code>profiles.json</code> in Notepad or any text editor. Each profile follows
+          this structure:
+        </p>
+        <div class="code-block">{
+  "name": "My Custom Roll",
+  "description": "Optional note about this profile",
+  "period_shift": { "old": "202512", "new": "202603" },
+  "rules": [
+    { "find": "25FY",  "replace": "26Q1" },
+    { "find": " FY",   "replace": " Q1"  }
+  ]
+}</div>
+        <div class="callout">
+          <strong>Tip:</strong> You can have a profile with <em>only</em> rules and no
+          <code>period_shift</code> block — useful for pure find-and-replace scenarios.
+        </div>
+      </section>
+
+      <!-- ── Dependency Map ────────────────────────────────────── -->
+      <section class="section" id="depmap">
+        <h2>Workbook Dependency Map</h2>
+        <p>
+          Click <strong>Build Dependency Map</strong> to scan all open workbooks and produce
+          an expandable tree:
+        </p>
+        <ul>
+          <li><span style="color:#006600;font-weight:600;">Green</span> entries — the linked file is also currently open in Excel</li>
+          <li><span style="color:#666;font-weight:600;">Grey</span> entries — the linked file is external (not open)</li>
+          <li>The <em># Links</em> column shows how many cells in the source workbook point to that target</li>
+        </ul>
+        <p>
+          Use <strong>Export to Excel</strong> to save the full map as a formatted spreadsheet —
+          handy for documentation or reviewing the refresh order before a period-end run.
+        </p>
+      </section>
+
+      <!-- ── Tab Refresh ───────────────────────────────────────── -->
+      <section class="section" id="tabrefresh">
+        <h2>Tab Refresh — Change Log Options</h2>
+        <p>
+          When <em>Change log</em> is set to anything other than <strong>No</strong>,
+          the tool records every cell whose value changed during the refresh.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Setting</th><th>What happens</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>No</strong></td>
+              <td>Refresh runs silently with no log.</td>
+            </tr>
+            <tr>
+              <td><strong>New File</strong></td>
+              <td>After refresh, a Save dialog appears and the log is saved as a new
+                  colour-coded <code>.xlsx</code> file.</td>
+            </tr>
+            <tr>
+              <td><strong>Add Tab to Workbook</strong></td>
+              <td>A new sheet named <code>ChangeLog_MMDD_HHMMSS</code> is added directly
+                  to the source workbook and activated automatically — no extra file created.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ── Tips ──────────────────────────────────────────────── -->
+      <section class="section" id="tips">
+        <h2>Tips &amp; Notes</h2>
+        <ul>
+          <li>
+            <strong>Dark / Light mode</strong> — click the <code>🌙 Dark Mode</code> button
+            in the bottom bar to toggle between themes instantly.
+          </li>
+          <li>
+            <strong>Column widths</strong> — in the Smart Relinker preview, use the
+            <em>Col width</em> spinner to widen path columns, or drag the column header
+            dividers directly.
+          </li>
+          <li>
+            <strong>Preview before applying</strong> — always use <em>Preview Changes</em>
+            before clicking <em>Apply Now</em>. The preview table is fully editable;
+            individual rows can be overridden using the <em>Manual override</em> box.
+          </li>
+          <li>
+            <strong>Verify paths</strong> — keep the <em>Verify new paths exist</em>
+            checkbox on. If a target file is not found on disk, the tool warns you before
+            writing any changes.
+          </li>
+          <li>
+            <strong>Refresh All Lists</strong> — click this whenever you open or close
+            workbooks in Excel so the tool's dropdowns stay in sync.
+          </li>
+          <li>
+            <strong>profiles.json</strong> — edit this file in Notepad to customise
+            quarterly rollover rules. Changes take effect next time you click
+            <em>Refresh All Lists</em> or open the relinker.
+          </li>
+        </ul>
+        <div class="callout">
+          <strong>Beta notice:</strong> This is version <strong>Beta v5</strong>.
+          If you encounter unexpected behaviour please report it to Moses directly
+          before sharing the tool further.
+        </div>
+      </section>
+
+      <!-- ── About ──────────────────────────────────────────────── -->
+      <section class="section" id="author">
+        <h2>About</h2>
+        <table>
+          <thead><tr><th></th><th></th></tr></thead>
+          <tbody>
+            <tr><td><strong>Tool</strong></td><td>Excel Workbook Manager</td></tr>
+            <tr><td><strong>Author</strong></td><td>Moses</td></tr>
+            <tr><td><strong>Version</strong></td><td>Beta v5</td></tr>
+            <tr><td><strong>Year</strong></td><td>© 2025</td></tr>
+          </tbody>
+        </table>
+        <div class="callout" style="margin-top:16px;">
+          This tool was designed and built by <strong>Moses</strong>.
+          Unauthorised redistribution or claiming of authorship is prohibited.
+        </div>
+      </section>
+
+    </main>
+  </div><!-- end body-wrap -->
+
+  <!-- ── Footer ───────────────────────────────────────────────── -->
+  <footer class="footer">
+    <strong>Excel Workbook Manager</strong> &nbsp;·&nbsp;
+    Built by <strong>Moses</strong> &nbsp;·&nbsp;
+    Beta v5 &nbsp;·&nbsp; © 2025
+  </footer>
+
+</div><!-- end page-wrap -->
+</body>
+</html>

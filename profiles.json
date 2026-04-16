@@ -1,0 +1,104 @@
+[
+  {
+    "name": "FY 2025 → Q1 2026  (202512 → 202603)",
+    "description": "December full-year to March quarter-1",
+    "period_shift": {
+      "old": "202512",
+      "new": "202603"
+    },
+    "rules": [
+      {
+        "find": "25FY",
+        "replace": "26Q1"
+      },
+      {
+        "find": " FY",
+        "replace": " Q1"
+      },
+      {
+        "find": "2025FY",
+        "replace": "2026Q1"
+      }
+    ]
+  },
+  {
+    "name": "Q1 2026 → HY 2026  (202603 → 202606)",
+    "description": "March quarter-1 to June half-year",
+    "period_shift": {
+      "old": "202603",
+      "new": "202606"
+    },
+    "rules": [
+      {
+        "find": "26Q1",
+        "replace": "26HY"
+      },
+      {
+        "find": " Q1",
+        "replace": " HY"
+      },
+      {
+        "find": "2026Q1",
+        "replace": "2026HY"
+      }
+    ]
+  },
+  {
+    "name": "HY 2026 → Q3 2026  (202606 → 202609)",
+    "description": "June half-year to September quarter-3",
+    "period_shift": {
+      "old": "202606",
+      "new": "202609"
+    },
+    "rules": [
+      {
+        "find": "26HY",
+        "replace": "26Q3"
+      },
+      {
+        "find": " HY",
+        "replace": " Q3"
+      },
+      {
+        "find": "2026HY",
+        "replace": "2026Q3"
+      }
+    ]
+  },
+  {
+    "name": "Q3 2026 → FY 2026  (202609 → 202612)",
+    "description": "September quarter-3 to December full-year",
+    "period_shift": {
+      "old": "202609",
+      "new": "202612"
+    },
+    "rules": [
+      {
+        "find": "26Q3",
+        "replace": "26FY"
+      },
+      {
+        "find": " Q3",
+        "replace": " FY"
+      },
+      {
+        "find": "2026Q3",
+        "replace": "2026FY"
+      }
+    ]
+  },
+  {
+    "name": "Custom Find & Replace (example)",
+    "description": "Example of a pure find/replace profile without period shift",
+    "rules": [
+      {
+        "find": "Old Folder",
+        "replace": "New Folder"
+      },
+      {
+        "find": "OldName",
+        "replace": "NewName"
+      }
+    ]
+  }
+]
