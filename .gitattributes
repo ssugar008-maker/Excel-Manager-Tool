@@ -1,10 +1,10 @@
 # Treat split archive parts as binary (no EOL conversion, no diff)
-*.zip.001 binary
-*.zip.002 binary
-*.zip.003 binary
-*.zip.004 binary
-*.zip.005 binary
-*.zip     binary
+*.part001 binary
+*.part002 binary
+*.part003 binary
+*.part004 binary
+*.part005 binary
+*.tar     binary
 *.exe     binary
 *.dll     binary
 *.pyd     binary

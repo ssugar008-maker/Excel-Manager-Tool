@@ -1,8 +1,9 @@
 @echo off
-REM =====================================================
+REM ==========================================================
 REM  Excel Workbook Manager - Reassemble launcher (.bat)
-REM  Double-click this to join the split ZIP and extract.
-REM =====================================================
+REM  Joins .tar.partNNN chunks, verifies SHA256, and extracts.
+REM  Double-click this file.
+REM ==========================================================
 setlocal
 cd /d "%~dp0"
 
