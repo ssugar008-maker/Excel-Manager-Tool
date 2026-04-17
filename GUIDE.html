@@ -313,11 +313,12 @@
     <nav class="toc">
       <h4>Contents</h4>
       <ol>
+        <li><a href="#whatsnew">What&rsquo;s New</a></li>
         <li><a href="#overview">Overview</a></li>
         <li><a href="#requirements">Requirements</a></li>
         <li><a href="#quickstart">Quick Start</a></li>
         <li><a href="#tabs">All Features</a></li>
-        <li><a href="#relinker">Smart Relinker</a></li>
+        <li><a href="#relinker">Smart Relinker <span style="color:#F4A017;">&#9679;</span></a></li>
         <li><a href="#rollover">Period Rollover</a></li>
         <li><a href="#profiles">Config Profiles</a></li>
         <li><a href="#depmap">Dependency Map</a></li>
@@ -329,6 +330,49 @@
 
     <!-- Content -->
     <main class="content">
+
+      <!-- ── What's New ───────────────────────────────────────── -->
+      <section class="section" id="whatsnew">
+        <h2>What&rsquo;s New in Beta v5</h2>
+        <div class="callout info">
+          <strong>Smart Relinker &mdash; Folder Match (fuzzy scan).</strong>
+          Point the relinker at a new root folder and it will fuzzy-match every
+          old link to the most similar file in the new tree, even when file names
+          or subfolders have been restructured. See the
+          <a href="#relinker">Smart Relinker section</a> for the full walkthrough
+          and scoring rules.
+        </div>
+        <ul>
+          <li>
+            <strong>Folder Match mode</strong> in Smart Relinker &mdash;
+            new fourth mode next to Period Shift, Custom Find &amp; Replace,
+            and Manual Edit. Recursive scan of
+            <code>.xlsx / .xlsb / .xlsm / .xls</code>, skeleton-based
+            similarity scoring, same-subfolder boost, candidate picker when
+            multiple files tie.
+          </li>
+          <li>
+            <strong>Manual Edit mode</strong> formalised &mdash; loads every
+            selected link into the preview grid untouched so you can hand-edit
+            rows without first defining any rule.
+          </li>
+          <li>
+            <strong>Preview grid is the single commit surface.</strong> All
+            four modes populate the same editable table; manual overrides,
+            Excel round-trip, and path verification work identically
+            regardless of which mode produced each row.
+          </li>
+          <li>
+            <strong>Auto-refresh</strong> &mdash; workbook and sheet lists are
+            re-polled every 20&nbsp;seconds in the background, so the tool stays
+            in sync when you open or close files in Excel.
+          </li>
+          <li>
+            <strong>Tab visibility settings</strong> persist between sessions
+            (<code>☰ Tabs</code> in the bottom bar).
+          </li>
+        </ul>
+      </section>
 
       <!-- ── Overview ─────────────────────────────────────────── -->
       <section class="section" id="overview">
@@ -425,9 +469,11 @@
 
           <div class="tab-card">
             <div class="tab-name"><div class="icon">⇄</div>Smart Relinker</div>
-            <p>Redirect external links using Period Shift (automatic year + period token
-               replacement), multi-rule Find &amp; Replace, or a saved profile. Includes
-               a live Excel-grid preview for manual path editing before applying.</p>
+            <p>Redirect external links in four ways: Period Shift (automatic year +
+               period token replacement), multi-rule Find &amp; Replace, <strong>Folder
+               Match fuzzy scan</strong> (point at a new root folder and it auto-picks
+               the closest file for every old link), or Manual Edit. Every mode feeds
+               the same editable preview grid with a live Excel round-trip.</p>
           </div>
 
           <div class="tab-card">
@@ -490,7 +536,14 @@
           ↓  Period Shift: 202512 → 202603  +  Rename rule: 25FY → 26Q1
 I:\IFRS 17\2026\202603\Working\Non-model\RI Hub\RI Hub AoM 26Q1.xlsx</div>
 
-        <h3>Period Shift mode</h3>
+        <p>
+          Pick <strong>one of four modes</strong> at the top of the tab — the UI below the
+          radio row changes automatically to show only the controls that apply. In every
+          mode the resulting Before / After paths land in the same <em>Preview</em> grid,
+          which is fully editable before <strong>Apply Now</strong>.
+        </p>
+
+        <h3>① Period Shift mode</h3>
         <p>Enter an Old Period and a New Period (6-digit YYYYMM).
            The tool automatically replaces:</p>
         <ul>
@@ -500,21 +553,127 @@ I:\IFRS 17\2026\202603\Working\Non-model\RI Hub\RI Hub AoM 26Q1.xlsx</div>
         <p>
           File name suffixes like <code>25FY</code> or <code> FY</code> are <strong>not</strong>
           changed by the period shift alone — add them as <strong>Extra Rename Rules</strong>
-          in the rules list below the mode selector.
+          in the rules list below the mode selector, or simply load a saved profile.
         </p>
 
-        <h3>Custom Find &amp; Replace mode</h3>
+        <h3>② Custom Find &amp; Replace mode</h3>
         <p>
           Define a list of Find / Replace pairs applied in sequence to every selected link path.
-          Useful for one-off corrections or non-standard folder structures.
+          Useful for one-off corrections, non-standard folder structures, or pure file-name
+          suffix changes with no period shift. The rule list supports re-ordering, enabling /
+          disabling individual rules, and loading from a profile.
         </p>
 
-        <h3>Open in Excel preview</h3>
+        <h3>③ Folder Match <span style="color:#F4A017;">(fuzzy scan)</span> — NEW</h3>
+        <div class="callout info">
+          <strong>When to use it.</strong> The folder layout or file names on the new drive
+          have changed in ways you cannot predict with a simple Find / Replace — maybe the
+          vendor renamed files, the subfolder tree was restructured, or the period token
+          moved from the end of the name to the middle. Point the tool at the new root
+          and it figures out which file matches which old link.
+        </div>
         <p>
-          Before applying, click <strong>Open in Excel</strong> to see the full Before / After
-          table in a live spreadsheet. Edit the yellow <em>New Path</em> column directly in
-          Excel cells, then click <strong>Import from Excel</strong> to bring the edits back.
+          Select <strong>Folder Match</strong> as the mode, set the new root folder, and
+          click <strong>Scan &amp; Match</strong>. The tool walks the folder recursively,
+          indexes every <code>.xlsx / .xlsb / .xlsm / .xls</code> file it finds, and for
+          each old linked file computes a <em>fuzzy similarity score</em> against every
+          candidate.
         </p>
+
+        <h4 style="margin-top:14px;">How the fuzzy match works</h4>
+        <p>
+          Each filename is reduced to a <strong>skeleton</strong> before comparison, so
+          volatile tokens do not artificially lower the score:
+        </p>
+        <div class="code-block">RI Hub AoM 25FY 20251231 v1.2.xlsx
+          ↓  strip 8-digit date  (20251231)
+          ↓  strip 6-digit period token  (no match here)
+          ↓  strip version string  (v1.2)
+          ↓  lower-case, collapse spaces / underscores
+"ri hub aom 25fy"     ← skeleton used for the similarity score</div>
+        <p>
+          Skeletons are compared with Python's <code>difflib.SequenceMatcher</code>,
+          producing a score from <code>0.00</code> to <code>1.00</code>. Candidates
+          below the threshold (default <strong>70%</strong>) are discarded. Files sitting
+          in the <em>same relative subfolder</em> as the original link are boosted to
+          the top of the candidate list — cross-extension matches (e.g. <code>.xlsm</code>
+          → <code>.xlsx</code>) are penalised by 5%.
+        </p>
+
+        <h4>What happens for each old link</h4>
+        <ul>
+          <li>
+            <strong>One strong match</strong> — auto-populated in the preview with
+            method tag <code>Folder Match (92%)</code>.
+          </li>
+          <li>
+            <strong>Multiple close matches</strong> — a picker dialog appears showing
+            every candidate with its score, version string, whether it lives in the
+            same subfolder, and full path. Double-click a row or click
+            <em>Use Selected</em> to accept it (method tag <code>Folder Match (picked)</code>).
+            Click <em>Skip</em> to leave that row alone.
+          </li>
+          <li>
+            <strong>No match above threshold</strong> — the row is kept unchanged
+            and tagged <code>No Match</code> so you can fix it manually.
+          </li>
+        </ul>
+
+        <h4>Good to know</h4>
+        <ul>
+          <li>
+            Folder Match <em>does not</em> require an Old Period / New Period — you can
+            use it on its own, or combine it with a subsequent Find &amp; Replace pass on
+            the preview grid for last-mile corrections.
+          </li>
+          <li>
+            The scan is purely filesystem-based — no Excel calls, no COM, no workbooks
+            opened. Large trees (10,000+ files) are typically scanned in a couple of
+            seconds thanks to a length-based early-out filter that skips candidates
+            whose maximum possible score is already below the threshold.
+          </li>
+          <li>
+            Excel must still be open when you click <strong>Apply Now</strong>, because
+            that step rewrites each link via COM on the live workbook.
+          </li>
+        </ul>
+
+        <h3>④ Manual Edit mode</h3>
+        <p>
+          Loads all selected links into the preview exactly as they are — no rules
+          applied. Select any row, type a corrected path in the <em>Manual Override</em>
+          box, click <strong>Update Row</strong>, then <strong>Apply Now</strong> when
+          you are done. Use this when the changes are too varied or ad-hoc to describe
+          with rules or fuzzy matching.
+        </p>
+
+        <h3>Preview grid — shared by all four modes</h3>
+        <p>
+          The preview grid is the single "commit surface" for every relink. Each row
+          shows the workbook, the old path, the computed new path, the method that
+          produced it (Period Shift / Find &amp; Replace / Folder Match / Manual),
+          and a ✔ / ✘ status from the <em>Verify new paths exist</em> check.
+        </p>
+        <ul>
+          <li>
+            <strong>Manual Override</strong> — overwrite the new path on any individual
+            row regardless of which mode produced it.
+          </li>
+          <li>
+            <strong>Open in Excel</strong> — send the full Before / After table into a
+            live spreadsheet, edit the yellow <em>New Path</em> column directly in
+            Excel cells, then click <strong>Import from Excel</strong> to pull the edits
+            back into the preview.
+          </li>
+          <li>
+            <strong>Col width</strong> — widen the path columns with the spinner in the
+            toolbar, or drag the column header dividers.
+          </li>
+          <li>
+            <strong>Verify new paths exist</strong> — keep this checkbox on. If any
+            target file is missing on disk, you are warned before any link is rewritten.
+          </li>
+        </ul>
       </section>
 
       <!-- ── Period Rollover ───────────────────────────────────── -->
@@ -693,7 +852,16 @@ I:\IFRS 17\2026\202603\Working\Non-model\RI Hub\RI Hub AoM 26Q1.xlsx</div>
           </li>
           <li>
             <strong>Refresh All Lists</strong> — click this whenever you open or close
-            workbooks in Excel so the tool's dropdowns stay in sync.
+            workbooks in Excel so the tool's dropdowns stay in sync. (It also runs
+            automatically every 20 seconds in the background.)
+          </li>
+          <li>
+            <strong>Folder Match threshold</strong> — the fuzzy matcher defaults to
+            70% similarity. If you are getting too many <em>No Match</em> rows on a
+            reorganised folder tree, lower it via the <em>Min score</em> spinner;
+            if too many wrong rows auto-populate, raise it toward 80–90% so only
+            very confident matches apply and everything else falls into the
+            candidate picker.
           </li>
           <li>
             <strong>profiles.json</strong> — edit this file in Notepad to customise
