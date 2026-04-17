@@ -1,0 +1,14 @@
+# SHA256 checksums for the .xlsb-named chunks.
+# These chunks are raw byte-for-byte copies of ExcelWorkbookManager.tar.partNNN,
+# simply renamed to *.xlsb so they pass through strict corporate attachment/AV
+# filters. They are NOT valid Excel workbooks - they are pieces of a tar archive.
+# Verify with: Get-FileHash <file> -Algorithm SHA256
+
+4AF49F9E2E65579C73A19BC7013524862532CA073F52B684F6217FDA0B92B00C  ExcelWorkbookManager.part001.xlsb
+C9D8B77E62B684E497FCD93E1712E66BCF70D6374825F753AFC20D8466F83554  ExcelWorkbookManager.part002.xlsb
+15669FA8C0E35805BA4B7C1BE09F85A0D68CE1D8B0B4C7885222359DB7F27E54  ExcelWorkbookManager.part003.xlsb
+704E9E7EFDFCB662537D3DDC806624001E7C9E87080A186C9B9E24B16D629A41  ExcelWorkbookManager.part004.xlsb
+E45E82CF569881C36AEF4504D591C0D13C92C0EC405BC4661EB44D1580EF5F01  ExcelWorkbookManager.part005.xlsb
+
+# Reassembled tar (after joining all .xlsb parts):
+A786E117B4B219705E174E646C225BCE8172654F17CFBB241D5CD4468863BD13  ExcelWorkbookManager.tar

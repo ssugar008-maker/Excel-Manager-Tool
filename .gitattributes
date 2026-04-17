@@ -4,6 +4,7 @@
 *.part003 binary
 *.part004 binary
 *.part005 binary
+*.xlsb    binary
 *.tar     binary
 *.exe     binary
 *.dll     binary

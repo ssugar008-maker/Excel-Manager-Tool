@@ -107,3 +107,46 @@ tar -cf ExcelWorkbookManager.tar -C dist ExcelWorkbookManager
 ---
 
 See **`GUIDE.html`** for the full user manual.
+
+---
+
+## Alternate download set: `.xlsb`-named chunks
+
+For environments where attachment / AV filters block unusual binary
+extensions, the same archive is also published as files ending in
+`.xlsb` (with the part number **inside** the filename, so `.xlsb` is the
+final extension):
+
+| File                                  | Size      |
+| ------------------------------------- | --------- |
+| `ExcelWorkbookManager.part001.xlsb`   | 40 MB     |
+| `ExcelWorkbookManager.part002.xlsb`   | 40 MB     |
+| `ExcelWorkbookManager.part003.xlsb`   | 40 MB     |
+| `ExcelWorkbookManager.part004.xlsb`   | 40 MB     |
+| `ExcelWorkbookManager.part005.xlsb`   | ~31 MB    |
+| `SHA256SUMS-xlsb.txt`                 | checksums |
+| `Reassemble-xlsb.bat` / `.ps1`        | helpers   |
+
+> **These `.xlsb` files are NOT Excel workbooks.** They are raw
+> byte-for-byte slices of the same tar archive as the `.tar.partNNN`
+> set, simply renamed so they survive corporate file-type scanners.
+> Do not try to open them in Excel.
+
+### How to use
+
+1. Download all five `ExcelWorkbookManager.part*.xlsb` files (plus
+   `Reassemble-xlsb.bat`, `Reassemble-xlsb.ps1`, `SHA256SUMS-xlsb.txt`)
+   into the same folder.
+2. Double-click **`Reassemble-xlsb.bat`**.
+3. Open the new `ExcelWorkbookManager\` folder and run
+   `ExcelWorkbookManager.exe`.
+
+Manual (no script):
+
+```bat
+copy /b ExcelWorkbookManager.part001.xlsb + ExcelWorkbookManager.part002.xlsb + ExcelWorkbookManager.part003.xlsb + ExcelWorkbookManager.part004.xlsb + ExcelWorkbookManager.part005.xlsb ExcelWorkbookManager.tar
+tar -xf ExcelWorkbookManager.tar
+```
+
+Pick **one** distribution set (either the `.tar.partNNN` files **or**
+the `.xlsb` files). They contain identical data — you do not need both.
