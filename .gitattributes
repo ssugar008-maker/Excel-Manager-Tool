@@ -1,11 +1,7 @@
 # Treat split archive parts as binary (no EOL conversion, no diff)
-*.part001 binary
-*.part002 binary
-*.part003 binary
-*.part004 binary
-*.part005 binary
-*.xlsb    binary
-*.tar     binary
-*.exe     binary
-*.dll     binary
-*.pyd     binary
+*.part[0-9][0-9][0-9] binary
+*.xlsb  binary
+*.tar   binary
+*.exe   binary
+*.dll   binary
+*.pyd   binary

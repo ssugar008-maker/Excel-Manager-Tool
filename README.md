@@ -115,17 +115,18 @@ See **`GUIDE.html`** for the full user manual.
 For environments where attachment / AV filters block unusual binary
 extensions, the same archive is also published as files ending in
 `.xlsb` (with the part number **inside** the filename, so `.xlsb` is the
-final extension):
+final extension). This set is cut into **24 smaller ~8 MB chunks** so
+each file stays comfortably under most 10 MB email / upload limits:
 
-| File                                  | Size      |
-| ------------------------------------- | --------- |
-| `ExcelWorkbookManager.part001.xlsb`   | 40 MB     |
-| `ExcelWorkbookManager.part002.xlsb`   | 40 MB     |
-| `ExcelWorkbookManager.part003.xlsb`   | 40 MB     |
-| `ExcelWorkbookManager.part004.xlsb`   | 40 MB     |
-| `ExcelWorkbookManager.part005.xlsb`   | ~31 MB    |
-| `SHA256SUMS-xlsb.txt`                 | checksums |
-| `Reassemble-xlsb.bat` / `.ps1`        | helpers   |
+| File                                                   | Size        |
+| ------------------------------------------------------ | ----------- |
+| `ExcelWorkbookManager.part001.xlsb` … `part023.xlsb`   | 8 MB each   |
+| `ExcelWorkbookManager.part024.xlsb`                    | ~7 MB       |
+| `SHA256SUMS-xlsb.txt`                                  | checksums   |
+| `Reassemble-xlsb.bat` / `.ps1`                         | helpers     |
+
+Total across the 24 chunks = 191 MB (same uncompressed tar as the
+`.tar.partNNN` set).
 
 > **These `.xlsb` files are NOT Excel workbooks.** They are raw
 > byte-for-byte slices of the same tar archive as the `.tar.partNNN`
@@ -134,17 +135,34 @@ final extension):
 
 ### How to use
 
-1. Download all five `ExcelWorkbookManager.part*.xlsb` files (plus
+1. Download **all 24** `ExcelWorkbookManager.part*.xlsb` files (plus
    `Reassemble-xlsb.bat`, `Reassemble-xlsb.ps1`, `SHA256SUMS-xlsb.txt`)
-   into the same folder.
-2. Double-click **`Reassemble-xlsb.bat`**.
+   into the same folder. Missing even one chunk will corrupt the build.
+2. Double-click **`Reassemble-xlsb.bat`**. The script automatically
+   detects however many `part*.xlsb` files are present, verifies each
+   one against `SHA256SUMS-xlsb.txt`, joins them in order, and extracts
+   the result with Windows' built-in `tar.exe`.
 3. Open the new `ExcelWorkbookManager\` folder and run
    `ExcelWorkbookManager.exe`.
 
-Manual (no script):
+Manual (no script) — from PowerShell in the download folder:
+
+```powershell
+$parts = Get-ChildItem ExcelWorkbookManager.part*.xlsb | Sort-Object Name
+$out = [System.IO.File]::Create("$PWD\ExcelWorkbookManager.tar")
+foreach ($p in $parts) {
+    $in = [System.IO.File]::OpenRead($p.FullName)
+    $in.CopyTo($out)
+    $in.Close()
+}
+$out.Close()
+tar -xf .\ExcelWorkbookManager.tar
+```
+
+Or with good old `copy /b` in a classic Command Prompt (one long line):
 
 ```bat
-copy /b ExcelWorkbookManager.part001.xlsb + ExcelWorkbookManager.part002.xlsb + ExcelWorkbookManager.part003.xlsb + ExcelWorkbookManager.part004.xlsb + ExcelWorkbookManager.part005.xlsb ExcelWorkbookManager.tar
+copy /b ExcelWorkbookManager.part001.xlsb + ExcelWorkbookManager.part002.xlsb + ExcelWorkbookManager.part003.xlsb + ExcelWorkbookManager.part004.xlsb + ExcelWorkbookManager.part005.xlsb + ExcelWorkbookManager.part006.xlsb + ExcelWorkbookManager.part007.xlsb + ExcelWorkbookManager.part008.xlsb + ExcelWorkbookManager.part009.xlsb + ExcelWorkbookManager.part010.xlsb + ExcelWorkbookManager.part011.xlsb + ExcelWorkbookManager.part012.xlsb + ExcelWorkbookManager.part013.xlsb + ExcelWorkbookManager.part014.xlsb + ExcelWorkbookManager.part015.xlsb + ExcelWorkbookManager.part016.xlsb + ExcelWorkbookManager.part017.xlsb + ExcelWorkbookManager.part018.xlsb + ExcelWorkbookManager.part019.xlsb + ExcelWorkbookManager.part020.xlsb + ExcelWorkbookManager.part021.xlsb + ExcelWorkbookManager.part022.xlsb + ExcelWorkbookManager.part023.xlsb + ExcelWorkbookManager.part024.xlsb ExcelWorkbookManager.tar
 tar -xf ExcelWorkbookManager.tar
 ```
 
