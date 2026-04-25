@@ -334,71 +334,110 @@
 
       <!-- ── What's New ───────────────────────────────────────── -->
       <section class="section" id="whatsnew">
-        <h2>What&rsquo;s New in Beta v6</h2>
+        <h2>What&rsquo;s New in Beta v7</h2>
         <div class="callout info">
-          <strong>Multi-instance support, smarter link opening, selection fixes,
-          and per-tab search fields.</strong>
-          Seven quality-of-life improvements across the tool.
-          See the sections below for detailed walkthroughs.
+          <strong>A full A/B/C enhancement pass:</strong> bug fixes, six new power features,
+          and sweeping UX polish across every tab.
         </div>
+
+        <h3>Phase A &mdash; Bug Fixes</h3>
         <ul>
           <li>
-            <strong>Excel Instance picker</strong> &mdash; a new <em>Excel:</em>
-            dropdown in the bottom bar lists every running Excel.exe process.
-            Choose one instance to lock all operations to it, or leave it on
-            <em>[ALL INSTANCES]</em> to see workbooks from every open Excel.
+            <strong>Correct change-log cell addresses</strong> &mdash; Tab Refresh now
+            accounts for UsedRange origin row/col offsets, so addresses like
+            <code>$B$3</code> are reported instead of <code>$A$1</code> when the
+            used range does not start at A1.
           </li>
           <li>
-            <strong>Opened links now trigger recalculation</strong> &mdash;
-            after <em>Open Selected</em> or <em>Open Current Tab&rsquo;s Links</em>,
-            the tool calls <code>UpdateLink</code> + <code>CalculateFullRebuild</code>
-            on the source workbook so formulas pick up live values immediately.
+            <strong>Workbook Health background scan</strong> &mdash; the health analysis
+            now runs in a background thread with an indeterminate progress bar and a
+            staleness notice whenever the workbook list changes.
           </li>
           <li>
-            <strong>Open Current Tab&rsquo;s Links</strong> button (and
-            <kbd>Ctrl+Shift+O</kbd>) in the <em>Open Links</em> tab &mdash;
-            opens only the external workbooks referenced by formulas on the
-            <em>currently active sheet</em> in Excel, not the whole workbook.
+            <strong>Dependency Map staleness notice</strong> &mdash; a warning banner
+            now appears when the workbook list changes, prompting you to rebuild the map.
           </li>
           <li>
-            <strong>Smart Relinker &mdash; Queue All Modified</strong> &mdash;
-            one button captures every changed row in the preview grid as an
-            explicit pair-based queue entry, letting you batch edits across
-            multiple workbooks before applying them in one go.
-          </li>
-          <li>
-            <strong>Shift+Arrow selection fixed</strong> &mdash; every list in the
-            tool now uses anchor-based range selection (like Windows Explorer).
-            Reversing direction shrinks the selection back instead of getting stuck.
-          </li>
-          <li>
-            <strong>Close Workbooks search</strong> &mdash; type in the new
-            <em>Search:</em> box to filter the workbook list in real time before
-            selecting and closing.
-          </li>
-          <li>
-            <strong>Sheet Navigator split search</strong> &mdash; two independent
-            filter fields (<em>Workbook:</em> and <em>Sheet:</em>) replace the
-            single combined search box, making it easier to narrow down sheets.
+            <strong>Close Workbooks &mdash; 3-button dialog</strong> &mdash; closing
+            workbooks with unsaved changes now presents <em>Save &amp; Close</em>,
+            <em>Close Without Saving</em>, and <em>Cancel</em> options instead of a
+            simple Yes/No prompt.
           </li>
         </ul>
 
-        <h3>Beta v5 highlights (previous release)</h3>
+        <h3>Phase B &mdash; Power Features</h3>
         <ul>
           <li>
-            <strong>Folder Match mode</strong> in Smart Relinker &mdash;
-            fuzzy scan against a new root folder.
+            <strong>Break Links</strong> &mdash; new button in <em>Open Links</em>
+            converts selected external links to static values
+            (<code>Workbook.BreakLink</code>).
           </li>
           <li>
-            <strong>Manual Edit mode</strong> formalised &mdash; loads links
-            into the preview grid for free-form editing.
+            <strong>Refresh All Connections</strong> &mdash; new button in
+            <em>Tab Refresh</em> triggers <code>Workbook.RefreshAll()</code> to update
+            Power Query queries, pivot caches, and all data connections.
           </li>
           <li>
-            <strong>Auto-refresh</strong> every 20&nbsp;seconds in the background.
+            <strong>Dependency Map depth &amp; recursion</strong> &mdash; a
+            <em>Max depth</em> spinner and <em>Recurse into open workbooks</em>
+            checkbox let you explore multi-level dependency chains.
           </li>
           <li>
-            <strong>Tab visibility settings</strong> persist between sessions.
+            <strong>Find &amp; Replace tab</strong> &mdash; a new dedicated tab
+            with workbook/sheet scoping, match-case / match-whole options, formula
+            search mode, and double-click navigation to any result cell.
           </li>
+          <li>
+            <strong>Sheet Navigator &mdash; hidden sheet visibility</strong> &mdash;
+            hidden and very-hidden sheets are now shown (in grey/red), with
+            <em>Make Visible</em>, <em>Hide</em>, and <em>Very Hide</em> action buttons.
+          </li>
+          <li>
+            <strong>Named Ranges &mdash; Create New &amp; Edit Selected</strong> &mdash;
+            a modal dialog lets you create new named ranges or edit the name and
+            RefersTo formula of an existing one, with scope selection.
+          </li>
+        </ul>
+
+        <h3>Phase C &mdash; UX Polish</h3>
+        <ul>
+          <li>
+            <strong>Right-click context menus</strong> on every Treeview &mdash;
+            right-clicking a row pops a context menu with the most relevant actions
+            for that list (Open, Break, Go To, Copy, Export&hellip;).
+          </li>
+          <li>
+            <strong>Sortable column headers</strong> &mdash; click any column heading
+            to sort ascending or descending (numeric-aware). An arrow indicator
+            shows the active sort column and direction.
+          </li>
+          <li>
+            <strong>Copy to Clipboard / Export to CSV</strong> &mdash; buttons (and
+            right-click menu items) on Link Explorer, Error &amp; Volatile Scanners,
+            Named Ranges, and Find &amp; Replace export the visible rows.
+          </li>
+          <li>
+            <strong>Last active tab restored</strong> &mdash; the tool remembers
+            which tab you had open and restores it on the next launch via
+            <code>settings.json</code>.
+          </li>
+          <li>
+            <strong>Unsaved-changes badge</strong> &mdash; workbooks with unsaved
+            changes are highlighted in orange in the Close Workbooks list.
+          </li>
+          <li>
+            <strong>Live filter in scanners</strong> &mdash; Error Scanner and Volatile
+            Scanner now include a real-time <em>Filter:</em> box to narrow results by
+            sheet, cell, error type, or formula text.
+          </li>
+        </ul>
+
+        <h3>Beta v6 highlights (previous release)</h3>
+        <ul>
+          <li><strong>Excel Instance picker</strong>, <strong>recalc on open</strong>,
+              <strong>Open Current Tab&rsquo;s Links</strong>, <strong>Queue All Modified</strong>,
+              <strong>Shift+Arrow fix</strong>, <strong>Close Workbooks search</strong>,
+              <strong>Sheet Navigator split search</strong>.</li>
         </ul>
       </section>
 
@@ -982,7 +1021,7 @@ I:\IFRS 17\2026\202603\Working\Non-model\RI Hub\RI Hub AoM 26Q1.xlsx</div>
           </li>
         </ul>
         <div class="callout">
-          <strong>Beta notice:</strong> This is version <strong>Beta v6</strong>.
+          <strong>Beta notice:</strong> This is version <strong>Beta v7</strong>.
           If you encounter unexpected behaviour please report it to Moses directly
           before sharing the tool further.
         </div>
@@ -996,7 +1035,7 @@ I:\IFRS 17\2026\202603\Working\Non-model\RI Hub\RI Hub AoM 26Q1.xlsx</div>
           <tbody>
             <tr><td><strong>Tool</strong></td><td>Excel Workbook Manager</td></tr>
             <tr><td><strong>Author</strong></td><td>Moses</td></tr>
-            <tr><td><strong>Version</strong></td><td>Beta v6</td></tr>
+            <tr><td><strong>Version</strong></td><td>Beta v7</td></tr>
             <tr><td><strong>Year</strong></td><td>© 2025</td></tr>
           </tbody>
         </table>

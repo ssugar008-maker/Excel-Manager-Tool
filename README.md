@@ -1,6 +1,6 @@
 # Excel Workbook Manager — Standalone Distribution
 
-**Beta v6** — multi-Excel-instance support, active-sheet link opener, recalc on open, Queue All Modified, fixed Shift+Arrow selection, and per-tab search fields.
+**Beta v7** — all A/B/C enhancements: bug fixes, power features, and UX polish. Highlights include: Find & Replace tab, Break Links, Refresh All Connections, Dependency Map depth/recursion, hidden-sheet visibility controls, Named Range create/edit dialogs, right-click menus, sortable columns, CSV/clipboard export on every list, live scanner filters, 3-button Save/NoSave/Cancel close dialog, unsaved-changes badge, background health scan, last-tab memory, and correct cell-address reporting in the change log.
 
 This repository contains the **standalone Windows build** of Excel Workbook Manager, distributed as **raw binary chunks** of an uncompressed tar archive. No Python install is needed on the end-user PC — just Microsoft Excel.
 
@@ -115,17 +115,16 @@ See **`GUIDE.html`** for the full user manual.
 For environments where attachment / AV filters block unusual binary
 extensions, the same archive is also published as files ending in
 `.xlsb` (with the part number **inside** the filename, so `.xlsb` is the
-final extension). This set is cut into **18 smaller ~8 MB chunks** so
-each file stays comfortably under most 10 MB email / upload limits:
+final extension). This set is cut into **17 smaller ~8 MB chunks**:
 
 | File                                                   | Size        |
 | ------------------------------------------------------ | ----------- |
-| `ExcelWorkbookManager.part001.xlsb` … `part017.xlsb`   | 8 MB each   |
-| `ExcelWorkbookManager.part018.xlsb`                    | ~0.4 MB     |
+| `ExcelWorkbookManager.part001.xlsb` … `part016.xlsb`   | 8 MB each   |
+| `ExcelWorkbookManager.part017.xlsb`                    | ~6 MB       |
 | `SHA256SUMS-xlsb.txt`                                  | checksums   |
 | `Reassemble-xlsb.bat` / `.ps1`                         | helpers     |
 
-Total across the 18 chunks = ~136 MB (same uncompressed tar as the
+Total across the 17 chunks = ~134 MB (same uncompressed tar as the
 `.tar.partNNN` set).
 
 > **These `.xlsb` files are NOT Excel workbooks.** They are raw
@@ -135,7 +134,7 @@ Total across the 18 chunks = ~136 MB (same uncompressed tar as the
 
 ### How to use
 
-1. Download **all 18** `ExcelWorkbookManager.part*.xlsb` files (plus
+1. Download **all 17** `ExcelWorkbookManager.part*.xlsb` files (plus
    `Reassemble-xlsb.bat`, `Reassemble-xlsb.ps1`, `SHA256SUMS-xlsb.txt`)
    into the same folder. Missing even one chunk will corrupt the build.
 2. Double-click **`Reassemble-xlsb.bat`**. The script automatically
@@ -162,7 +161,7 @@ tar -xf .\ExcelWorkbookManager.tar
 Or with good old `copy /b` in a classic Command Prompt (one long line):
 
 ```bat
-copy /b ExcelWorkbookManager.part001.xlsb + ExcelWorkbookManager.part002.xlsb + ExcelWorkbookManager.part003.xlsb + ExcelWorkbookManager.part004.xlsb + ExcelWorkbookManager.part005.xlsb + ExcelWorkbookManager.part006.xlsb + ExcelWorkbookManager.part007.xlsb + ExcelWorkbookManager.part008.xlsb + ExcelWorkbookManager.part009.xlsb + ExcelWorkbookManager.part010.xlsb + ExcelWorkbookManager.part011.xlsb + ExcelWorkbookManager.part012.xlsb + ExcelWorkbookManager.part013.xlsb + ExcelWorkbookManager.part014.xlsb + ExcelWorkbookManager.part015.xlsb + ExcelWorkbookManager.part016.xlsb + ExcelWorkbookManager.part017.xlsb + ExcelWorkbookManager.part018.xlsb ExcelWorkbookManager.tar
+copy /b ExcelWorkbookManager.part001.xlsb + ExcelWorkbookManager.part002.xlsb + ExcelWorkbookManager.part003.xlsb + ExcelWorkbookManager.part004.xlsb + ExcelWorkbookManager.part005.xlsb + ExcelWorkbookManager.part006.xlsb + ExcelWorkbookManager.part007.xlsb + ExcelWorkbookManager.part008.xlsb + ExcelWorkbookManager.part009.xlsb + ExcelWorkbookManager.part010.xlsb + ExcelWorkbookManager.part011.xlsb + ExcelWorkbookManager.part012.xlsb + ExcelWorkbookManager.part013.xlsb + ExcelWorkbookManager.part014.xlsb + ExcelWorkbookManager.part015.xlsb + ExcelWorkbookManager.part016.xlsb + ExcelWorkbookManager.part017.xlsb ExcelWorkbookManager.tar
 tar -xf ExcelWorkbookManager.tar
 ```
 
