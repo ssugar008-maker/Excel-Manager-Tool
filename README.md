@@ -1,5 +1,7 @@
 # Excel Workbook Manager — Standalone Distribution
 
+**Beta v6** — multi-Excel-instance support, active-sheet link opener, recalc on open, Queue All Modified, fixed Shift+Arrow selection, and per-tab search fields.
+
 This repository contains the **standalone Windows build** of Excel Workbook Manager, distributed as **raw binary chunks** of an uncompressed tar archive. No Python install is needed on the end-user PC — just Microsoft Excel.
 
 The build is not shipped as a `.zip` on purpose. Each `.partNNN` file is a plain binary slice of the tar archive, so they can be concatenated byte-for-byte with `copy /b` or any equivalent tool.
@@ -10,11 +12,10 @@ The build is not shipped as a `.zip` on purpose. Each `.partNNN` file is a plain
 
 | File                                   | Purpose                                                |
 | -------------------------------------- | ------------------------------------------------------ |
-| `ExcelWorkbookManager.tar.part001`     | Raw chunk 1 (40 MB)                                    |
-| `ExcelWorkbookManager.tar.part002`     | Raw chunk 2 (40 MB)                                    |
-| `ExcelWorkbookManager.tar.part003`     | Raw chunk 3 (40 MB)                                    |
-| `ExcelWorkbookManager.tar.part004`     | Raw chunk 4 (40 MB)                                    |
-| `ExcelWorkbookManager.tar.part005`     | Raw chunk 5 (~31 MB)                                   |
+| `ExcelWorkbookManager.part001`         | Raw chunk 1 (40 MB)                                    |
+| `ExcelWorkbookManager.part002`         | Raw chunk 2 (40 MB)                                    |
+| `ExcelWorkbookManager.part003`         | Raw chunk 3 (40 MB)                                    |
+| `ExcelWorkbookManager.part004`         | Raw chunk 4 (~16 MB)                                   |
 | `SHA256SUMS.txt`                       | Checksums for every chunk and the joined tar           |
 | `Reassemble.ps1`                       | PowerShell: verify + join + extract                    |
 | `Reassemble.bat`                       | Double-click launcher for `Reassemble.ps1`             |
@@ -42,14 +43,14 @@ The build is not shipped as a `.zip` on purpose. Each `.partNNN` file is a plain
 From a classic Command Prompt in the download folder:
 
 ```bat
-copy /b ExcelWorkbookManager.tar.part001 + ExcelWorkbookManager.tar.part002 + ExcelWorkbookManager.tar.part003 + ExcelWorkbookManager.tar.part004 + ExcelWorkbookManager.tar.part005 ExcelWorkbookManager.tar
+copy /b ExcelWorkbookManager.part001 + ExcelWorkbookManager.part002 + ExcelWorkbookManager.part003 + ExcelWorkbookManager.part004 ExcelWorkbookManager.tar
 tar -xf ExcelWorkbookManager.tar
 ```
 
 Or from PowerShell:
 
 ```powershell
-cmd /c "copy /b ExcelWorkbookManager.tar.part001 + ExcelWorkbookManager.tar.part002 + ExcelWorkbookManager.tar.part003 + ExcelWorkbookManager.tar.part004 + ExcelWorkbookManager.tar.part005 ExcelWorkbookManager.tar"
+cmd /c "copy /b ExcelWorkbookManager.part001 + ExcelWorkbookManager.part002 + ExcelWorkbookManager.part003 + ExcelWorkbookManager.part004 ExcelWorkbookManager.tar"
 tar -xf .\ExcelWorkbookManager.tar
 ```
 
@@ -68,11 +69,10 @@ No Python, no pip, no virtualenv on the end-user PC.
 ## Verifying the download (optional)
 
 ```powershell
-Get-FileHash .\ExcelWorkbookManager.tar.part001 -Algorithm SHA256
-Get-FileHash .\ExcelWorkbookManager.tar.part002 -Algorithm SHA256
-Get-FileHash .\ExcelWorkbookManager.tar.part003 -Algorithm SHA256
-Get-FileHash .\ExcelWorkbookManager.tar.part004 -Algorithm SHA256
-Get-FileHash .\ExcelWorkbookManager.tar.part005 -Algorithm SHA256
+Get-FileHash .\ExcelWorkbookManager.part001 -Algorithm SHA256
+Get-FileHash .\ExcelWorkbookManager.part002 -Algorithm SHA256
+Get-FileHash .\ExcelWorkbookManager.part003 -Algorithm SHA256
+Get-FileHash .\ExcelWorkbookManager.part004 -Algorithm SHA256
 ```
 
 Compare against `SHA256SUMS.txt`. `Reassemble.ps1` does all of this automatically.
@@ -115,17 +115,17 @@ See **`GUIDE.html`** for the full user manual.
 For environments where attachment / AV filters block unusual binary
 extensions, the same archive is also published as files ending in
 `.xlsb` (with the part number **inside** the filename, so `.xlsb` is the
-final extension). This set is cut into **24 smaller ~8 MB chunks** so
+final extension). This set is cut into **18 smaller ~8 MB chunks** so
 each file stays comfortably under most 10 MB email / upload limits:
 
 | File                                                   | Size        |
 | ------------------------------------------------------ | ----------- |
-| `ExcelWorkbookManager.part001.xlsb` … `part023.xlsb`   | 8 MB each   |
-| `ExcelWorkbookManager.part024.xlsb`                    | ~7 MB       |
+| `ExcelWorkbookManager.part001.xlsb` … `part017.xlsb`   | 8 MB each   |
+| `ExcelWorkbookManager.part018.xlsb`                    | ~0.4 MB     |
 | `SHA256SUMS-xlsb.txt`                                  | checksums   |
 | `Reassemble-xlsb.bat` / `.ps1`                         | helpers     |
 
-Total across the 24 chunks = 191 MB (same uncompressed tar as the
+Total across the 18 chunks = ~136 MB (same uncompressed tar as the
 `.tar.partNNN` set).
 
 > **These `.xlsb` files are NOT Excel workbooks.** They are raw
@@ -135,7 +135,7 @@ Total across the 24 chunks = 191 MB (same uncompressed tar as the
 
 ### How to use
 
-1. Download **all 24** `ExcelWorkbookManager.part*.xlsb` files (plus
+1. Download **all 18** `ExcelWorkbookManager.part*.xlsb` files (plus
    `Reassemble-xlsb.bat`, `Reassemble-xlsb.ps1`, `SHA256SUMS-xlsb.txt`)
    into the same folder. Missing even one chunk will corrupt the build.
 2. Double-click **`Reassemble-xlsb.bat`**. The script automatically
@@ -162,7 +162,7 @@ tar -xf .\ExcelWorkbookManager.tar
 Or with good old `copy /b` in a classic Command Prompt (one long line):
 
 ```bat
-copy /b ExcelWorkbookManager.part001.xlsb + ExcelWorkbookManager.part002.xlsb + ExcelWorkbookManager.part003.xlsb + ExcelWorkbookManager.part004.xlsb + ExcelWorkbookManager.part005.xlsb + ExcelWorkbookManager.part006.xlsb + ExcelWorkbookManager.part007.xlsb + ExcelWorkbookManager.part008.xlsb + ExcelWorkbookManager.part009.xlsb + ExcelWorkbookManager.part010.xlsb + ExcelWorkbookManager.part011.xlsb + ExcelWorkbookManager.part012.xlsb + ExcelWorkbookManager.part013.xlsb + ExcelWorkbookManager.part014.xlsb + ExcelWorkbookManager.part015.xlsb + ExcelWorkbookManager.part016.xlsb + ExcelWorkbookManager.part017.xlsb + ExcelWorkbookManager.part018.xlsb + ExcelWorkbookManager.part019.xlsb + ExcelWorkbookManager.part020.xlsb + ExcelWorkbookManager.part021.xlsb + ExcelWorkbookManager.part022.xlsb + ExcelWorkbookManager.part023.xlsb + ExcelWorkbookManager.part024.xlsb ExcelWorkbookManager.tar
+copy /b ExcelWorkbookManager.part001.xlsb + ExcelWorkbookManager.part002.xlsb + ExcelWorkbookManager.part003.xlsb + ExcelWorkbookManager.part004.xlsb + ExcelWorkbookManager.part005.xlsb + ExcelWorkbookManager.part006.xlsb + ExcelWorkbookManager.part007.xlsb + ExcelWorkbookManager.part008.xlsb + ExcelWorkbookManager.part009.xlsb + ExcelWorkbookManager.part010.xlsb + ExcelWorkbookManager.part011.xlsb + ExcelWorkbookManager.part012.xlsb + ExcelWorkbookManager.part013.xlsb + ExcelWorkbookManager.part014.xlsb + ExcelWorkbookManager.part015.xlsb + ExcelWorkbookManager.part016.xlsb + ExcelWorkbookManager.part017.xlsb + ExcelWorkbookManager.part018.xlsb ExcelWorkbookManager.tar
 tar -xf ExcelWorkbookManager.tar
 ```
 

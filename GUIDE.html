@@ -323,6 +323,7 @@
         <li><a href="#profiles">Config Profiles</a></li>
         <li><a href="#depmap">Dependency Map</a></li>
         <li><a href="#tabrefresh">Tab Refresh</a></li>
+        <li><a href="#shortcuts">Keyboard Shortcuts</a></li>
         <li><a href="#tips">Tips &amp; Notes</a></li>
         <li><a href="#author">About</a></li>
       </ol>
@@ -333,43 +334,70 @@
 
       <!-- ── What's New ───────────────────────────────────────── -->
       <section class="section" id="whatsnew">
-        <h2>What&rsquo;s New in Beta v5</h2>
+        <h2>What&rsquo;s New in Beta v6</h2>
         <div class="callout info">
-          <strong>Smart Relinker &mdash; Folder Match (fuzzy scan).</strong>
-          Point the relinker at a new root folder and it will fuzzy-match every
-          old link to the most similar file in the new tree, even when file names
-          or subfolders have been restructured. See the
-          <a href="#relinker">Smart Relinker section</a> for the full walkthrough
-          and scoring rules.
+          <strong>Multi-instance support, smarter link opening, selection fixes,
+          and per-tab search fields.</strong>
+          Seven quality-of-life improvements across the tool.
+          See the sections below for detailed walkthroughs.
         </div>
         <ul>
           <li>
+            <strong>Excel Instance picker</strong> &mdash; a new <em>Excel:</em>
+            dropdown in the bottom bar lists every running Excel.exe process.
+            Choose one instance to lock all operations to it, or leave it on
+            <em>[ALL INSTANCES]</em> to see workbooks from every open Excel.
+          </li>
+          <li>
+            <strong>Opened links now trigger recalculation</strong> &mdash;
+            after <em>Open Selected</em> or <em>Open Current Tab&rsquo;s Links</em>,
+            the tool calls <code>UpdateLink</code> + <code>CalculateFullRebuild</code>
+            on the source workbook so formulas pick up live values immediately.
+          </li>
+          <li>
+            <strong>Open Current Tab&rsquo;s Links</strong> button (and
+            <kbd>Ctrl+Shift+O</kbd>) in the <em>Open Links</em> tab &mdash;
+            opens only the external workbooks referenced by formulas on the
+            <em>currently active sheet</em> in Excel, not the whole workbook.
+          </li>
+          <li>
+            <strong>Smart Relinker &mdash; Queue All Modified</strong> &mdash;
+            one button captures every changed row in the preview grid as an
+            explicit pair-based queue entry, letting you batch edits across
+            multiple workbooks before applying them in one go.
+          </li>
+          <li>
+            <strong>Shift+Arrow selection fixed</strong> &mdash; every list in the
+            tool now uses anchor-based range selection (like Windows Explorer).
+            Reversing direction shrinks the selection back instead of getting stuck.
+          </li>
+          <li>
+            <strong>Close Workbooks search</strong> &mdash; type in the new
+            <em>Search:</em> box to filter the workbook list in real time before
+            selecting and closing.
+          </li>
+          <li>
+            <strong>Sheet Navigator split search</strong> &mdash; two independent
+            filter fields (<em>Workbook:</em> and <em>Sheet:</em>) replace the
+            single combined search box, making it easier to narrow down sheets.
+          </li>
+        </ul>
+
+        <h3>Beta v5 highlights (previous release)</h3>
+        <ul>
+          <li>
             <strong>Folder Match mode</strong> in Smart Relinker &mdash;
-            new fourth mode next to Period Shift, Custom Find &amp; Replace,
-            and Manual Edit. Recursive scan of
-            <code>.xlsx / .xlsb / .xlsm / .xls</code>, skeleton-based
-            similarity scoring, same-subfolder boost, candidate picker when
-            multiple files tie.
+            fuzzy scan against a new root folder.
           </li>
           <li>
-            <strong>Manual Edit mode</strong> formalised &mdash; loads every
-            selected link into the preview grid untouched so you can hand-edit
-            rows without first defining any rule.
+            <strong>Manual Edit mode</strong> formalised &mdash; loads links
+            into the preview grid for free-form editing.
           </li>
           <li>
-            <strong>Preview grid is the single commit surface.</strong> All
-            four modes populate the same editable table; manual overrides,
-            Excel round-trip, and path verification work identically
-            regardless of which mode produced each row.
+            <strong>Auto-refresh</strong> every 20&nbsp;seconds in the background.
           </li>
           <li>
-            <strong>Auto-refresh</strong> &mdash; workbook and sheet lists are
-            re-polled every 20&nbsp;seconds in the background, so the tool stays
-            in sync when you open or close files in Excel.
-          </li>
-          <li>
-            <strong>Tab visibility settings</strong> persist between sessions
-            (<code>☰ Tabs</code> in the bottom bar).
+            <strong>Tab visibility settings</strong> persist between sessions.
           </li>
         </ul>
       </section>
@@ -450,14 +478,17 @@
 
           <div class="tab-card">
             <div class="tab-name"><div class="icon">✕</div>Close Workbooks</div>
-            <p>Lists all open workbooks with size and path. Select one or many and close them
-               in bulk. Prevents the "close one-by-one" routine when finishing a period.</p>
+            <p>Lists all open workbooks. Use the <em>Search:</em> box to filter by name,
+               then select one or many and close them in bulk. Prevents the
+               &ldquo;close one-by-one&rdquo; routine when finishing a period.</p>
           </div>
 
           <div class="tab-card">
-            <div class="tab-name"><div class="icon">🔗</div>Link Explorer</div>
-            <p>Scans all open workbooks and displays every external link (source path, type,
-               status). Quickly identify broken, missing or unexpected references.</p>
+            <div class="tab-name"><div class="icon">🔗</div>Link Explorer (Open Links)</div>
+            <p>Lists every external link in a workbook with status. <em>Open Selected</em>
+               opens chosen links and immediately recalculates the source workbook.
+               <em>Open Current Tab&rsquo;s Links</em> (or <kbd>Ctrl+Shift+O</kbd>)
+               opens only links referenced by formulas on the active sheet.</p>
           </div>
 
           <div class="tab-card">
@@ -469,11 +500,11 @@
 
           <div class="tab-card">
             <div class="tab-name"><div class="icon">⇄</div>Smart Relinker</div>
-            <p>Redirect external links in four ways: Period Shift (automatic year +
-               period token replacement), multi-rule Find &amp; Replace, <strong>Folder
-               Match fuzzy scan</strong> (point at a new root folder and it auto-picks
-               the closest file for every old link), or Manual Edit. Every mode feeds
-               the same editable preview grid with a live Excel round-trip.</p>
+            <p>Redirect external links in four ways: Period Shift, multi-rule
+               Find &amp; Replace, <strong>Folder Match fuzzy scan</strong>, or
+               Manual Edit. Use <em>Queue All Modified</em> to capture all changed
+               rows from the preview grid as a single queue entry &mdash; great for
+               batching edits across multiple workbooks before applying.</p>
           </div>
 
           <div class="tab-card">
@@ -498,8 +529,10 @@
 
           <div class="tab-card">
             <div class="tab-name"><div class="icon">📋</div>Sheet Navigator</div>
-            <p>Searchable list of every sheet across all open workbooks. Click any row to
-               activate that sheet instantly — no more scrolling through tab bars.</p>
+            <p>Searchable list of every sheet across all open workbooks. Use the
+               separate <em>Workbook:</em> and <em>Sheet:</em> filter boxes to narrow
+               down the list. Click any row (or double-click) to activate that sheet
+               instantly &mdash; no more scrolling through tab bars.</p>
           </div>
 
           <div class="tab-card">
@@ -827,6 +860,73 @@ I:\IFRS 17\2026\202603\Working\Non-model\RI Hub\RI Hub AoM 26Q1.xlsx</div>
         </table>
       </section>
 
+      <!-- ── Keyboard Shortcuts ───────────────────────────────── -->
+      <section class="section" id="shortcuts">
+        <h2>Keyboard Shortcuts</h2>
+        <table>
+          <thead>
+            <tr><th>Shortcut</th><th>Where</th><th>Action</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><kbd>Ctrl+Shift+O</kbd></td>
+              <td>Open Links tab</td>
+              <td>Open all external links referenced by formulas on the
+                  <em>active sheet</em> in the selected workbook.</td>
+            </tr>
+            <tr>
+              <td><kbd>Shift+Up / Down</kbd></td>
+              <td>All lists</td>
+              <td>Extend or shrink a range selection (anchor-based, like
+                  Windows Explorer).</td>
+            </tr>
+            <tr>
+              <td><kbd>Ctrl+Shift+Up / Down</kbd></td>
+              <td>All lists</td>
+              <td>Same as Shift+Up/Down.</td>
+            </tr>
+            <tr>
+              <td><kbd>Double-click</kbd></td>
+              <td>Sheet Navigator</td>
+              <td>Navigate to the selected sheet in Excel.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ── Excel Instance Picker ────────────────────────────── -->
+      <section class="section" id="instancepicker">
+        <h2>Excel Instance Picker</h2>
+        <p>
+          If you have more than one Excel.exe running simultaneously, the
+          <strong>Excel:</strong> dropdown in the bottom bar lets you control
+          which instance the tool talks to.
+        </p>
+        <ul>
+          <li>
+            <strong>[ALL INSTANCES]</strong> &mdash; the default. Workbook lists
+            aggregate every open file across all instances. When a workbook name
+            exists in only one instance it is shown as-is; when the same name appears
+            in multiple instances the label includes a <code>[PID&nbsp;N]</code> suffix
+            so operations are routed unambiguously.
+          </li>
+          <li>
+            <strong>PID&nbsp;XXXX — Book.xlsx</strong> &mdash; selecting a specific
+            entry locks all operations (open, close, relink, calculate&hellip;) to
+            that Excel process. Useful when you want to relink files in one model
+            without accidentally touching a separate instance.
+          </li>
+          <li>
+            Click <strong>Rescan</strong> next to the dropdown to repopulate the list
+            after launching or closing an Excel instance.
+          </li>
+          <li>
+            Your selection is saved between sessions. If the saved PID is gone when
+            the tool next starts, it automatically falls back to <em>[ALL INSTANCES]</em>.
+          </li>
+        </ul>
+      </section>
+
       <!-- ── Tips ──────────────────────────────────────────────── -->
       <section class="section" id="tips">
         <h2>Tips &amp; Notes</h2>
@@ -859,9 +959,21 @@ I:\IFRS 17\2026\202603\Working\Non-model\RI Hub\RI Hub AoM 26Q1.xlsx</div>
             <strong>Folder Match threshold</strong> — the fuzzy matcher defaults to
             70% similarity. If you are getting too many <em>No Match</em> rows on a
             reorganised folder tree, lower it via the <em>Min score</em> spinner;
-            if too many wrong rows auto-populate, raise it toward 80–90% so only
+            if too many wrong rows auto-populate, raise it toward 80&ndash;90% so only
             very confident matches apply and everything else falls into the
             candidate picker.
+          </li>
+          <li>
+            <strong>Queue All Modified workflow</strong> &mdash; edit the preview grid
+            for one workbook (via any mode), click <em>Queue All Modified</em>, then
+            switch to the next workbook and repeat. When all workbooks are prepared,
+            click <em>Apply Queue</em> once to commit everything in sequence.
+          </li>
+          <li>
+            <strong>Open Current Tab&rsquo;s Links</strong> only detects links written
+            directly as <code>'path\[Book.xlsx]Sheet'!cell</code> formula references.
+            Links that come from defined names, Power Query, or DDE connections are not
+            included &mdash; use <em>List Links</em> + <em>Open Selected</em> for those.
           </li>
           <li>
             <strong>profiles.json</strong> — edit this file in Notepad to customise
@@ -870,7 +982,7 @@ I:\IFRS 17\2026\202603\Working\Non-model\RI Hub\RI Hub AoM 26Q1.xlsx</div>
           </li>
         </ul>
         <div class="callout">
-          <strong>Beta notice:</strong> This is version <strong>Beta v5</strong>.
+          <strong>Beta notice:</strong> This is version <strong>Beta v6</strong>.
           If you encounter unexpected behaviour please report it to Moses directly
           before sharing the tool further.
         </div>
@@ -884,7 +996,7 @@ I:\IFRS 17\2026\202603\Working\Non-model\RI Hub\RI Hub AoM 26Q1.xlsx</div>
           <tbody>
             <tr><td><strong>Tool</strong></td><td>Excel Workbook Manager</td></tr>
             <tr><td><strong>Author</strong></td><td>Moses</td></tr>
-            <tr><td><strong>Version</strong></td><td>Beta v5</td></tr>
+            <tr><td><strong>Version</strong></td><td>Beta v6</td></tr>
             <tr><td><strong>Year</strong></td><td>© 2025</td></tr>
           </tbody>
         </table>
