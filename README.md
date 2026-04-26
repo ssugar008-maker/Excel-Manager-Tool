@@ -1,6 +1,6 @@
 # Excel Workbook Manager — Standalone Distribution
 
-**Beta v7** — all A/B/C enhancements: bug fixes, power features, and UX polish. Highlights include: Find & Replace tab, Break Links, Refresh All Connections, Dependency Map depth/recursion, hidden-sheet visibility controls, Named Range create/edit dialogs, right-click menus, sortable columns, CSV/clipboard export on every list, live scanner filters, 3-button Save/NoSave/Cancel close dialog, unsaved-changes badge, background health scan, last-tab memory, and correct cell-address reporting in the change log.
+**Beta v8** — two new actuarial power tabs: **Smart Refresh Orchestrator** (auto-discover linked docs, open them, recalculate selected sheets, compare audit cells before/after, scheduled auto-run with countdown timer, named profiles, exportable colour-coded audit log) and **Snapshot Export** (copy selected sheets as paste-values-only to a new file automatically named `originalname_YYYYMMDD.xlsb`).
 
 This repository contains the **standalone Windows build** of Excel Workbook Manager, distributed as **raw binary chunks** of an uncompressed tar archive. No Python install is needed on the end-user PC — just Microsoft Excel.
 

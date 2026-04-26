@@ -324,6 +324,8 @@
         <li><a href="#depmap">Dependency Map</a></li>
         <li><a href="#tabrefresh">Tab Refresh</a></li>
         <li><a href="#shortcuts">Keyboard Shortcuts</a></li>
+        <li><a href="#smart_refresh">Smart Refresh</a></li>
+        <li><a href="#snapshot_export">Snapshot Export</a></li>
         <li><a href="#tips">Tips &amp; Notes</a></li>
         <li><a href="#author">About</a></li>
       </ol>
@@ -334,11 +336,38 @@
 
       <!-- ── What's New ───────────────────────────────────────── -->
       <section class="section" id="whatsnew">
-        <h2>What&rsquo;s New in Beta v7</h2>
+        <h2>What&rsquo;s New in Beta v8</h2>
         <div class="callout info">
-          <strong>A full A/B/C enhancement pass:</strong> bug fixes, six new power features,
-          and sweeping UX polish across every tab.
+          <strong>Two new actuarial power tabs:</strong> Smart Refresh Orchestrator and
+          Paste-Values Snapshot Export.
         </div>
+        <ul>
+          <li>
+            <strong>Smart Refresh</strong> &mdash; discovers the linked documents a workbook
+            depends on, opens them automatically, recalculates selected sheets, and records
+            before/after values for user-defined audit cells. Supports immediate <em>Run Now</em>
+            or a scheduled auto-run (every N minutes, countdown timer shown in the UI).
+            Results append to a persistent audit log exportable to a colour-coded Excel file.
+            Named profiles save the entire setup for re-use across periods.
+          </li>
+          <li>
+            <strong>Snapshot Export</strong> &mdash; copies selected sheets from any open
+            workbook into a new file with all formulas replaced by their current values
+            (paste-special &rarr; values only). The output is automatically named
+            <code>originalname_YYYYMMDD.xlsb</code> (or a custom suffix). Supports
+            <code>.xlsb</code>, <code>.xlsx</code>, <code>.xlsm</code>, and <code>.xls</code>
+            output formats with optional auto-open after save.
+          </li>
+        </ul>
+
+        <h3>Beta v7 highlights (previous release)</h3>
+        <ul>
+          <li>Find &amp; Replace tab, Break Links, Refresh All Connections, Dependency Map
+              depth/recursion, hidden-sheet visibility, Named Range create/edit dialogs,
+              right-click menus, sortable columns, CSV/clipboard export, live scanner filters,
+              3-button close dialog, unsaved-changes badge, background health scan,
+              last-tab memory, correct change-log cell addresses.</li>
+        </ul>
 
         <h3>Phase A &mdash; Bug Fixes</h3>
         <ul>
@@ -966,6 +995,99 @@ I:\IFRS 17\2026\202603\Working\Non-model\RI Hub\RI Hub AoM 26Q1.xlsx</div>
         </ul>
       </section>
 
+      <!-- ── Smart Refresh ─────────────────────────────────────── -->
+      <section class="section" id="smart_refresh">
+        <h2>Smart Refresh</h2>
+        <p>
+          This tab automates the full "open dependencies → recalculate → verify" cycle
+          that actuaries repeat at every period-end. It combines link discovery, scheduled
+          execution, and an auditable before/after comparison into a single workflow.
+        </p>
+
+        <h3>Typical workflow</h3>
+        <ol>
+          <li>Select the <strong>source workbook</strong> (your main model file) and click
+              <strong>Discover Links</strong>. All external workbook references are listed.</li>
+          <li>Tick the linked documents that must be opened before the refresh. Untick any
+              that are already permanently open or that you want to open manually.</li>
+          <li>Click <strong>Load Sheets</strong> on the right pane and select the sheets to
+              recalculate (e.g. your output sheets or reconciliation tabs).</li>
+          <li>Define <strong>Audit Cells</strong> — enter a label, sheet name, and cell or
+              range address (e.g. <code>C5</code> or <code>B2:D10</code>) for every key
+              figure you want tracked. These are read before and after each run.</li>
+          <li>Click <strong>Run Now</strong> to execute immediately, or set an interval and
+              click <strong>Start Schedule</strong> to run automatically every N minutes
+              while the tool is open. A countdown timer is displayed.</li>
+        </ol>
+
+        <h3>Audit Log</h3>
+        <p>
+          Each run appends one row per audit cell to the log at the bottom of the tab.
+          Rows where the value changed are highlighted in orange; unchanged rows are green.
+          The log is kept in memory for the session and can be exported to a colour-coded
+          Excel file via <strong>Export to Excel</strong>, or to CSV via
+          <strong>Export to CSV</strong>.
+        </p>
+
+        <h3>Profiles</h3>
+        <p>
+          Save the entire configuration (workbook, checked links, selected sheets, audit
+          cells, interval) as a named <strong>Profile</strong>. Profiles are stored in
+          <code>settings.json</code> and restored across sessions. Use one profile per
+          report (e.g. "IFRS17 Month-End BEL", "Solvency II QRT").
+        </p>
+
+        <div class="callout warning">
+          <strong>Note:</strong> The scheduled auto-run only fires while the tool is open.
+          It is not a Windows Task Scheduler job. Close the tool and the schedule stops.
+        </div>
+      </section>
+
+      <!-- ── Snapshot Export ───────────────────────────────────── -->
+      <section class="section" id="snapshot_export">
+        <h2>Snapshot Export</h2>
+        <p>
+          Creates a static, formula-free copy of selected sheets from any open workbook.
+          All formulas are replaced with their current values (equivalent to
+          <em>Paste Special &rarr; Values</em> in Excel). This is useful for:
+        </p>
+        <ul>
+          <li>Sending a "locked" version of model outputs to reviewers</li>
+          <li>Creating dated period-end archives (<code>BEL_Model_20260331.xlsb</code>)</li>
+          <li>Reducing file size by stripping formulas from distribution copies</li>
+        </ul>
+
+        <h3>Steps</h3>
+        <ol>
+          <li>Select the source workbook and click <strong>Load Sheets</strong>. All sheets
+              are selected by default.</li>
+          <li>Deselect any sheets you do not want in the snapshot (e.g. helper tabs).</li>
+          <li>Choose a <strong>Save folder</strong> (defaults to the source workbook&rsquo;s
+              own directory).</li>
+          <li>Set the <strong>Suffix</strong> to <em>Date (YYYYMMDD)</em> (the default) or
+              enter a <em>Custom</em> suffix such as <code>_MonthEnd</code> or
+              <code>_v2</code>.</li>
+          <li>Pick the output <strong>Format</strong>: <code>.xlsb</code> (smallest, binary),
+              <code>.xlsx</code>, <code>.xlsm</code>, or <code>.xls</code>.</li>
+          <li>Optionally tick <em>Open in Excel after saving</em> or
+              <em>Save source workbook first</em>.</li>
+          <li>Click <strong>Export Snapshot</strong>. The filename preview above the button
+              shows the exact output path before you commit.</li>
+        </ol>
+
+        <div class="callout info">
+          <strong>Tip:</strong> Use <code>.xlsb</code> format for the smallest file size.
+          It is ideal for archiving large models because binary workbooks are typically
+          30&ndash;50% smaller than equivalent <code>.xlsx</code> files.
+        </div>
+
+        <div class="callout warning">
+          <strong>Note:</strong> Charts, pivot tables, and objects on the copied sheets are
+          preserved. Only <em>formula cells</em> are converted to values. Formatting,
+          named ranges, and sheet structure are retained.
+        </div>
+      </section>
+
       <!-- ── Tips ──────────────────────────────────────────────── -->
       <section class="section" id="tips">
         <h2>Tips &amp; Notes</h2>
@@ -1021,7 +1143,7 @@ I:\IFRS 17\2026\202603\Working\Non-model\RI Hub\RI Hub AoM 26Q1.xlsx</div>
           </li>
         </ul>
         <div class="callout">
-          <strong>Beta notice:</strong> This is version <strong>Beta v7</strong>.
+          <strong>Beta notice:</strong> This is version <strong>Beta v8</strong>.
           If you encounter unexpected behaviour please report it to Moses directly
           before sharing the tool further.
         </div>
@@ -1035,7 +1157,7 @@ I:\IFRS 17\2026\202603\Working\Non-model\RI Hub\RI Hub AoM 26Q1.xlsx</div>
           <tbody>
             <tr><td><strong>Tool</strong></td><td>Excel Workbook Manager</td></tr>
             <tr><td><strong>Author</strong></td><td>Moses</td></tr>
-            <tr><td><strong>Version</strong></td><td>Beta v7</td></tr>
+            <tr><td><strong>Version</strong></td><td>Beta v8</td></tr>
             <tr><td><strong>Year</strong></td><td>© 2025</td></tr>
           </tbody>
         </table>
