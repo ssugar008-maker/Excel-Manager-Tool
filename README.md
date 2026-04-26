@@ -1,6 +1,12 @@
 # Excel Workbook Manager — Standalone Distribution
 
-**Beta v9** — performance and multi-instance reliability release:
+**Beta v10** — relink UX fixes and shortcut rename:
+
+- **Ctrl+Shift+O → Ctrl+Shift+M** — the "Open Current Tab's Links" shortcut has been renamed to avoid key-layout clashes.
+- **Silent relink popup** — the *"links were not updated because the file was not recalculated"* Excel dialog is now automatically suppressed during `Apply Now` / `Apply Queue`, regardless of whether the source workbook is open.
+- **Auto-open before relink toggle** — a new checkbox in Smart Relinker opens each target file (read-only) before changing link paths, ensuring Excel can verify the path and preventing any residual warnings.
+
+Previous **Beta v9** highlights:
 
 - **20-second auto-poll removed** — no more background freezes; a *Last refreshed* timestamp shows when data was last synced.
 - **Lazy tab refresh** — data is only pushed to tabs you actually open, eliminating the fan-out rebuild of all 14 tabs on every manual refresh.

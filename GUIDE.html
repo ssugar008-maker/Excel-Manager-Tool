@@ -185,7 +185,7 @@
     <h1>Excel Workbook Manager</h1>
     <p class="subtitle">Detailed User Guide — every tab, every button, every option explained</p>
     <div class="hero-meta">
-        <span class="badge">Beta v9</span>
+        <span class="badge">Beta v10</span>
         <span class="badge navy">Built by Moses</span>
         <span class="badge navy">13 Tabs</span>
         <span class="badge navy">Windows + Excel required</span>
@@ -200,7 +200,7 @@
   <nav class="toc">
     <h4>Contents</h4>
     <ol>
-      <li><a href="#whatsnew">What&rsquo;s New (v9)</a></li>
+      <li><a href="#whatsnew">What&rsquo;s New (v10)</a></li>
       <li><a href="#overview">Overview</a></li>
       <li><a href="#requirements">Requirements</a></li>
       <li><a href="#quickstart">Quick Start</a></li>
@@ -239,11 +239,42 @@
   <!-- Main content -->
   <main class="content">
 
-    <!-- ── What's New v9 ─────────────────────────────────────────── -->
+    <!-- ── What's New v10 ────────────────────────────────────────── -->
     <section class="section" id="whatsnew">
-      <h2>What&rsquo;s New in Beta v9</h2>
+      <h2>What&rsquo;s New in Beta v10</h2>
       <div class="callout info">
-        <strong>Focus release: performance and multi-instance reliability.</strong>
+        <strong>Focus release: relink UX fixes and shortcut rename.</strong>
+      </div>
+
+      <h3>Beta v10 changes</h3>
+      <ul>
+        <li>
+          <strong>Ctrl+Shift+O renamed to Ctrl+Shift+M</strong> — the &ldquo;Open Current
+          Tab&rsquo;s Links&rdquo; shortcut in the Open Links tab has been changed to
+          <kbd>Ctrl+Shift+M</kbd> to avoid a clash with the system copy shortcut on some
+          keyboard layouts. The button label and all documentation have been updated.
+        </li>
+        <li>
+          <strong>Smart Relinker — silent &ldquo;not recalculated&rdquo; popup.</strong>
+          Excel&rsquo;s alert <em>&ldquo;Links to &lsquo;file&rsquo; were not updated
+          because &lsquo;file&rsquo; was not recalculated before it was last saved&rdquo;</em>
+          is now automatically suppressed whenever <span class="btn-label">Apply Now</span>
+          or <span class="btn-label">Apply Queue</span> is run, regardless of whether the
+          source file is open. No configuration needed.
+        </li>
+        <li>
+          <strong>Smart Relinker — Auto-open new paths before relinking toggle.</strong>
+          A new checkbox above the Apply buttons opens every target file (read-only, no
+          link updates) before changing the link paths. Enable this when target files have
+          never been opened so Excel can verify the path and avoid any residual warnings.
+          See <a href="#relink_apply_options">Apply Options</a> for full details.
+        </li>
+      </ul>
+
+      <hr style="margin:20px 0;">
+      <h3>Beta v10 changes (previous release)</h3>
+      <div class="callout info">
+        <strong>Focus: performance and multi-instance reliability.</strong>
         No new tabs were added; all changes are under-the-hood improvements.
       </div>
 
@@ -364,7 +395,7 @@
         <div class="tab-card">
           <div class="tab-name"><div class="icon">🔗</div>2 · Open Links</div>
           <p>List, check, open, or permanently break external workbook links. Includes a
-             per-active-sheet shortcut (<kbd>Ctrl+Shift+O</kbd>).</p>
+             per-active-sheet shortcut (<kbd>Ctrl+Shift+M</kbd>).</p>
         </div>
         <div class="tab-card">
           <div class="tab-name"><div class="icon">↻</div>3 · Tab Refresh</div>
@@ -662,7 +693,7 @@
                 workbook so formulas immediately pick up live values from the newly opened files.</td>
           </tr>
           <tr>
-            <td><span class="btn-label">Open Current Tab's Links (Ctrl+Shift+O)</span></td>
+            <td><span class="btn-label">Open Current Tab's Links (Ctrl+Shift+M)</span></td>
             <td>Scans the <em>active sheet</em> in the selected workbook for formula references of
                 the form <code>'path\[Book.xlsx]Sheet'!cell</code> and opens only those.
                 Does not open links used only on other sheets.</td>
@@ -693,7 +724,7 @@
       </table>
 
       <div class="callout">
-        <strong>Ctrl+Shift+O scope:</strong> This shortcut only detects links written as direct
+        <strong>Ctrl+Shift+M scope:</strong> This shortcut only detects links written as direct
         formula references. Links from Power Query, defined names, or DDE connections are not
         detected. Use <em>List Links</em> + <em>Open Selected</em> for those.
       </div>
@@ -948,6 +979,48 @@ After:  I:\IFRS 17\2026\202603\Working\RI Hub\RI Hub AoM 25FY.xlsx</div>
         <li>Keep <strong>Verify new paths exist</strong> ticked. If a target file is missing,
             the tool warns you before writing any changes.</li>
       </ul>
+
+      <!-- Apply options -->
+      <h3 id="relink_apply_options">Apply Options</h3>
+
+      <h4>Silent alerts (always on)</h4>
+      <p>
+        When <code>ChangeLink</code> is called while the source workbook is <em>not open</em>,
+        Excel normally pops up a dialog:
+        <em>"Links to &lsquo;file&rsquo; were not updated because &lsquo;file&rsquo; was not
+        recalculated before it was last saved."</em>
+        The tool now suppresses this alert automatically by disabling
+        <code>Application.DisplayAlerts</code> for the duration of each link change and
+        restoring it immediately after — so you will never see this popup regardless of
+        which workbooks are currently open.
+      </p>
+
+      <h4>Auto-open new paths before relinking</h4>
+      <p>
+        When this checkbox (above the <span class="btn-label">Apply Now</span> button) is
+        enabled, the tool will:
+      </p>
+      <ol class="steps">
+        <li><div class="step-body">
+          Collect every distinct <em>New Path</em> from the preview (or queue) that is
+          not already open in Excel.
+        </div></li>
+        <li><div class="step-body">
+          Open each file in <strong>read-only</strong> mode with <em>Update Links = False</em>
+          (so no cascading link updates are triggered on open).
+        </div></li>
+        <li><div class="step-body">
+          Proceed with the normal link change. Because the target file is now open, Excel
+          can confirm the path is valid and the "not recalculated" dialog never appears.
+        </div></li>
+      </ol>
+      <div class="callout">
+        <strong>When to use this:</strong> Turn it on if you are relinking to files that
+        were recently rolled over but not yet opened, or if Excel still shows the warning
+        even with alerts silenced (very rare in some Excel versions). Leave it off for
+        day-to-day use when the target files are already open — opening large workbooks
+        unnecessarily slows down the relink.
+      </div>
     </section>
 
     <!-- ═══════════════════════════════════════════════════════════ -->
@@ -1616,7 +1689,7 @@ After:  I:\IFRS 17\2026\202603\Working\RI Hub\RI Hub AoM 25FY.xlsx</div>
         <thead><tr><th>Shortcut</th><th>Active in</th><th>Action</th></tr></thead>
         <tbody>
           <tr>
-            <td><kbd>Ctrl+Shift+O</kbd></td>
+            <td><kbd>Ctrl+Shift+M</kbd></td>
             <td>Open Links tab</td>
             <td>Open all external links referenced on the <em>active sheet</em> in the selected workbook.</td>
           </tr>
@@ -1660,7 +1733,7 @@ After:  I:\IFRS 17\2026\202603\Working\RI Hub\RI Hub AoM 25FY.xlsx</div>
       <ul>
         <li>
           <strong>Always click Refresh All Lists</strong> after opening or closing workbooks
-          in Excel. The auto-poll was removed in Beta v9 — the bottom bar now shows a
+          in Excel. The auto-poll was removed in Beta v10 — the bottom bar now shows a
           <em>Last refreshed: HH:MM:SS</em> timestamp so you can see how stale the data is.
         </li>
         <li>
@@ -1720,7 +1793,7 @@ After:  I:\IFRS 17\2026\202603\Working\RI Hub\RI Hub AoM 25FY.xlsx</div>
       </ul>
 
       <div class="callout">
-        <strong>Beta notice:</strong> This is version <strong>Beta v9</strong>.
+        <strong>Beta notice:</strong> This is version <strong>Beta v10</strong>.
         If you encounter unexpected behaviour please report it to Moses directly.
       </div>
     </section>
@@ -1733,7 +1806,7 @@ After:  I:\IFRS 17\2026\202603\Working\RI Hub\RI Hub AoM 25FY.xlsx</div>
         <tbody>
           <tr><td><strong>Tool</strong></td><td>Excel Workbook Manager</td></tr>
           <tr><td><strong>Author</strong></td><td>Moses</td></tr>
-          <tr><td><strong>Version</strong></td><td>Beta v9</td></tr>
+          <tr><td><strong>Version</strong></td><td>Beta v10</td></tr>
           <tr><td><strong>Year</strong></td><td>&copy; 2025 – 2026</td></tr>
           <tr><td><strong>Platform</strong></td><td>Windows 10 / 11, Microsoft Excel (COM automation via xlwings)</td></tr>
         </tbody>
@@ -1750,7 +1823,7 @@ After:  I:\IFRS 17\2026\202603\Working\RI Hub\RI Hub AoM 25FY.xlsx</div>
 <footer class="footer">
   <strong>Excel Workbook Manager</strong> &nbsp;&middot;&nbsp;
   Built by <strong>Moses</strong> &nbsp;&middot;&nbsp;
-  Beta v9 &nbsp;&middot;&nbsp; &copy; 2025 &ndash; 2026
+  Beta v10 &nbsp;&middot;&nbsp; &copy; 2025 &ndash; 2026
 </footer>
 
 </div><!-- end page-wrap -->
