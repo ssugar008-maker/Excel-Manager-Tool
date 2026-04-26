@@ -3,1179 +3,1641 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Excel Workbook Manager — User Guide</title>
+  <title>Excel Workbook Manager — Detailed User Guide</title>
   <style>
-    /* ── Reset & base ─────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: "Segoe UI", Arial, sans-serif;
       font-size: 14px;
       color: #1a1a2e;
       background: #f5f7fa;
-      line-height: 1.7;
+      line-height: 1.75;
     }
     a { color: #0A2D4D; }
+    a:hover { color: #F4A017; }
 
-    /* ── Layout ───────────────────────────────────────────────── */
     .page-wrap {
-      max-width: 980px;
+      max-width: 1060px;
       margin: 0 auto;
-      background: #ffffff;
+      background: #fff;
       box-shadow: 0 2px 24px rgba(0,0,0,.10);
     }
 
-    /* ── Hero header ──────────────────────────────────────────── */
+    /* ── Hero ─────────────────────────────────────────────────── */
     .hero {
       background: #0A2D4D;
       background-image:
         repeating-linear-gradient(0deg,   transparent, transparent 21px, rgba(255,255,255,.04) 21px, rgba(255,255,255,.04) 22px),
         repeating-linear-gradient(90deg,  transparent, transparent 29px, rgba(255,255,255,.04) 29px, rgba(255,255,255,.04) 30px);
       padding: 52px 48px 44px;
-      position: relative;
       border-bottom: 4px solid #F4A017;
     }
     .hero-monogram {
-      font-size: 64px;
-      font-weight: 900;
-      color: #F4A017;
-      line-height: 1;
-      float: left;
-      margin-right: 24px;
+      font-size: 64px; font-weight: 900; color: #F4A017; line-height: 1;
+      float: left; margin-right: 24px;
       text-shadow: 0 2px 12px rgba(0,0,0,.4);
-      font-family: "Segoe UI", Georgia, serif;
     }
-    .hero-text h1 {
-      font-size: 28px;
-      font-weight: 700;
-      color: #ffffff;
-      margin-bottom: 4px;
-    }
-    .hero-text .subtitle {
-      color: #FFD060;
-      font-size: 14px;
-      font-style: italic;
-    }
-    .hero-meta {
-      margin-top: 18px;
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
+    .hero-text h1 { font-size: 28px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+    .hero-text .subtitle { color: #FFD060; font-size: 14px; font-style: italic; }
+    .hero-meta { margin-top: 18px; display: flex; gap: 10px; flex-wrap: wrap; }
     .badge {
-      background: rgba(244,160,23,.18);
-      border: 1px solid #F4A017;
-      color: #FFD060;
-      border-radius: 20px;
-      padding: 3px 14px;
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: .4px;
+      background: rgba(244,160,23,.18); border: 1px solid #F4A017;
+      color: #FFD060; border-radius: 20px; padding: 3px 14px;
+      font-size: 12px; font-weight: 600; letter-spacing: .4px;
     }
     .badge.navy {
-      background: rgba(255,255,255,.08);
-      border-color: rgba(255,255,255,.25);
-      color: #ccd9e8;
+      background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.25); color: #ccd9e8;
     }
     .clearfix::after { content:""; display:table; clear:both; }
 
-    /* ── TOC sidebar + content ────────────────────────────────── */
-    .body-wrap {
-      display: flex;
-      align-items: flex-start;
-    }
+    /* ── Layout ───────────────────────────────────────────────── */
+    .body-wrap { display: flex; align-items: flex-start; }
     .toc {
-      width: 230px;
-      flex-shrink: 0;
-      position: sticky;
-      top: 0;
-      padding: 32px 0 32px 28px;
-      border-right: 1px solid #e4e8ef;
+      width: 240px; flex-shrink: 0; position: sticky; top: 0;
+      padding: 28px 0 32px 24px; border-right: 1px solid #e4e8ef;
+      max-height: 100vh; overflow-y: auto;
     }
-    .toc h4 {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: #8899aa;
-      margin-bottom: 10px;
-    }
-    .toc ol {
-      padding-left: 16px;
-    }
-    .toc li {
-      margin-bottom: 6px;
-    }
-    .toc a {
-      text-decoration: none;
-      color: #0A2D4D;
-      font-size: 13px;
-    }
+    .toc h4 { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #8899aa; margin-bottom: 8px; }
+    .toc ol { padding-left: 16px; }
+    .toc > ol > li { margin-bottom: 5px; }
+    .toc a { text-decoration: none; color: #0A2D4D; font-size: 12.5px; }
     .toc a:hover { color: #F4A017; }
+    .toc .toc-sub { padding-left: 14px; list-style: none; margin-top: 3px; }
+    .toc .toc-sub li { margin-bottom: 3px; }
+    .toc .toc-sub a { font-size: 11.5px; color: #556677; }
 
-    .content {
-      flex: 1;
-      padding: 36px 48px 64px;
-      min-width: 0;
-    }
+    .content { flex: 1; padding: 36px 48px 72px; min-width: 0; }
 
     /* ── Section headings ─────────────────────────────────────── */
-    .section {
-      margin-bottom: 48px;
-    }
+    .section { margin-bottom: 52px; }
     h2 {
-      font-size: 20px;
-      font-weight: 700;
-      color: #0A2D4D;
-      border-bottom: 2px solid #F4A017;
-      padding-bottom: 6px;
-      margin-bottom: 20px;
+      font-size: 21px; font-weight: 700; color: #0A2D4D;
+      border-bottom: 2px solid #F4A017; padding-bottom: 7px; margin-bottom: 20px;
+      display: flex; align-items: center; gap: 10px;
     }
-    h3 {
-      font-size: 15px;
-      font-weight: 700;
-      color: #0A2D4D;
-      margin: 22px 0 8px;
+    h2 .tab-num {
+      background: #F4A017; color: #0A2D4D; font-size: 13px; font-weight: 900;
+      border-radius: 6px; padding: 2px 9px; flex-shrink: 0;
     }
+    h3 { font-size: 15px; font-weight: 700; color: #0A2D4D; margin: 24px 0 9px; }
+    h4 { font-size: 13.5px; font-weight: 700; color: #336; margin: 16px 0 6px; }
     p { margin-bottom: 12px; }
     ul, ol { padding-left: 22px; margin-bottom: 12px; }
     li { margin-bottom: 5px; }
 
-    /* ── Tab cards ────────────────────────────────────────────── */
-    .tab-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin-top: 4px;
+    /* ── Callouts ─────────────────────────────────────────────── */
+    .callout {
+      border-left: 4px solid #F4A017; background: #fffbf0;
+      border-radius: 0 6px 6px 0; padding: 12px 16px; margin: 14px 0; font-size: 13px;
     }
-    .tab-card {
-      border: 1px solid #dde3ed;
-      border-radius: 8px;
-      padding: 16px 18px;
-      background: #fafbfd;
-      transition: box-shadow .15s;
-    }
-    .tab-card:hover { box-shadow: 0 2px 10px rgba(10,45,77,.10); }
-    .tab-card .tab-name {
-      font-weight: 700;
-      color: #0A2D4D;
-      font-size: 13px;
-      margin-bottom: 5px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .tab-card .tab-name .icon {
-      width: 26px;
-      height: 26px;
-      border-radius: 6px;
-      background: #0A2D4D;
-      color: #F4A017;
-      font-size: 13px;
-      font-weight: 900;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-    .tab-card p {
-      font-size: 12.5px;
-      color: #444;
-      margin: 0;
-    }
+    .callout.info   { border-color: #0A2D4D; background: #f0f4fa; }
+    .callout.green  { border-color: #006600; background: #f0faf0; }
+    .callout.red    { border-color: #aa0000; background: #fff0f0; }
+    .callout strong { color: #0A2D4D; }
 
-    /* ── Step boxes ───────────────────────────────────────────── */
-    .steps {
-      counter-reset: step;
-      list-style: none;
-      padding: 0;
-    }
+    /* ── Steps ────────────────────────────────────────────────── */
+    .steps { counter-reset: step; list-style: none; padding: 0; }
     .steps li {
-      counter-increment: step;
-      display: flex;
-      gap: 14px;
-      margin-bottom: 14px;
-      align-items: flex-start;
+      counter-increment: step; display: flex; gap: 14px;
+      margin-bottom: 14px; align-items: flex-start;
     }
     .steps li::before {
       content: counter(step);
-      background: #0A2D4D;
-      color: #F4A017;
-      font-weight: 700;
-      font-size: 13px;
-      min-width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      margin-top: 1px;
+      background: #0A2D4D; color: #F4A017; font-weight: 700; font-size: 13px;
+      min-width: 28px; height: 28px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 1px;
     }
-    .steps li .step-body strong {
-      display: block;
-      color: #0A2D4D;
-    }
-    .steps li .step-body {
-      font-size: 13.5px;
-    }
+    .steps li .step-body { font-size: 13.5px; }
+    .steps li .step-body strong { display: block; color: #0A2D4D; }
 
-    /* ── Code / path blocks ───────────────────────────────────── */
+    /* ── Code ─────────────────────────────────────────────────── */
     code {
-      background: #eef2f7;
-      border: 1px solid #dde3ed;
-      border-radius: 4px;
-      padding: 1px 7px;
-      font-size: 12.5px;
-      font-family: Consolas, "Courier New", monospace;
+      background: #eef2f7; border: 1px solid #dde3ed; border-radius: 4px;
+      padding: 1px 7px; font-size: 12.5px; font-family: Consolas, "Courier New", monospace;
       color: #0A2D4D;
     }
     .code-block {
-      background: #0A2D4D;
-      border-radius: 8px;
-      padding: 16px 20px;
-      margin: 12px 0;
-      font-family: Consolas, "Courier New", monospace;
-      font-size: 12.5px;
-      color: #FFD060;
-      overflow-x: auto;
-      white-space: pre;
+      background: #0A2D4D; border-radius: 8px; padding: 16px 20px; margin: 12px 0;
+      font-family: Consolas, "Courier New", monospace; font-size: 12.5px;
+      color: #FFD060; overflow-x: auto; white-space: pre;
     }
 
-    /* ── Info / warning callouts ─────────────────────────────── */
-    .callout {
-      border-left: 4px solid #F4A017;
-      background: #fffbf0;
-      border-radius: 0 6px 6px 0;
-      padding: 12px 16px;
-      margin: 14px 0;
-      font-size: 13px;
-    }
-    .callout.info {
-      border-color: #0A2D4D;
-      background: #f0f4fa;
-    }
-    .callout strong { color: #0A2D4D; }
-
-    /* ── Profile table ────────────────────────────────────────── */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-      margin: 12px 0;
-    }
-    th {
-      background: #0A2D4D;
-      color: #FFD060;
-      font-weight: 700;
-      text-align: left;
-      padding: 9px 14px;
-    }
-    td {
-      padding: 8px 14px;
-      border-bottom: 1px solid #eaecf0;
-    }
+    /* ── Tables ───────────────────────────────────────────────── */
+    table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 12px 0; }
+    th { background: #0A2D4D; color: #FFD060; font-weight: 700; text-align: left; padding: 9px 14px; }
+    td { padding: 8px 14px; border-bottom: 1px solid #eaecf0; vertical-align: top; }
     tr:nth-child(even) td { background: #f8f9fb; }
     tr:hover td { background: #eef3fa; }
 
+    /* ── Tab overview grid ────────────────────────────────────── */
+    .tab-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 4px; }
+    .tab-card {
+      border: 1px solid #dde3ed; border-radius: 8px; padding: 14px 16px;
+      background: #fafbfd; transition: box-shadow .15s;
+    }
+    .tab-card:hover { box-shadow: 0 2px 10px rgba(10,45,77,.10); }
+    .tab-card .tab-name {
+      font-weight: 700; color: #0A2D4D; font-size: 13px; margin-bottom: 5px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .tab-card .tab-name .icon {
+      width: 26px; height: 26px; border-radius: 6px; background: #0A2D4D; color: #F4A017;
+      font-size: 12px; font-weight: 900; display: flex; align-items: center;
+      justify-content: center; flex-shrink: 0;
+    }
+    .tab-card p { font-size: 12.5px; color: #444; margin: 0; }
+
+    /* ── UI element labels ────────────────────────────────────── */
+    .btn-label {
+      display: inline-block; background: #0A2D4D; color: #FFD060;
+      border-radius: 4px; padding: 1px 8px; font-size: 12px; font-weight: 600;
+      font-family: "Segoe UI", Arial, sans-serif;
+    }
+    .field-label {
+      display: inline-block; background: #eef2f7; border: 1px solid #dde3ed;
+      border-radius: 4px; padding: 1px 7px; font-size: 12px; color: #0A2D4D;
+    }
+
+    /* ── Separator ────────────────────────────────────────────── */
+    .sep { border: none; border-top: 1px solid #e4e8ef; margin: 32px 0; }
+
     /* ── Footer ───────────────────────────────────────────────── */
     .footer {
-      background: #0A2D4D;
-      color: #7a99bb;
-      text-align: center;
-      padding: 28px 20px;
-      font-size: 12.5px;
-      border-top: 3px solid #F4A017;
+      background: #0A2D4D; color: #7a99bb; text-align: center;
+      padding: 28px 20px; font-size: 12.5px; border-top: 3px solid #F4A017;
     }
     .footer strong { color: #FFD060; }
+
+    kbd {
+      background: #e8ecf0; border: 1px solid #b0b8c8; border-radius: 3px;
+      padding: 1px 6px; font-size: 12px; font-family: Consolas, monospace;
+    }
   </style>
 </head>
 <body>
 <div class="page-wrap">
 
-  <!-- ── Hero ───────────────────────────────────────────────── -->
-  <header class="hero clearfix">
-    <div class="hero-monogram">M</div>
-    <div class="hero-text">
-      <h1>Excel Workbook Manager</h1>
-      <p class="subtitle">A desktop automation tool for actuarial Excel workflows</p>
-      <div class="hero-meta">
-        <span class="badge">Beta v5</span>
-        <span class="badge navy">Built by Moses</span>
-        <span class="badge navy">11 Tabs</span>
-        <span class="badge navy">Requires Excel + Windows</span>
-      </div>
+<!-- ── Hero ─────────────────────────────────────────────────────── -->
+<header class="hero clearfix">
+  <div class="hero-monogram">M</div>
+  <div class="hero-text">
+    <h1>Excel Workbook Manager</h1>
+    <p class="subtitle">Detailed User Guide — every tab, every button, every option explained</p>
+    <div class="hero-meta">
+      <span class="badge">Beta v8</span>
+      <span class="badge navy">Built by Moses</span>
+      <span class="badge navy">13 Tabs</span>
+      <span class="badge navy">Windows + Excel required</span>
     </div>
-  </header>
+  </div>
+</header>
 
-  <!-- ── Body ───────────────────────────────────────────────── -->
-  <div class="body-wrap">
+<!-- ── Body ──────────────────────────────────────────────────────── -->
+<div class="body-wrap">
 
-    <!-- TOC -->
-    <nav class="toc">
-      <h4>Contents</h4>
-      <ol>
-        <li><a href="#whatsnew">What&rsquo;s New</a></li>
-        <li><a href="#overview">Overview</a></li>
-        <li><a href="#requirements">Requirements</a></li>
-        <li><a href="#quickstart">Quick Start</a></li>
-        <li><a href="#tabs">All Features</a></li>
-        <li><a href="#relinker">Smart Relinker <span style="color:#F4A017;">&#9679;</span></a></li>
-        <li><a href="#rollover">Period Rollover</a></li>
-        <li><a href="#profiles">Config Profiles</a></li>
-        <li><a href="#depmap">Dependency Map</a></li>
-        <li><a href="#tabrefresh">Tab Refresh</a></li>
-        <li><a href="#shortcuts">Keyboard Shortcuts</a></li>
-        <li><a href="#smart_refresh">Smart Refresh</a></li>
-        <li><a href="#snapshot_export">Snapshot Export</a></li>
-        <li><a href="#tips">Tips &amp; Notes</a></li>
-        <li><a href="#author">About</a></li>
+  <!-- TOC -->
+  <nav class="toc">
+    <h4>Contents</h4>
+    <ol>
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#requirements">Requirements</a></li>
+      <li><a href="#quickstart">Quick Start</a></li>
+      <li><a href="#globalcontrols">Global Controls</a></li>
+      <li><a href="#instancepicker">Instance Picker</a></li>
+      <li><a href="#close_workbooks">1 · Close Workbooks</a></li>
+      <li><a href="#link_explorer">2 · Open Links</a></li>
+      <li><a href="#tab_refresh">3 · Tab Refresh</a></li>
+      <li><a href="#smart_relinker">4 · Smart Relinker</a>
+        <ul class="toc-sub">
+          <li><a href="#relink_period">Period Shift</a></li>
+          <li><a href="#relink_fnr">Find &amp; Replace</a></li>
+          <li><a href="#relink_folder">Folder Match</a></li>
+          <li><a href="#relink_manual">Manual Edit</a></li>
+          <li><a href="#relink_queue">Queue System</a></li>
+          <li><a href="#relink_preview">Preview Grid</a></li>
+        </ul>
+      </li>
+      <li><a href="#period_rollover">5 · Period Rollover</a></li>
+      <li><a href="#dependency_map">6 · Dependency Map</a></li>
+      <li><a href="#error_scanner">7 · Error Scanner</a></li>
+      <li><a href="#sheet_navigator">8 · Sheet Navigator</a></li>
+      <li><a href="#volatile_scanner">9 · Volatile Scanner</a></li>
+      <li><a href="#named_ranges">10 · Named Ranges</a></li>
+      <li><a href="#find_replace">11 · Find &amp; Replace</a></li>
+      <li><a href="#smart_refresh">12 · Smart Refresh</a></li>
+      <li><a href="#snapshot_export">13 · Snapshot Export</a></li>
+      <li><a href="#workbook_health">14 · Workbook Health</a></li>
+      <li><a href="#profiles">Config Profiles</a></li>
+      <li><a href="#shortcuts">Keyboard Shortcuts</a></li>
+      <li><a href="#tips">Tips &amp; Notes</a></li>
+      <li><a href="#author">About</a></li>
+    </ol>
+  </nav>
+
+  <!-- Main content -->
+  <main class="content">
+
+    <!-- ── Overview ─────────────────────────────────────────────── -->
+    <section class="section" id="overview">
+      <h2>Overview</h2>
+      <p>
+        <strong>Excel Workbook Manager</strong> is a standalone Windows desktop tool that sits
+        alongside Microsoft Excel and automates the repetitive, error-prone workbook management
+        tasks that arise during actuarial period-end processes — IFRS 17 reporting, Solvency II
+        QRTs, board packs, and similar workflows.
+      </p>
+      <p>
+        The tool connects to Excel via COM automation (the same mechanism that powers VBA macros),
+        so every action it takes is equivalent to what you could do yourself inside Excel — just
+        much faster and with a permanent audit trail.
+      </p>
+      <div class="callout info">
+        <strong>No installation needed.</strong> The tool ships as a self-contained
+        <code>ExcelWorkbookManager.exe</code>. Place it anywhere on your PC and double-click to run.
+        No Python, no admin rights, no Office add-in registration.
+      </div>
+
+      <h3>All 13 tabs at a glance</h3>
+      <div class="tab-grid">
+        <div class="tab-card">
+          <div class="tab-name"><div class="icon">✕</div>1 · Close Workbooks</div>
+          <p>Bulk-close open workbooks with a single click. Search by name, see unsaved-changes
+             badge, choose Save or Discard per batch.</p>
+        </div>
+        <div class="tab-card">
+          <div class="tab-name"><div class="icon">🔗</div>2 · Open Links</div>
+          <p>List, check, open, or permanently break external workbook links. Includes a
+             per-active-sheet shortcut (<kbd>Ctrl+Shift+O</kbd>).</p>
+        </div>
+        <div class="tab-card">
+          <div class="tab-name"><div class="icon">↻</div>3 · Tab Refresh</div>
+          <p>Force-recalculate selected sheets with optional multi-pass and a cell-level
+             change log. Also refreshes Power Query connections.</p>
+        </div>
+        <div class="tab-card">
+          <div class="tab-name"><div class="icon">⇄</div>4 · Smart Relinker</div>
+          <p>Redirect external links with four modes: Period Shift, Find &amp; Replace,
+             fuzzy Folder Match, or Manual Edit. Full preview + queue system.</p>
+        </div>
+        <div class="tab-card">
+          <div class="tab-name"><div class="icon">⚡</div>5 · Period Rollover</div>
+          <p>Roll every selected workbook from one reporting period to the next in a single
+             guided flow — relink + rename + recalculate.</p>
+        </div>
+        <div class="tab-card">
+          <div class="tab-name"><div class="icon">🗺</div>6 · Dependency Map</div>
+          <p>Expandable tree of every workbook-to-workbook link. Configurable depth,
+             recursive traversal, and Excel export.</p>
+        </div>
+        <div class="tab-card">
+          <div class="tab-name"><div class="icon">⚠</div>7 · Error Scanner</div>
+          <p>Scans for formula errors (#REF!, #N/A, #VALUE! …) across all sheets. Live filter,
+             one-click cell navigation, CSV/clipboard export.</p>
+        </div>
+        <div class="tab-card">
+          <div class="tab-name"><div class="icon">📋</div>8 · Sheet Navigator</div>
+          <p>Searchable list of every sheet across all open workbooks. Toggle hidden/very-hidden
+             sheets. Make Visible / Hide / Very Hide buttons.</p>
+        </div>
+        <div class="tab-card">
+          <div class="tab-name"><div class="icon">🔍</div>9 · Volatile Scanner</div>
+          <p>Finds INDIRECT, OFFSET, NOW, TODAY, RAND, etc. that cause full recalculation
+             on every change — a major source of model slowness.</p>
+        </div>
+        <div class="tab-card">
+          <div class="tab-name"><div class="icon">📌</div>10 · Named Ranges</div>
+          <p>List, filter, navigate, create, edit, and delete named ranges. Flags broken
+             (#REF!) and external-scope names.</p>
+        </div>
+        <div class="tab-card">
+          <div class="tab-name"><div class="icon">🔎</div>11 · Find &amp; Replace</div>
+          <p>Search across a whole workbook (or a single sheet) for any value or formula text.
+             Replace in bulk. Double-click any result to jump there in Excel.</p>
+        </div>
+        <div class="tab-card">
+          <div class="tab-name"><div class="icon">🔄</div>12 · Smart Refresh</div>
+          <p>Discover linked docs, open them, recalculate sheets, compare audit cells
+             before/after. Scheduled auto-run with countdown. Colour-coded audit log.</p>
+        </div>
+        <div class="tab-card">
+          <div class="tab-name"><div class="icon">📸</div>13 · Snapshot Export</div>
+          <p>Copy selected sheets to a new values-only file named
+             <code>Model_YYYYMMDD.xlsb</code> — no formulas, perfect for period-end archives.</p>
+        </div>
+        <div class="tab-card">
+          <div class="tab-name"><div class="icon">❤</div>Workbook Health</div>
+          <p>Background diagnostic scan: file size, link count, calculation mode, macro presence,
+             last-saved time. Tips and warnings for large or slow workbooks.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Requirements ──────────────────────────────────────────── -->
+    <section class="section" id="requirements">
+      <h2>Requirements</h2>
+      <table>
+        <thead><tr><th>Requirement</th><th>Detail</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Operating System</strong></td><td>Windows 10 (1803+) or Windows 11</td></tr>
+          <tr><td><strong>Microsoft Excel</strong></td><td>Any desktop version (2016 and later recommended). Excel must be installed and licensed — Office 365 / Microsoft 365 works fine.</td></tr>
+          <tr><td><strong>Excel running first</strong></td><td>Open Excel (with at least one workbook) <em>before</em> launching the tool. If Excel is not running, the tool shows a startup error and exits.</td></tr>
+          <tr><td><strong>Disk space</strong></td><td>~300 MB after extraction (most is the Python runtime bundled by PyInstaller).</td></tr>
+          <tr><td><strong>Python / admin rights</strong></td><td>Not required on the end-user PC.</td></tr>
+        </tbody>
+      </table>
+      <div class="callout">
+        <strong>Always open Excel first.</strong> The tool connects to the running Excel process.
+        If you close Excel while the tool is open, many operations will return errors until you
+        re-open Excel and click <span class="btn-label">Refresh All Lists</span>.
+      </div>
+    </section>
+
+    <!-- ── Quick Start ────────────────────────────────────────────── -->
+    <section class="section" id="quickstart">
+      <h2>Quick Start</h2>
+      <ol class="steps">
+        <li><div class="step-body">
+          <strong>Open Excel and load your workbooks</strong>
+          The tool only sees workbooks that are currently open in Excel. Open everything you plan
+          to work with before launching.
+        </div></li>
+        <li><div class="step-body">
+          <strong>Double-click <code>ExcelWorkbookManager.exe</code></strong>
+          A brief splash screen appears while the tool connects to Excel. The main window opens
+          automatically with the last active tab restored.
+        </div></li>
+        <li><div class="step-body">
+          <strong>Check the Excel Instance picker (bottom bar)</strong>
+          If you have multiple Excel windows open, select the right instance from the
+          <span class="field-label">Excel:</span> dropdown, or leave it on
+          <em>[ALL INSTANCES]</em> to see everything.
+        </div></li>
+        <li><div class="step-body">
+          <strong>Click <span class="btn-label">Refresh All Lists</span></strong>
+          This re-scans all open workbooks. Use it any time you open or close a file in Excel.
+          The tool also auto-refreshes every 20 seconds in the background.
+        </div></li>
+        <li><div class="step-body">
+          <strong>Select a tab and work</strong>
+          Each tab is self-contained. Start with your most common task — for period-end work this
+          is usually <em>Smart Relinker</em> → <em>Tab Refresh</em> → <em>Smart Refresh</em>.
+        </div></li>
       </ol>
-    </nav>
+    </section>
 
-    <!-- Content -->
-    <main class="content">
+    <!-- ── Global Controls ───────────────────────────────────────── -->
+    <section class="section" id="globalcontrols">
+      <h2>Global Controls (Bottom Bar)</h2>
+      <p>
+        The bottom bar is always visible regardless of which tab is active.
+      </p>
+      <table>
+        <thead><tr><th>Control</th><th>What it does</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Excel: [dropdown]</strong></td>
+            <td>Select which Excel instance the tool operates on. See <a href="#instancepicker">Instance Picker</a> below.</td>
+          </tr>
+          <tr>
+            <td><strong>Rescan</strong></td>
+            <td>Re-enumerate all running Excel.exe processes and update the instance dropdown.</td>
+          </tr>
+          <tr>
+            <td><strong>Refresh All Lists</strong></td>
+            <td>Re-reads all open workbooks in the selected Excel instance(s) and pushes the updated list to every tab. Use this after opening or closing files in Excel.</td>
+          </tr>
+          <tr>
+            <td><strong>🌙 Dark Mode / ☀ Light Mode</strong></td>
+            <td>Toggles the colour theme. Your preference is saved and restored on next launch.</td>
+          </tr>
+          <tr>
+            <td><strong>⚙ Settings</strong></td>
+            <td>Opens the hidden-tab manager — tick or untick tabs to show/hide them from the notebook. Changes take effect immediately.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
 
-      <!-- ── What's New ───────────────────────────────────────── -->
-      <section class="section" id="whatsnew">
-        <h2>What&rsquo;s New in Beta v8</h2>
-        <div class="callout info">
-          <strong>Two new actuarial power tabs:</strong> Smart Refresh Orchestrator and
-          Paste-Values Snapshot Export.
-        </div>
-        <ul>
-          <li>
-            <strong>Smart Refresh</strong> &mdash; discovers the linked documents a workbook
-            depends on, opens them automatically, recalculates selected sheets, and records
-            before/after values for user-defined audit cells. Supports immediate <em>Run Now</em>
-            or a scheduled auto-run (every N minutes, countdown timer shown in the UI).
-            Results append to a persistent audit log exportable to a colour-coded Excel file.
-            Named profiles save the entire setup for re-use across periods.
-          </li>
-          <li>
-            <strong>Snapshot Export</strong> &mdash; copies selected sheets from any open
-            workbook into a new file with all formulas replaced by their current values
-            (paste-special &rarr; values only). The output is automatically named
-            <code>originalname_YYYYMMDD.xlsb</code> (or a custom suffix). Supports
-            <code>.xlsb</code>, <code>.xlsx</code>, <code>.xlsm</code>, and <code>.xls</code>
-            output formats with optional auto-open after save.
-          </li>
-        </ul>
+    <!-- ── Instance Picker ───────────────────────────────────────── -->
+    <section class="section" id="instancepicker">
+      <h2>Excel Instance Picker</h2>
+      <p>
+        If you run more than one Excel.exe simultaneously — for example, one for the actuarial
+        model and another for a standalone pivot table — the <span class="field-label">Excel:</span>
+        dropdown lets you control which instance the tool talks to.
+      </p>
+      <table>
+        <thead><tr><th>Option</th><th>Behaviour</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>[ALL INSTANCES]</strong></td>
+            <td>Default. Workbook dropdowns aggregate every open file across all instances.
+                Workbooks with the same name in multiple instances are labelled
+                <code>Book.xlsx [PID 1234]</code> for unambiguous routing.</td>
+          </tr>
+          <tr>
+            <td><strong>PID XXXX — workbook name</strong></td>
+            <td>Locks all operations (open, close, relink, calculate, refresh…) to that single
+                Excel process. Useful when working with parallel models that must not interfere.</td>
+          </tr>
+        </tbody>
+      </table>
+      <ul>
+        <li>Click <span class="btn-label">Rescan</span> after opening a new Excel window.</li>
+        <li>Your choice is saved in <code>settings.json</code> and restored on next launch.
+            If the saved PID no longer exists, the tool falls back to <em>[ALL INSTANCES]</em>.</li>
+      </ul>
+    </section>
 
-        <h3>Beta v7 highlights (previous release)</h3>
-        <ul>
-          <li>Find &amp; Replace tab, Break Links, Refresh All Connections, Dependency Map
-              depth/recursion, hidden-sheet visibility, Named Range create/edit dialogs,
-              right-click menus, sortable columns, CSV/clipboard export, live scanner filters,
-              3-button close dialog, unsaved-changes badge, background health scan,
-              last-tab memory, correct change-log cell addresses.</li>
-        </ul>
+    <hr class="sep">
 
-        <h3>Phase A &mdash; Bug Fixes</h3>
-        <ul>
-          <li>
-            <strong>Correct change-log cell addresses</strong> &mdash; Tab Refresh now
-            accounts for UsedRange origin row/col offsets, so addresses like
-            <code>$B$3</code> are reported instead of <code>$A$1</code> when the
-            used range does not start at A1.
-          </li>
-          <li>
-            <strong>Workbook Health background scan</strong> &mdash; the health analysis
-            now runs in a background thread with an indeterminate progress bar and a
-            staleness notice whenever the workbook list changes.
-          </li>
-          <li>
-            <strong>Dependency Map staleness notice</strong> &mdash; a warning banner
-            now appears when the workbook list changes, prompting you to rebuild the map.
-          </li>
-          <li>
-            <strong>Close Workbooks &mdash; 3-button dialog</strong> &mdash; closing
-            workbooks with unsaved changes now presents <em>Save &amp; Close</em>,
-            <em>Close Without Saving</em>, and <em>Cancel</em> options instead of a
-            simple Yes/No prompt.
-          </li>
-        </ul>
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- TAB 1 — CLOSE WORKBOOKS                                     -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <section class="section" id="close_workbooks">
+      <h2><span class="tab-num">1</span> Close Workbooks</h2>
+      <p>
+        Lists every open Excel workbook and lets you close any number of them in bulk.
+        Useful at the end of a period-end run when you need to tidy up a large set of
+        open files without closing Excel itself.
+      </p>
 
-        <h3>Phase B &mdash; Power Features</h3>
-        <ul>
-          <li>
-            <strong>Break Links</strong> &mdash; new button in <em>Open Links</em>
-            converts selected external links to static values
-            (<code>Workbook.BreakLink</code>).
-          </li>
-          <li>
-            <strong>Refresh All Connections</strong> &mdash; new button in
-            <em>Tab Refresh</em> triggers <code>Workbook.RefreshAll()</code> to update
-            Power Query queries, pivot caches, and all data connections.
-          </li>
-          <li>
-            <strong>Dependency Map depth &amp; recursion</strong> &mdash; a
-            <em>Max depth</em> spinner and <em>Recurse into open workbooks</em>
-            checkbox let you explore multi-level dependency chains.
-          </li>
-          <li>
-            <strong>Find &amp; Replace tab</strong> &mdash; a new dedicated tab
-            with workbook/sheet scoping, match-case / match-whole options, formula
-            search mode, and double-click navigation to any result cell.
-          </li>
-          <li>
-            <strong>Sheet Navigator &mdash; hidden sheet visibility</strong> &mdash;
-            hidden and very-hidden sheets are now shown (in grey/red), with
-            <em>Make Visible</em>, <em>Hide</em>, and <em>Very Hide</em> action buttons.
-          </li>
-          <li>
-            <strong>Named Ranges &mdash; Create New &amp; Edit Selected</strong> &mdash;
-            a modal dialog lets you create new named ranges or edit the name and
-            RefersTo formula of an existing one, with scope selection.
-          </li>
-        </ul>
+      <h3>How to use it</h3>
+      <ol class="steps">
+        <li><div class="step-body">
+          <strong>Click Refresh Lists (or wait for the auto-refresh)</strong>
+          The list populates with every open workbook, its sheet count, and whether it has
+          unsaved changes.
+        </div></li>
+        <li><div class="step-body">
+          <strong>Use the Search box to filter</strong>
+          Type any part of the workbook name. The list updates in real time (200 ms debounce).
+          Clear the box to show all.
+        </div></li>
+        <li><div class="step-body">
+          <strong>Select workbooks to close</strong>
+          Click individual rows, or use <span class="btn-label">Select All</span> /
+          <span class="btn-label">Deselect All</span>. You can also
+          <kbd>Shift+Click</kbd> or <kbd>Ctrl+Click</kbd> for multi-select.
+        </div></li>
+        <li><div class="step-body">
+          <strong>Click Close Selected</strong>
+          If any selected workbook has unsaved changes, a 3-button dialog appears:
+          <em>Save &amp; Close</em>, <em>Close Without Saving</em>, or <em>Cancel</em>.
+          Your choice applies to all selected workbooks in that batch.
+        </div></li>
+      </ol>
 
-        <h3>Phase C &mdash; UX Polish</h3>
-        <ul>
-          <li>
-            <strong>Right-click context menus</strong> on every Treeview &mdash;
-            right-clicking a row pops a context menu with the most relevant actions
-            for that list (Open, Break, Go To, Copy, Export&hellip;).
-          </li>
-          <li>
-            <strong>Sortable column headers</strong> &mdash; click any column heading
-            to sort ascending or descending (numeric-aware). An arrow indicator
-            shows the active sort column and direction.
-          </li>
-          <li>
-            <strong>Copy to Clipboard / Export to CSV</strong> &mdash; buttons (and
-            right-click menu items) on Link Explorer, Error &amp; Volatile Scanners,
-            Named Ranges, and Find &amp; Replace export the visible rows.
-          </li>
-          <li>
-            <strong>Last active tab restored</strong> &mdash; the tool remembers
-            which tab you had open and restores it on the next launch via
-            <code>settings.json</code>.
-          </li>
-          <li>
-            <strong>Unsaved-changes badge</strong> &mdash; workbooks with unsaved
-            changes are highlighted in orange in the Close Workbooks list.
-          </li>
-          <li>
-            <strong>Live filter in scanners</strong> &mdash; Error Scanner and Volatile
-            Scanner now include a real-time <em>Filter:</em> box to narrow results by
-            sheet, cell, error type, or formula text.
-          </li>
-        </ul>
+      <h3>Columns explained</h3>
+      <table>
+        <thead><tr><th>Column</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Workbook Name</strong></td><td>The filename as Excel knows it. Shown in orange if the workbook has unsaved changes.</td></tr>
+          <tr><td><strong>Sheets</strong></td><td>Total number of sheets (visible + hidden).</td></tr>
+          <tr><td><strong>Unsaved?</strong></td><td>"Yes" if the workbook's Saved property is False. Rows marked "Yes" are highlighted in orange as a visual warning.</td></tr>
+        </tbody>
+      </table>
 
-        <h3>Beta v6 highlights (previous release)</h3>
-        <ul>
-          <li><strong>Excel Instance picker</strong>, <strong>recalc on open</strong>,
-              <strong>Open Current Tab&rsquo;s Links</strong>, <strong>Queue All Modified</strong>,
-              <strong>Shift+Arrow fix</strong>, <strong>Close Workbooks search</strong>,
-              <strong>Sheet Navigator split search</strong>.</li>
-        </ul>
-      </section>
+      <h3>Right-click menu</h3>
+      <p>Right-click any row to access: <em>Close Selected</em>, <em>Copy to Clipboard</em>, <em>Export to CSV</em>.</p>
 
-      <!-- ── Overview ─────────────────────────────────────────── -->
-      <section class="section" id="overview">
-        <h2>Overview</h2>
-        <p>
-          <strong>Excel Workbook Manager</strong> is a standalone Windows desktop application
-          that sits alongside Excel and automates repetitive workbook management tasks —
-          particularly those that arise during period-end actuarial processes such as
-          IFRS 17 reporting.
-        </p>
-        <p>
-          Rather than manually hunting through Excel menus, it provides a unified control panel
-          to close workbooks, relink external references, refresh calculation tabs, scan for
-          errors, and much more — all without touching a macro or VBA editor.
-        </p>
-        <div class="callout info">
-          <strong>No installation required.</strong>
-          The tool ships as a single <code>.exe</code> file.
-          Copy it to any Windows machine that has Excel installed and double-click to run.
-        </div>
-      </section>
+      <div class="callout">
+        <strong>Tip:</strong> The list does not include <code>PERSONAL.XLSB</code> — the personal
+        macro workbook is always excluded to prevent accidental closing.
+      </div>
+    </section>
 
-      <!-- ── Requirements ─────────────────────────────────────── -->
-      <section class="section" id="requirements">
-        <h2>Requirements</h2>
-        <ul>
-          <li>Windows 10 or 11</li>
-          <li>Microsoft Excel (desktop, any recent version)</li>
-          <li>Excel must be <strong>open and running</strong> before launching the tool</li>
-          <li>No Python installation needed on the target machine</li>
-        </ul>
-        <div class="callout">
-          <strong>Important:</strong> Always open Excel first, then launch the tool.
-          If Excel is not running you will see a startup error.
-        </div>
-      </section>
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- TAB 2 — OPEN LINKS                                          -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <section class="section" id="link_explorer">
+      <h2><span class="tab-num">2</span> Open Links (Link Explorer)</h2>
+      <p>
+        Displays all external workbook links stored in a selected workbook and lets you
+        open, verify, or permanently break them.
+      </p>
 
-      <!-- ── Quick Start ───────────────────────────────────────── -->
-      <section class="section" id="quickstart">
-        <h2>Quick Start</h2>
-        <ol class="steps">
-          <li>
-            <div class="step-body">
-              <strong>Open Excel</strong>
-              Load the workbooks you want to work with — the tool reads whatever is currently open.
-            </div>
-          </li>
-          <li>
-            <div class="step-body">
-              <strong>Launch ExcelWorkbookManager.exe</strong>
-              A splash screen appears briefly; the main window opens automatically.
-            </div>
-          </li>
-          <li>
-            <div class="step-body">
-              <strong>Click "Refresh All Lists"</strong>
-              The bottom-left button re-scans all open workbooks. Use it any time you open or
-              close a file in Excel.
-            </div>
-          </li>
-          <li>
-            <div class="step-body">
-              <strong>Select a tab and work</strong>
-              Each tab is self-contained. Hover over <strong>ℹ</strong> buttons for inline
-              explanations.
-            </div>
-          </li>
-        </ol>
-      </section>
+      <h3>Listing links</h3>
+      <ol class="steps">
+        <li><div class="step-body">
+          <strong>Select a workbook from the Source Workbook dropdown</strong>
+        </div></li>
+        <li><div class="step-body">
+          <strong>Click List Links</strong>
+          All external <code>.xls*</code> paths registered in the workbook's link table are shown.
+        </div></li>
+        <li><div class="step-body">
+          <strong>Optionally tick "Check file existence (may be slow on network drives)"</strong>
+          When ticked each link's status is resolved: <em>OK</em> (file found on disk),
+          <em>BROKEN</em> (file not found), or <em>Unknown</em> (UNC/network path could not be
+          reached). Leave unticked on network drives to avoid slowdowns.
+        </div></li>
+      </ol>
 
-      <!-- ── All Features ─────────────────────────────────────── -->
-      <section class="section" id="tabs">
-        <h2>All Features (11 Tabs)</h2>
-        <div class="tab-grid">
+      <h3>Opening links</h3>
+      <p>
+        Select one or more links in the list, then choose one of the two open buttons:
+      </p>
+      <table>
+        <thead><tr><th>Button</th><th>What opens</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="btn-label">Open Selected</span></td>
+            <td>Opens every highlighted link. After opening, the tool calls
+                <code>UpdateLink</code> + <code>CalculateFullRebuild</code> on the source
+                workbook so formulas immediately pick up live values from the newly opened files.</td>
+          </tr>
+          <tr>
+            <td><span class="btn-label">Open Current Tab's Links (Ctrl+Shift+O)</span></td>
+            <td>Scans the <em>active sheet</em> in the selected workbook for formula references of
+                the form <code>'path\[Book.xlsx]Sheet'!cell</code> and opens only those.
+                Does not open links used only on other sheets.</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>
+        The <strong>Open as Read-Only</strong> checkbox (on by default) controls whether linked
+        workbooks open read-only or read-write.
+      </p>
 
-          <div class="tab-card">
-            <div class="tab-name"><div class="icon">✕</div>Close Workbooks</div>
-            <p>Lists all open workbooks. Use the <em>Search:</em> box to filter by name,
-               then select one or many and close them in bulk. Prevents the
-               &ldquo;close one-by-one&rdquo; routine when finishing a period.</p>
-          </div>
+      <h3>Breaking links</h3>
+      <p>
+        Select links, click <span class="btn-label">Break Selected Links</span>, and confirm.
+        Breaking a link calls Excel's <code>Workbook.BreakLink</code> which replaces every
+        formula referencing that file with its last-calculated static value. <strong>This
+        cannot be undone with Ctrl+Z</strong> — save the workbook first if you are unsure.
+      </p>
 
-          <div class="tab-card">
-            <div class="tab-name"><div class="icon">🔗</div>Link Explorer (Open Links)</div>
-            <p>Lists every external link in a workbook with status. <em>Open Selected</em>
-               opens chosen links and immediately recalculates the source workbook.
-               <em>Open Current Tab&rsquo;s Links</em> (or <kbd>Ctrl+Shift+O</kbd>)
-               opens only links referenced by formulas on the active sheet.</p>
-          </div>
+      <h3>Status colours</h3>
+      <table>
+        <thead><tr><th>Colour</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td style="color:#CC0000;font-weight:600;">Red</td><td>BROKEN — file not found on disk.</td></tr>
+          <tr><td style="color:#006600;font-weight:600;">Green</td><td>OK — file exists.</td></tr>
+          <tr><td style="color:#888;font-weight:600;">Grey</td><td>Status not checked (default when existence-check is off).</td></tr>
+        </tbody>
+      </table>
 
-          <div class="tab-card">
-            <div class="tab-name"><div class="icon">↻</div>Tab Refresh</div>
-            <p>Select individual sheets and run multiple recalculation passes in any order.
-               Optionally tracks cell-level changes and saves a change log — either to a
-               new Excel file or directly as a new tab in the source workbook.</p>
-          </div>
+      <div class="callout">
+        <strong>Ctrl+Shift+O scope:</strong> This shortcut only detects links written as direct
+        formula references. Links from Power Query, defined names, or DDE connections are not
+        detected. Use <em>List Links</em> + <em>Open Selected</em> for those.
+      </div>
+    </section>
 
-          <div class="tab-card">
-            <div class="tab-name"><div class="icon">⇄</div>Smart Relinker</div>
-            <p>Redirect external links in four ways: Period Shift, multi-rule
-               Find &amp; Replace, <strong>Folder Match fuzzy scan</strong>, or
-               Manual Edit. Use <em>Queue All Modified</em> to capture all changed
-               rows from the preview grid as a single queue entry &mdash; great for
-               batching edits across multiple workbooks before applying.</p>
-          </div>
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- TAB 3 — TAB REFRESH                                         -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <section class="section" id="tab_refresh">
+      <h2><span class="tab-num">3</span> Tab Refresh</h2>
+      <p>
+        Forces Excel to recalculate specific sheets — bypassing the global calculation mode.
+        Useful when you want to push a handful of output sheets without recalculating the
+        entire workbook.
+      </p>
 
-          <div class="tab-card">
-            <div class="tab-name"><div class="icon">⚡</div>Period Rollover</div>
-            <p>One-click wizard to roll <em>all selected workbooks</em> from one period to
-               the next. Applies period shift + rename rules + optional Tab Refresh in
-               a single operation.</p>
-          </div>
+      <h3>Options panel</h3>
+      <table>
+        <thead><tr><th>Option</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Workbook</strong></td>
+            <td>The workbook whose sheets you want to refresh.</td>
+          </tr>
+          <tr>
+            <td><strong>Refreshes</strong></td>
+            <td>Number of calculation passes per sheet. Use 2 or more when iterative
+                calculation is needed (e.g. circular references or sequential dependency chains
+                within the sheet).</td>
+          </tr>
+          <tr>
+            <td><strong>Order</strong></td>
+            <td><em>Normal</em> = top-to-bottom as listed; <em>Reverse</em> = bottom-to-top.
+                Useful when later sheets feed back into earlier ones.</td>
+          </tr>
+          <tr>
+            <td><strong>Change log</strong></td>
+            <td>See table below.</td>
+          </tr>
+        </tbody>
+      </table>
 
-          <div class="tab-card">
-            <div class="tab-name"><div class="icon">🗺</div>Dependency Map</div>
-            <p>Builds an expandable tree showing which workbook links to which.
-               Identifies open vs external files. Exportable to Excel for documentation.</p>
-          </div>
+      <h3>Change log options</h3>
+      <table>
+        <thead><tr><th>Setting</th><th>What happens</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>No</strong></td>
+            <td>Refresh runs silently — no log produced.</td>
+          </tr>
+          <tr>
+            <td><strong>New File</strong></td>
+            <td>After the refresh a Save dialog appears. Every cell whose value changed is
+                written to a colour-coded <code>.xlsx</code> file with columns:
+                Tab Name, Cell Address, Original Value, Changed Value.</td>
+          </tr>
+          <tr>
+            <td><strong>Add Tab to Workbook</strong></td>
+            <td>A new sheet named <code>ChangeLog_MMDD_HHMMSS</code> is appended directly to
+                the source workbook. The cell addresses in the log correctly reflect the
+                UsedRange origin — a cell at row 3 col 2 is reported as <code>$B$3</code>,
+                not <code>$A$1</code>.</td>
+          </tr>
+        </tbody>
+      </table>
 
-          <div class="tab-card">
-            <div class="tab-name"><div class="icon">⚠</div>Error Scanner</div>
-            <p>Scans selected sheets for formula errors (<code>#REF!</code>, <code>#N/A</code>,
-               <code>#VALUE!</code> etc.) and lists every affected cell. Jump directly to
-               any flagged cell from the results list.</p>
-          </div>
+      <h3>Refresh All Connections button</h3>
+      <p>
+        This separate button calls <code>Workbook.RefreshAll()</code> on the selected workbook.
+        This refreshes all Power Query queries, pivot caches, and ODBC/database connections in
+        one go — equivalent to clicking <em>Data → Refresh All</em> in Excel.
+      </p>
 
-          <div class="tab-card">
-            <div class="tab-name"><div class="icon">📋</div>Sheet Navigator</div>
-            <p>Searchable list of every sheet across all open workbooks. Use the
-               separate <em>Workbook:</em> and <em>Sheet:</em> filter boxes to narrow
-               down the list. Click any row (or double-click) to activate that sheet
-               instantly &mdash; no more scrolling through tab bars.</p>
-          </div>
+      <h3>Workflow tips</h3>
+      <ul>
+        <li>Click <span class="btn-label">List Sheets</span> first to populate the sheet list,
+            then select only the sheets you need before clicking
+            <span class="btn-label">Refresh Selected Tabs</span>.</li>
+        <li>Use <span class="btn-label">Cancel</span> (appears while running) to stop after
+            the current sheet completes.</li>
+        <li>For a full model refresh, use the <a href="#smart_refresh">Smart Refresh</a> tab
+            instead — it handles link-opening and audit-cell comparison as well.</li>
+      </ul>
+    </section>
 
-          <div class="tab-card">
-            <div class="tab-name"><div class="icon">🔍</div>Volatile Scanner</div>
-            <p>Locates cells using volatile functions (<code>NOW</code>, <code>TODAY</code>,
-               <code>RAND</code>, <code>INDIRECT</code>, <code>OFFSET</code> etc.) that force
-               full recalculation on every change — a common source of slowness.</p>
-          </div>
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- TAB 4 — SMART RELINKER                                      -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <section class="section" id="smart_relinker">
+      <h2><span class="tab-num">4</span> Smart Relinker</h2>
+      <p>
+        Redirects the external workbook links stored inside one or more open workbooks.
+        This is the primary tool for the quarterly period roll — changing
+        <code>\2025\202512\</code> links to <code>\2026\202603\</code> across dozens of files.
+      </p>
 
-          <div class="tab-card">
-            <div class="tab-name"><div class="icon">📌</div>Named Ranges</div>
-            <p>Lists all named ranges and their references across open workbooks.
-               Filter, inspect and jump to any named range in one click.</p>
-          </div>
+      <p>
+        Four <strong>modes</strong> are available via radio buttons at the top. Each mode fills
+        the same <em>Preview grid</em> at the bottom — all modes are non-destructive until you
+        click <span class="btn-label">Apply Now</span>.
+      </p>
 
-          <div class="tab-card">
-            <div class="tab-name"><div class="icon">❤</div>Workbook Health</div>
-            <p>Runs a multi-check diagnostic (broken links, error cells, volatile functions,
-               external references, hidden sheets) and produces a traffic-light summary
-               report for each workbook.</p>
-          </div>
+      <!-- Period Shift -->
+      <h3 id="relink_period">① Period Shift mode</h3>
+      <p>Enter an <strong>Old Period</strong> and a <strong>New Period</strong> (6-digit YYYYMM).
+         The tool replaces:</p>
+      <ul>
+        <li>The <em>year subfolder</em> — e.g. <code>\2025\</code> → <code>\2026\</code></li>
+        <li>Every occurrence of the period token in the path — e.g. <code>202512</code> → <code>202603</code></li>
+      </ul>
+      <div class="code-block">Before: I:\IFRS 17\2025\202512\Working\RI Hub\RI Hub AoM 25FY.xlsx
+After:  I:\IFRS 17\2026\202603\Working\RI Hub\RI Hub AoM 25FY.xlsx</div>
+      <p>
+        File-name suffixes like <code>25FY</code> are <em>not</em> changed by Period Shift alone.
+        Add suffix rename rules in the <strong>Extra Rename Rules</strong> list, or load a
+        quarterly profile (see <a href="#profiles">Config Profiles</a>).
+      </p>
 
-        </div>
-      </section>
+      <!-- Find & Replace mode -->
+      <h3 id="relink_fnr">② Custom Find &amp; Replace mode</h3>
+      <p>
+        Define a list of find/replace text pairs applied in sequence to every link path.
+        Good for ad-hoc corrections, non-standard folder restructuring, or standalone
+        suffix changes without a period shift.
+      </p>
+      <ul>
+        <li>Rules are applied top-to-bottom — order matters if one rule's output is the
+            input for the next.</li>
+        <li>Rules can be individually enabled or disabled with the checkbox on each row.</li>
+        <li>The rule list can be saved as a profile for re-use.</li>
+      </ul>
 
-      <!-- ── Smart Relinker ────────────────────────────────────── -->
-      <section class="section" id="relinker">
-        <h2>Smart Relinker — How It Works</h2>
-        <p>
-          The Smart Relinker is designed around the IFRS 17 folder convention where both the
-          <em>year folder</em> and the <em>period token</em> in file names change every quarter:
-        </p>
-        <div class="code-block">I:\IFRS 17\2025\202512\Working\Non-model\RI Hub\RI Hub AoM 25FY.xlsx
-          ↓  Period Shift: 202512 → 202603  +  Rename rule: 25FY → 26Q1
-I:\IFRS 17\2026\202603\Working\Non-model\RI Hub\RI Hub AoM 26Q1.xlsx</div>
+      <!-- Folder Match mode -->
+      <h3 id="relink_folder">③ Folder Match mode <span style="color:#F4A017;">(fuzzy scan)</span></h3>
+      <div class="callout info">
+        <strong>Use this when</strong> the folder layout or file names have changed in ways you
+        cannot describe with a simple find/replace — e.g. the vendor renamed files, the subfolder
+        tree was restructured, or the period token moved position.
+      </div>
+      <ol class="steps">
+        <li><div class="step-body">
+          <strong>Select the new root folder</strong>
+          Click the folder browser and choose the top-level directory under which the new files live.
+        </div></li>
+        <li><div class="step-body">
+          <strong>Set the minimum score threshold</strong>
+          Default is <strong>70%</strong>. Lower it (e.g. 50%) if you get too many "No Match" rows;
+          raise it (e.g. 85%) if wrong files are auto-matched.
+        </div></li>
+        <li><div class="step-body">
+          <strong>Click Scan &amp; Match</strong>
+          The tool walks the folder recursively, indexes every <code>.xls*</code> file, and
+          computes a fuzzy similarity score for each old link vs every candidate.
+        </div></li>
+      </ol>
 
-        <p>
-          Pick <strong>one of four modes</strong> at the top of the tab — the UI below the
-          radio row changes automatically to show only the controls that apply. In every
-          mode the resulting Before / After paths land in the same <em>Preview</em> grid,
-          which is fully editable before <strong>Apply Now</strong>.
-        </p>
+      <h4>How the fuzzy score is calculated</h4>
+      <p>
+        Each filename is reduced to a <em>skeleton</em> before scoring: 8-digit dates, 6-digit
+        period tokens, and version strings (<code>v1.2</code>, <code>_v3</code>) are stripped.
+        The skeleton is lower-cased and spaces/underscores are normalised. Python's
+        <code>difflib.SequenceMatcher</code> then compares skeletons, producing a 0–1 score.
+      </p>
+      <div class="code-block">RI Hub AoM 25FY 20251231 v1.2.xlsx
+  → strip date, version → "RI Hub AoM 25FY"
+  → lower + normalise → "ri hub aom 25fy"  ← skeleton for scoring</div>
 
-        <h3>① Period Shift mode</h3>
-        <p>Enter an Old Period and a New Period (6-digit YYYYMM).
-           The tool automatically replaces:</p>
-        <ul>
-          <li>The year folder — e.g. <code>\2025\</code> → <code>\2026\</code></li>
-          <li>Every occurrence of the period token — e.g. <code>202512</code> → <code>202603</code></li>
-        </ul>
-        <p>
-          File name suffixes like <code>25FY</code> or <code> FY</code> are <strong>not</strong>
-          changed by the period shift alone — add them as <strong>Extra Rename Rules</strong>
-          in the rules list below the mode selector, or simply load a saved profile.
-        </p>
+      <h4>Match outcomes</h4>
+      <table>
+        <thead><tr><th>Outcome</th><th>What you see</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>One strong match</strong></td>
+            <td>Auto-filled in preview with tag <code>Folder Match (92%)</code>.</td>
+          </tr>
+          <tr>
+            <td><strong>Multiple close matches</strong></td>
+            <td>A picker dialog shows all candidates with scores, same-folder bonus indicator,
+                and full paths. Double-click or click <em>Use Selected</em> to choose;
+                <em>Skip</em> leaves the row unchanged.</td>
+          </tr>
+          <tr>
+            <td><strong>No match ≥ threshold</strong></td>
+            <td>Row stays unchanged and is tagged <code>No Match</code> for manual correction.</td>
+          </tr>
+        </tbody>
+      </table>
+      <ul>
+        <li>Files in the <em>same relative subfolder</em> as the original link are boosted
+            above equal-scoring files in different folders.</li>
+        <li>Cross-extension matches (<code>.xlsm</code> → <code>.xlsx</code>) are penalised 5%.</li>
+        <li>The scan is purely file-system based — no COM calls, so it's very fast
+            (10,000-file trees typically scan in a few seconds).</li>
+      </ul>
 
-        <h3>② Custom Find &amp; Replace mode</h3>
-        <p>
-          Define a list of Find / Replace pairs applied in sequence to every selected link path.
-          Useful for one-off corrections, non-standard folder structures, or pure file-name
-          suffix changes with no period shift. The rule list supports re-ordering, enabling /
-          disabling individual rules, and loading from a profile.
-        </p>
+      <!-- Manual Edit -->
+      <h3 id="relink_manual">④ Manual Edit mode</h3>
+      <p>
+        Loads all links into the preview exactly as they are — no rules applied. Select any row,
+        type a corrected path in the <span class="field-label">Manual Override</span> box,
+        click <span class="btn-label">Update Row</span>, then
+        <span class="btn-label">Apply Now</span>. Use this for one-off corrections that are
+        too varied for any automated rule.
+      </p>
 
-        <h3>③ Folder Match <span style="color:#F4A017;">(fuzzy scan)</span> — NEW</h3>
-        <div class="callout info">
-          <strong>When to use it.</strong> The folder layout or file names on the new drive
-          have changed in ways you cannot predict with a simple Find / Replace — maybe the
-          vendor renamed files, the subfolder tree was restructured, or the period token
-          moved from the end of the name to the middle. Point the tool at the new root
-          and it figures out which file matches which old link.
-        </div>
-        <p>
-          Select <strong>Folder Match</strong> as the mode, set the new root folder, and
-          click <strong>Scan &amp; Match</strong>. The tool walks the folder recursively,
-          indexes every <code>.xlsx / .xlsb / .xlsm / .xls</code> file it finds, and for
-          each old linked file computes a <em>fuzzy similarity score</em> against every
-          candidate.
-        </p>
+      <!-- Queue system -->
+      <h3 id="relink_queue">The Queue System</h3>
+      <p>
+        The queue lets you prepare relink changes across <em>multiple workbooks</em> and
+        apply them all in a single final step:
+      </p>
+      <ol class="steps">
+        <li><div class="step-body">
+          <strong>Set up rules and generate a preview for workbook A</strong>
+        </div></li>
+        <li><div class="step-body">
+          <strong>Click Queue All Modified</strong>
+          Every row in the preview where the New Path differs from the Current Path is captured
+          as a named queue entry (e.g. "Book A — 12 pairs").
+        </div></li>
+        <li><div class="step-body">
+          <strong>Switch to workbook B, generate preview, Queue All Modified again</strong>
+          Repeat for as many workbooks as needed.
+        </div></li>
+        <li><div class="step-body">
+          <strong>Click Apply Queue</strong>
+          All entries are processed in order. A summary log appears on completion.
+        </div></li>
+      </ol>
+      <p>Queue entries can be removed individually before applying.</p>
 
-        <h4 style="margin-top:14px;">How the fuzzy match works</h4>
-        <p>
-          Each filename is reduced to a <strong>skeleton</strong> before comparison, so
-          volatile tokens do not artificially lower the score:
-        </p>
-        <div class="code-block">RI Hub AoM 25FY 20251231 v1.2.xlsx
-          ↓  strip 8-digit date  (20251231)
-          ↓  strip 6-digit period token  (no match here)
-          ↓  strip version string  (v1.2)
-          ↓  lower-case, collapse spaces / underscores
-"ri hub aom 25fy"     ← skeleton used for the similarity score</div>
-        <p>
-          Skeletons are compared with Python's <code>difflib.SequenceMatcher</code>,
-          producing a score from <code>0.00</code> to <code>1.00</code>. Candidates
-          below the threshold (default <strong>70%</strong>) are discarded. Files sitting
-          in the <em>same relative subfolder</em> as the original link are boosted to
-          the top of the candidate list — cross-extension matches (e.g. <code>.xlsm</code>
-          → <code>.xlsx</code>) are penalised by 5%.
-        </p>
+      <!-- Preview grid -->
+      <h3 id="relink_preview">Preview Grid — shared by all modes</h3>
+      <p>
+        The preview is the "commit surface" — it shows exactly what will change before you
+        commit. It is fully editable.
+      </p>
+      <table>
+        <thead><tr><th>Column</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Workbook</strong></td><td>Source workbook that owns this link.</td></tr>
+          <tr><td><strong>Current Path</strong></td><td>The link as stored in Excel right now.</td></tr>
+          <tr><td><strong>New Path</strong></td><td>The computed target path. Edit this cell directly for a manual override.</td></tr>
+          <tr><td><strong>Method</strong></td><td>How the new path was generated: Period Shift, Find/Replace, Folder Match, Manual.</td></tr>
+          <tr><td><strong>✔/✘</strong></td><td>File-exists check result (shown when "Verify new paths exist" is ticked).</td></tr>
+        </tbody>
+      </table>
+      <ul>
+        <li><span class="btn-label">Open in Excel</span> — send the full Before/After table
+            into a live spreadsheet. Edit the yellow <em>New Path</em> column in Excel cells,
+            then click <span class="btn-label">Import from Excel</span> to pull the edits back.</li>
+        <li>Keep <strong>Verify new paths exist</strong> ticked. If a target file is missing,
+            the tool warns you before writing any changes.</li>
+      </ul>
+    </section>
 
-        <h4>What happens for each old link</h4>
-        <ul>
-          <li>
-            <strong>One strong match</strong> — auto-populated in the preview with
-            method tag <code>Folder Match (92%)</code>.
-          </li>
-          <li>
-            <strong>Multiple close matches</strong> — a picker dialog appears showing
-            every candidate with its score, version string, whether it lives in the
-            same subfolder, and full path. Double-click a row or click
-            <em>Use Selected</em> to accept it (method tag <code>Folder Match (picked)</code>).
-            Click <em>Skip</em> to leave that row alone.
-          </li>
-          <li>
-            <strong>No match above threshold</strong> — the row is kept unchanged
-            and tagged <code>No Match</code> so you can fix it manually.
-          </li>
-        </ul>
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- TAB 5 — PERIOD ROLLOVER                                     -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <section class="section" id="period_rollover">
+      <h2><span class="tab-num">5</span> Period Rollover Wizard</h2>
+      <p>
+        Rolls <em>all selected open workbooks</em> from one reporting period to the next
+        in a single guided step — applies Period Shift rules, rename rules, and optionally
+        Tab Refresh, without having to visit the Smart Relinker for each file individually.
+      </p>
 
-        <h4>Good to know</h4>
-        <ul>
-          <li>
-            Folder Match <em>does not</em> require an Old Period / New Period — you can
-            use it on its own, or combine it with a subsequent Find &amp; Replace pass on
-            the preview grid for last-mile corrections.
-          </li>
-          <li>
-            The scan is purely filesystem-based — no Excel calls, no COM, no workbooks
-            opened. Large trees (10,000+ files) are typically scanned in a couple of
-            seconds thanks to a length-based early-out filter that skips candidates
-            whose maximum possible score is already below the threshold.
-          </li>
-          <li>
-            Excel must still be open when you click <strong>Apply Now</strong>, because
-            that step rewrites each link via COM on the live workbook.
-          </li>
-        </ul>
+      <ol class="steps">
+        <li><div class="step-body">
+          <strong>Select workbooks</strong>
+          All open workbooks are listed. Deselect any you want to skip (e.g. data extract files
+          that do not carry period-specific links).
+        </div></li>
+        <li><div class="step-body">
+          <strong>Set Old Period and New Period, or load a profile</strong>
+          Enter 6-digit YYYYMM codes, or select a built-in quarterly profile from the dropdown
+          (which pre-fills both periods and all rename rules).
+        </div></li>
+        <li><div class="step-body">
+          <strong>Review / add Extra Rename Rules</strong>
+          e.g. <code>25FY → 26Q1</code>. These are already included if you loaded a
+          standard quarterly profile.
+        </div></li>
+        <li><div class="step-body">
+          <strong>Click Preview All Changes</strong>
+          Review the full Before/After list across every selected workbook before committing.
+        </div></li>
+        <li><div class="step-body">
+          <strong>Click Apply Rollover</strong>
+          All relinks are applied. If <em>Run Tab Refresh after relink</em> is checked,
+          every sheet in every affected workbook is recalculated automatically.
+        </div></li>
+      </ol>
 
-        <h3>④ Manual Edit mode</h3>
-        <p>
-          Loads all selected links into the preview exactly as they are — no rules
-          applied. Select any row, type a corrected path in the <em>Manual Override</em>
-          box, click <strong>Update Row</strong>, then <strong>Apply Now</strong> when
-          you are done. Use this when the changes are too varied or ad-hoc to describe
-          with rules or fuzzy matching.
-        </p>
+      <div class="callout info">
+        <strong>When to use Rollover vs Smart Relinker:</strong> Use the Rollover wizard when
+        all workbooks follow the same period naming convention and a single set of rules
+        applies to all. Use Smart Relinker when workbooks have different conventions
+        and need per-file customisation.
+      </div>
+    </section>
 
-        <h3>Preview grid — shared by all four modes</h3>
-        <p>
-          The preview grid is the single "commit surface" for every relink. Each row
-          shows the workbook, the old path, the computed new path, the method that
-          produced it (Period Shift / Find &amp; Replace / Folder Match / Manual),
-          and a ✔ / ✘ status from the <em>Verify new paths exist</em> check.
-        </p>
-        <ul>
-          <li>
-            <strong>Manual Override</strong> — overwrite the new path on any individual
-            row regardless of which mode produced it.
-          </li>
-          <li>
-            <strong>Open in Excel</strong> — send the full Before / After table into a
-            live spreadsheet, edit the yellow <em>New Path</em> column directly in
-            Excel cells, then click <strong>Import from Excel</strong> to pull the edits
-            back into the preview.
-          </li>
-          <li>
-            <strong>Col width</strong> — widen the path columns with the spinner in the
-            toolbar, or drag the column header dividers.
-          </li>
-          <li>
-            <strong>Verify new paths exist</strong> — keep this checkbox on. If any
-            target file is missing on disk, you are warned before any link is rewritten.
-          </li>
-        </ul>
-      </section>
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- TAB 6 — DEPENDENCY MAP                                      -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <section class="section" id="dependency_map">
+      <h2><span class="tab-num">6</span> Dependency Map</h2>
+      <p>
+        Builds an expandable tree showing which workbook links to which other workbook
+        or external file. Useful for understanding refresh order and for documentation.
+      </p>
 
-      <!-- ── Period Rollover ───────────────────────────────────── -->
-      <section class="section" id="rollover">
-        <h2>Period Rollover Wizard</h2>
-        <p>
-          Use this tab when you need to roll <em>multiple workbooks at once</em> from one
-          reporting period to the next. It combines relinking, rename rules, and
-          tab refresh in a single guided flow.
-        </p>
-        <ol class="steps">
-          <li>
-            <div class="step-body">
-              <strong>Select workbooks</strong>
-              All open workbooks are listed and pre-selected. Deselect any you want to skip.
-            </div>
-          </li>
-          <li>
-            <div class="step-body">
-              <strong>Set periods or load a profile</strong>
-              Enter Old Period and New Period, or pick a saved profile from the dropdown
-              (which pre-fills both periods and all rename rules automatically).
-            </div>
-          </li>
-          <li>
-            <div class="step-body">
-              <strong>Add extra rename rules if needed</strong>
-              e.g. <code>25FY</code> → <code>26Q1</code>. These are already included if
-              you loaded a standard quarterly profile.
-            </div>
-          </li>
-          <li>
-            <div class="step-body">
-              <strong>Preview All Changes</strong>
-              Review the full list of Before / After paths across every selected workbook.
-            </div>
-          </li>
-          <li>
-            <div class="step-body">
-              <strong>Apply Rollover</strong>
-              Applies all relinks. If <em>Run Tab Refresh after relink</em> is checked,
-              every sheet in every affected workbook is recalculated automatically.
-            </div>
-          </li>
-        </ol>
-      </section>
+      <h3>Building the map</h3>
+      <ol class="steps">
+        <li><div class="step-body">
+          <strong>Set Max Depth</strong> (1–6, default 2)
+          Depth 1 shows only direct links from each open workbook.
+          Depth 2 also shows what each of those targets links to (if open), and so on.
+        </div></li>
+        <li><div class="step-body">
+          <strong>Optionally tick "Recurse into open workbooks"</strong>
+          When ticked, the tree follows links through any target that is currently open in
+          Excel, up to the Max Depth limit.
+        </div></li>
+        <li><div class="step-body">
+          <strong>Click Build Dependency Map</strong>
+        </div></li>
+      </ol>
 
-      <!-- ── Config Profiles ───────────────────────────────────── -->
-      <section class="section" id="profiles">
-        <h2>Config Profiles</h2>
-        <p>
-          Profiles save a complete set of relinking rules (period shift + rename rules) so
-          you never need to re-enter them each quarter. They are stored in
-          <code>profiles.json</code> alongside the <code>.exe</code> file.
-        </p>
+      <h3>Reading the tree</h3>
+      <table>
+        <thead><tr><th>Colour</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td style="color:#006600;font-weight:600;">Green</td><td>The linked file is currently open in Excel.</td></tr>
+          <tr><td style="color:#666;font-weight:600;">Grey</td><td>The linked file is external (not open).</td></tr>
+          <tr><td style="color:#999;font-weight:600;">Light grey</td><td>No outgoing links from this workbook.</td></tr>
+        </tbody>
+      </table>
+      <p>
+        The <em># Links</em> column shows how many cells in the source workbook reference each
+        target file. Use <span class="btn-label">Expand All</span> /
+        <span class="btn-label">Collapse All</span> for quick navigation.
+      </p>
 
-        <h3>Built-in quarterly profiles</h3>
-        <table>
-          <thead>
-            <tr><th>Profile name</th><th>Period shift</th><th>Rename rules included</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>FY 2025 → Q1 2026</td>
-              <td>202512 → 202603</td>
-              <td>25FY→26Q1 &nbsp;·&nbsp; &nbsp;FY&nbsp;→&nbsp;Q1</td>
-            </tr>
-            <tr>
-              <td>Q1 2026 → HY 2026</td>
-              <td>202603 → 202606</td>
-              <td>26Q1→26HY &nbsp;·&nbsp; &nbsp;Q1&nbsp;→&nbsp;HY</td>
-            </tr>
-            <tr>
-              <td>HY 2026 → Q3 2026</td>
-              <td>202606 → 202609</td>
-              <td>26HY→26Q3 &nbsp;·&nbsp; &nbsp;HY&nbsp;→&nbsp;Q3</td>
-            </tr>
-            <tr>
-              <td>Q3 2026 → FY 2026</td>
-              <td>202609 → 202612</td>
-              <td>26Q3→26FY &nbsp;·&nbsp; &nbsp;Q3&nbsp;→&nbsp;FY</td>
-            </tr>
-          </tbody>
-        </table>
+      <h3>Exporting</h3>
+      <p>
+        <span class="btn-label">Export to Excel</span> saves the full map as a formatted
+        <code>.xlsx</code> with columns: Source Workbook, Links To, Full Path, # Links, Status.
+        Useful for documentation, sign-off, or planning the recalculation order before a
+        period-end run.
+      </p>
+      <div class="callout">
+        <strong>Staleness notice:</strong> If you open or close workbooks after building the
+        map, a warning banner appears. Click <em>Build Dependency Map</em> again to refresh.
+      </div>
+    </section>
 
-        <h3>Adding your own profiles</h3>
-        <p>
-          Open <code>profiles.json</code> in Notepad or any text editor. Each profile follows
-          this structure:
-        </p>
-        <div class="code-block">{
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- TAB 7 — ERROR SCANNER                                       -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <section class="section" id="error_scanner">
+      <h2><span class="tab-num">7</span> Error Scanner</h2>
+      <p>
+        Scans all sheets in a workbook for formula error values and presents the full list
+        with sheet, address, error type, and formula text.
+      </p>
+
+      <ol class="steps">
+        <li><div class="step-body">
+          <strong>Select a workbook and click Scan for Errors</strong>
+          A progress bar shows which sheet is being scanned and how many are remaining.
+          Click <span class="btn-label">Cancel</span> to stop after the current sheet.
+        </div></li>
+        <li><div class="step-body">
+          <strong>Use the Filter box to narrow results</strong>
+          Type any text — the list is filtered instantly across Sheet, Cell, Error, and
+          Formula columns simultaneously.
+        </div></li>
+        <li><div class="step-body">
+          <strong>Select a row and click Go To Cell</strong>
+          Excel activates the sheet and selects the cell. You can also double-click a row
+          (right-click menu).
+        </div></li>
+      </ol>
+
+      <h3>Error colour coding</h3>
+      <table>
+        <thead><tr><th>Colour</th><th>Error</th><th>Common cause</th></tr></thead>
+        <tbody>
+          <tr><td style="color:#CC0000;font-weight:600;">Red</td><td>#REF!</td><td>Deleted row/column or broken external link.</td></tr>
+          <tr><td style="color:#CC6600;font-weight:600;">Orange</td><td>#N/A</td><td>VLOOKUP / MATCH value not found.</td></tr>
+          <tr><td style="color:#884400;font-weight:600;">Brown</td><td>#VALUE!, #DIV/0!, etc.</td><td>Wrong data type or formula error.</td></tr>
+        </tbody>
+      </table>
+      <p>
+        Use <span class="btn-label">Export to CSV</span> or
+        <span class="btn-label">Copy to Clipboard</span> to share the error list with
+        reviewers. Right-click any row for the same options.
+      </p>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- TAB 8 — SHEET NAVIGATOR                                     -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <section class="section" id="sheet_navigator">
+      <h2><span class="tab-num">8</span> Sheet Navigator</h2>
+      <p>
+        A searchable master list of every sheet across all open workbooks. Navigate to any
+        sheet instantly without scrolling through Excel's tab bar.
+      </p>
+
+      <h3>Searching</h3>
+      <p>Two independent filter boxes:</p>
+      <ul>
+        <li><strong>Workbook:</strong> narrows by workbook name (case-insensitive substring).</li>
+        <li><strong>Sheet:</strong> narrows by sheet name.</li>
+      </ul>
+      <p>Both filters are applied as AND conditions — e.g. Workbook "RI Hub" AND Sheet "AoM"
+         shows only sheets named "AoM" that belong to workbooks with "RI Hub" in their name.</p>
+
+      <h3>Hidden sheets</h3>
+      <p>
+        By default the list includes <em>hidden</em> and <em>very-hidden</em> sheets, shown in
+        grey and red respectively. Untick <strong>Show hidden sheets</strong> to hide them.
+      </p>
+      <table>
+        <thead><tr><th>Colour</th><th>Visibility</th></tr></thead>
+        <tbody>
+          <tr><td style="color:#000;font-weight:600;">Black</td><td>Visible — normal sheet.</td></tr>
+          <tr><td style="color:#888;font-weight:600;">Grey</td><td>Hidden — <code>xlSheetHidden</code>. Can be unhidden from the Excel tab bar context menu.</td></tr>
+          <tr><td style="color:#CC0000;font-weight:600;">Red</td><td>Very Hidden — <code>xlSheetVeryHidden</code>. Cannot be unhidden from the Excel UI — VBA or this tool required.</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Visibility actions</h3>
+      <p>Select a sheet and use the action buttons:</p>
+      <table>
+        <thead><tr><th>Button</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td><span class="btn-label">Make Visible</span></td><td>Sets <code>xlSheetVisible</code>. Works on Hidden and Very Hidden sheets.</td></tr>
+          <tr><td><span class="btn-label">Hide</span></td><td>Sets <code>xlSheetHidden</code>. Reversible from Excel's UI.</td></tr>
+          <tr><td><span class="btn-label">Very Hide</span></td><td>Sets <code>xlSheetVeryHidden</code>. Only reversible via VBA, the tool, or the Name Manager trick.</td></tr>
+          <tr><td><span class="btn-label">Go To Sheet</span></td><td>Activates the sheet in Excel. Also triggered by double-clicking a row.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- TAB 9 — VOLATILE SCANNER                                    -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <section class="section" id="volatile_scanner">
+      <h2><span class="tab-num">9</span> Volatile Scanner</h2>
+      <p>
+        Finds cells containing <em>volatile functions</em> — functions that force Excel to
+        recalculate the <strong>entire workbook</strong> every time any cell changes,
+        regardless of whether they have any dependency on what changed.
+      </p>
+
+      <h3>Volatile functions detected</h3>
+      <div class="code-block">INDIRECT  OFFSET  NOW  TODAY  RAND  RANDBETWEEN  INFO  CELL</div>
+
+      <p>
+        The scanner uses word-boundary matching: <code>NOW()</code> is flagged, but
+        <code>NOWHERE</code> or a quoted string containing "NOW" is not.
+      </p>
+
+      <h3>Impact rating</h3>
+      <table>
+        <thead><tr><th>Count</th><th>Rating</th><th>Recommendation</th></tr></thead>
+        <tbody>
+          <tr><td>0</td><td style="color:#006600;font-weight:600;">None — Clean!</td><td>No action needed.</td></tr>
+          <tr><td>1–20</td><td style="color:#886600;font-weight:600;">Low</td><td>Acceptable in most models.</td></tr>
+          <tr><td>21–100</td><td style="color:#CC4400;font-weight:600;">Medium</td><td>Consider replacing INDIRECT/OFFSET with direct references where possible.</td></tr>
+          <tr><td>100+</td><td style="color:#CC0000;font-weight:600;">High</td><td>Likely causing significant slowness. Prioritise elimination of INDIRECT/OFFSET in inner-loop formulas.</td></tr>
+        </tbody>
+      </table>
+
+      <p>
+        Use the live <strong>Filter</strong> box to narrow to specific functions or sheets.
+        Click <span class="btn-label">Go To Cell</span> (or double-click) to jump to any result.
+      </p>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- TAB 10 — NAMED RANGES                                       -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <section class="section" id="named_ranges">
+      <h2><span class="tab-num">10</span> Named Ranges</h2>
+      <p>
+        Lists all named ranges in a workbook, flags broken ones, and lets you create,
+        edit, navigate, and delete them.
+      </p>
+
+      <h3>Listing</h3>
+      <ol class="steps">
+        <li><div class="step-body">
+          <strong>Select a workbook and click List Named Ranges</strong>
+        </div></li>
+        <li><div class="step-body">
+          <strong>Use the Filter box</strong> to search by name or RefersTo formula.
+        </div></li>
+      </ol>
+
+      <h3>Status colours</h3>
+      <table>
+        <thead><tr><th>Colour</th><th>Status</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td style="color:#006600;font-weight:600;">Green</td><td>OK</td><td>Name resolves correctly to a valid range.</td></tr>
+          <tr><td style="color:#CC0000;font-weight:600;">Red</td><td>BROKEN (#REF!)</td><td>The range the name points to has been deleted. Safe to delete or fix.</td></tr>
+          <tr><td style="color:#0055AA;font-weight:600;">Blue</td><td>EXTERNAL</td><td>The name references a range in another workbook.</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Creating a named range</h3>
+      <ol class="steps">
+        <li><div class="step-body">
+          <strong>Click Create New</strong>
+          A modal dialog opens with three fields:
+          <em>Name</em>, <em>Refers To</em> (Excel formula syntax, e.g. <code>=Sheet1!$A$1:$B$5</code>),
+          and <em>Scope</em> (Workbook or a specific sheet name).
+        </div></li>
+        <li><div class="step-body">
+          <strong>Fill in the fields and click OK</strong>
+          The name is created immediately and the list refreshes.
+        </div></li>
+      </ol>
+
+      <h3>Editing a named range</h3>
+      <p>
+        Select a row and click <span class="btn-label">Edit Selected</span>. The same dialog
+        opens pre-filled with the current name and RefersTo formula. Change either field and
+        click OK. Note: the scope cannot be changed during an edit — delete and recreate if
+        you need a different scope.
+      </p>
+
+      <h3>Other actions</h3>
+      <table>
+        <thead><tr><th>Button</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td><span class="btn-label">Go To Range</span></td><td>Activates the first cell of the named range in Excel.</td></tr>
+          <tr><td><span class="btn-label">Delete Selected</span></td><td>Deletes the named range after a confirmation prompt. Cannot be undone.</td></tr>
+          <tr><td><span class="btn-label">Export to CSV / Copy to Clipboard</span></td><td>Exports the visible (filtered) list.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- TAB 11 — FIND & REPLACE                                     -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <section class="section" id="find_replace">
+      <h2><span class="tab-num">11</span> Find &amp; Replace</h2>
+      <p>
+        Searches for text across a whole workbook or a single sheet, and optionally replaces
+        all matches at once. Results are navigable — double-click any row to jump directly to
+        that cell in Excel.
+      </p>
+
+      <h3>Search options</h3>
+      <table>
+        <thead><tr><th>Option</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Workbook</strong></td>
+            <td>The workbook to search.</td>
+          </tr>
+          <tr>
+            <td><strong>Sheets</strong></td>
+            <td><em>All</em> searches every sheet. Select a specific sheet name to limit the scope.</td>
+          </tr>
+          <tr>
+            <td><strong>Find</strong></td>
+            <td>The text to search for.</td>
+          </tr>
+          <tr>
+            <td><strong>Replace</strong></td>
+            <td>The replacement text (used only by Replace All).</td>
+          </tr>
+          <tr>
+            <td><strong>Match case</strong></td>
+            <td>Case-sensitive matching.</td>
+          </tr>
+          <tr>
+            <td><strong>Match whole cell</strong></td>
+            <td>Only match if the entire cell content equals the search term.</td>
+          </tr>
+          <tr>
+            <td><strong>Search in formulas</strong></td>
+            <td>Search within formula text rather than displayed values. Useful for finding
+                cell references, function names, or link paths embedded in formulas.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Finding</h3>
+      <p>
+        Click <span class="btn-label">Find All</span>. Results appear in the list with columns:
+        Sheet, Address, Value, Formula. The search runs in a background thread — a progress bar
+        is shown while it runs.
+      </p>
+      <p>
+        Click any column header to sort results. Double-click any row (or right-click →
+        <em>Go To Cell</em>) to navigate Excel to that cell.
+      </p>
+
+      <h3>Replacing</h3>
+      <p>
+        Fill in the <strong>Replace</strong> box, then click
+        <span class="btn-label">Replace All</span>. A confirmation dialog shows the exact scope
+        (workbook + sheet selection). After replacing, the results list automatically refreshes
+        to show the updated values.
+      </p>
+
+      <div class="callout red">
+        <strong>Caution:</strong> Replace All cannot be undone with Ctrl+Z across all sheets.
+        Save the workbook before using Replace All on a large scope.
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- TAB 12 — SMART REFRESH                                      -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <section class="section" id="smart_refresh">
+      <h2><span class="tab-num">12</span> Smart Refresh</h2>
+      <p>
+        The actuarial-specific automation tab. It combines four steps that are normally done
+        manually at every period-end refresh: open linked documents, recalculate sheets,
+        compare key figures, and log the changes for audit. All of this can be scheduled to
+        run automatically every N minutes.
+      </p>
+
+      <h3>Four-panel layout</h3>
+      <table>
+        <thead><tr><th>Panel</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Workbook &amp; Profile (top)</strong></td><td>Choose the source workbook; save/load named run profiles.</td></tr>
+          <tr><td><strong>Linked Docs to Pre-Open (left)</strong></td><td>List of all external links discovered in the workbook. Tick which ones to open before each refresh.</td></tr>
+          <tr><td><strong>Sheets to Refresh (right)</strong></td><td>Select which sheets to recalculate on each run.</td></tr>
+          <tr><td><strong>Audit Cells (middle)</strong></td><td>Define the key figures to compare before and after each run.</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Step-by-step setup</h3>
+      <ol class="steps">
+        <li><div class="step-body">
+          <strong>Select the source workbook and click Discover Links</strong>
+          All external <code>.xls*</code> paths are listed in the left panel. Tick every
+          linked document that must be open for the refresh formulas to update correctly.
+          Untick files that are always open or that you manage separately.
+        </div></li>
+        <li><div class="step-body">
+          <strong>Click Load Sheets in the right panel and select the sheets to recalculate</strong>
+          e.g. your output summary sheet and reconciliation tabs.
+        </div></li>
+        <li><div class="step-body">
+          <strong>Define Audit Cells</strong>
+          For each key figure you want tracked:
+          <ul>
+            <li><strong>Label</strong> — a descriptive name (e.g. "BEL Reserve Total")</li>
+            <li><strong>Sheet</strong> — choose from the dropdown (populated after Load Sheets)</li>
+            <li><strong>Address</strong> — cell address like <code>C5</code> or a range like
+                <code>B3:D10</code></li>
+          </ul>
+          Click <span class="btn-label">Add Cell</span>. Add as many as needed.
+        </div></li>
+        <li><div class="step-body">
+          <strong>Click Run Now or set up a schedule</strong>
+          See below.
+        </div></li>
+      </ol>
+
+      <h3>Run Now — what happens in order</h3>
+      <ol>
+        <li>Read the current value of every audit cell → <strong>BEFORE snapshot</strong></li>
+        <li>Open any checked linked documents that are not already open (read-only)</li>
+        <li>Call <code>Application.Calculate</code> on each selected sheet</li>
+        <li>Call <code>UpdateLink + CalculateFullRebuild</code> on the source workbook</li>
+        <li>Read the current value of every audit cell → <strong>AFTER snapshot</strong></li>
+        <li>Append one row per audit cell to the Audit Log</li>
+      </ol>
+
+      <h3>Scheduled auto-run</h3>
+      <p>
+        Set the <strong>Auto-run every N minutes</strong> spinbox, then click
+        <span class="btn-label">Start Schedule</span>. A countdown label shows
+        <em>"Next run in 4:32"</em> and counts down second by second. Click
+        <span class="btn-label">Stop Schedule</span> to cancel.
+      </p>
+      <div class="callout">
+        <strong>Important:</strong> The schedule is purely in-app — it only runs while the tool
+        window is open. It is not a Windows Task Scheduler job. Minimise the window to let it
+        run in the background while you work elsewhere.
+      </div>
+
+      <h3>Audit Log</h3>
+      <p>
+        The log at the bottom shows every audit-cell comparison from every run in the session.
+      </p>
+      <table>
+        <thead><tr><th>Column</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Timestamp</strong></td><td>Date and time the run completed.</td></tr>
+          <tr><td><strong>Workbook</strong></td><td>Source workbook name.</td></tr>
+          <tr><td><strong>Label</strong></td><td>The label you gave this audit cell.</td></tr>
+          <tr><td><strong>Sheet / Address</strong></td><td>Where the value was read from.</td></tr>
+          <tr><td><strong>Before / After</strong></td><td>Value before and after the refresh. For multi-cell ranges, the first 8 values are shown comma-separated.</td></tr>
+          <tr><td style="color:#CC4400;font-weight:600;"><strong>Changed?</strong></td><td>YES (orange) if the value changed; "no" (green) if unchanged.</td></tr>
+        </tbody>
+      </table>
+      <p>
+        Export the log with <span class="btn-label">Export to Excel</span> (colour-coded
+        <code>.xlsx</code>), <span class="btn-label">Export to CSV</span>, or
+        <span class="btn-label">Copy to Clipboard</span>. Use
+        <span class="btn-label">Clear Log</span> to start fresh.
+      </p>
+
+      <h3>Profiles — saving and reusing configurations</h3>
+      <p>
+        Save the entire setup (workbook, checked links, selected sheets, audit cells, interval)
+        as a named profile. Profiles are stored in <code>settings.json</code> and persist
+        across sessions.
+      </p>
+      <ul>
+        <li>Click <span class="btn-label">Save Profile</span> — enter a name (e.g.
+            "IFRS17 Month-End BEL", "Solvency QRT 202603").</li>
+        <li>To reload a profile: select its name from the Profile dropdown and select it.
+            All panels restore automatically.</li>
+        <li>Click <span class="btn-label">Delete Profile</span> to remove a profile
+            permanently.</li>
+      </ul>
+      <div class="callout green">
+        <strong>Tip:</strong> Create one profile per report type. Before each period-end run,
+        load the profile for that report, click Run Now, and your audit log is automatically
+        populated.
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- TAB 13 — SNAPSHOT EXPORT                                    -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <section class="section" id="snapshot_export">
+      <h2><span class="tab-num">13</span> Snapshot Export</h2>
+      <p>
+        Creates a formula-free copy of selected sheets. Every formula cell is replaced by its
+        current displayed value (equivalent to <em>Copy → Paste Special → Values</em> in Excel).
+        The output file is named automatically with the date suffix.
+      </p>
+
+      <h3>When to use it</h3>
+      <ul>
+        <li>Send a "locked" version of model outputs to reviewers who should not see formulas.</li>
+        <li>Create a dated period-end archive: <code>BEL_Model_20260331.xlsb</code>.</li>
+        <li>Reduce file size — binary <code>.xlsb</code> with values only can be 50–70% smaller
+            than the formula-bearing original.</li>
+        <li>Produce distribution workbooks that open instantly because there is nothing to
+            recalculate.</li>
+      </ul>
+
+      <h3>Step-by-step</h3>
+      <ol class="steps">
+        <li><div class="step-body">
+          <strong>Select the source workbook and click Load Sheets</strong>
+          All sheets are listed and all are selected by default.
+        </div></li>
+        <li><div class="step-body">
+          <strong>Deselect sheets you do not want in the snapshot</strong>
+          e.g. internal helper tabs, parameter sheets, or VBA-only sheets.
+        </div></li>
+        <li><div class="step-body">
+          <strong>Choose or confirm the Save Folder</strong>
+          Defaults to the same directory as the source workbook. Click
+          <span class="btn-label">Browse…</span> to change it.
+        </div></li>
+        <li><div class="step-body">
+          <strong>Set the Suffix type</strong>
+          <ul>
+            <li><strong>Date (YYYYMMDD)</strong> — e.g. <code>Budget_Model_20260430.xlsb</code></li>
+            <li><strong>Custom</strong> — type any suffix: <code>_MonthEnd</code>, <code>_v2_final</code>, <code>_ForReview</code></li>
+          </ul>
+        </div></li>
+        <li><div class="step-body">
+          <strong>Choose the output Format</strong>
+          <code>.xlsb</code> (smallest, binary), <code>.xlsx</code> (most compatible),
+          <code>.xlsm</code> (if you need macros), or <code>.xls</code> (legacy).
+        </div></li>
+        <li><div class="step-body">
+          <strong>Set the optional checkboxes</strong>
+          <ul>
+            <li><em>Save source workbook first</em> — saves the original before exporting, so
+                the snapshot reflects the latest saved state.</li>
+            <li><em>Open in Excel after saving</em> — opens the new file immediately for review.</li>
+          </ul>
+        </div></li>
+        <li><div class="step-body">
+          <strong>Check the filename preview and click Export Snapshot</strong>
+          The preview label above the button shows the exact full path before you commit.
+          If the file already exists, a confirmation dialog appears before overwriting.
+        </div></li>
+      </ol>
+
+      <h3>What is and is not affected</h3>
+      <table>
+        <thead><tr><th>Preserved</th><th>Converted to values</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Cell formatting, fonts, colours, borders</td>
+            <td>All formula cells → static values</td>
+          </tr>
+          <tr>
+            <td>Charts and chart data</td>
+            <td>(Charts still display correctly; the underlying data cells become values)</td>
+          </tr>
+          <tr>
+            <td>Pivot tables (structure)</td>
+            <td>Pivot table source formulas if in the UsedRange</td>
+          </tr>
+          <tr>
+            <td>Sheet names, tab colours, print areas</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Named ranges scoped to the sheet</td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="callout info">
+        <strong>File size tip:</strong> For the smallest output, choose <code>.xlsb</code> and
+        deselect any sheets that are purely data-input tabs (no visible outputs). A
+        500 MB formulaic model often reduces to under 50 MB as a values-only <code>.xlsb</code>.
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- WORKBOOK HEALTH                                             -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <section class="section" id="workbook_health">
+      <h2>Workbook Health</h2>
+      <p>
+        Runs a background diagnostic scan across all open workbooks and produces a
+        summary table with health indicators.
+      </p>
+
+      <h3>How to run</h3>
+      <p>
+        Click <span class="btn-label">Refresh Dashboard</span>. The scan runs in a background
+        thread so the tool remains responsive. A progress bar is shown while scanning.
+      </p>
+      <p>
+        The dashboard does not auto-run on every refresh — it only updates when you explicitly
+        click the button. If you open or close workbooks after scanning, a staleness warning
+        appears at the top.
+      </p>
+
+      <h3>Columns</h3>
+      <table>
+        <thead><tr><th>Column</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Workbook</strong></td><td>Filename.</td></tr>
+          <tr><td><strong>Sheets</strong></td><td>Total sheet count (visible + hidden).</td></tr>
+          <tr><td><strong>Size (MB)</strong></td><td>File size on disk. Files &gt; 50 MB are highlighted as potentially large.</td></tr>
+          <tr><td><strong>Links</strong></td><td>Number of external workbook links. High counts (&gt; 20) are flagged.</td></tr>
+          <tr><td><strong>Calc Mode</strong></td><td>Automatic, Manual, or Semi-Automatic.</td></tr>
+          <tr><td><strong>Macros</strong></td><td>Whether the workbook contains VBA code.</td></tr>
+          <tr><td><strong>Last Saved</strong></td><td>Timestamp of the last save operation.</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Health Tips panel</h3>
+      <p>
+        Below the table, a free-text tips area summarises any warnings: large files,
+        high link counts, and global calculation-mode concerns (e.g. Automatic mode
+        with 50+ sheets).
+      </p>
+    </section>
+
+    <hr class="sep">
+
+    <!-- ── Config Profiles ───────────────────────────────────────── -->
+    <section class="section" id="profiles">
+      <h2>Config Profiles (Rollover Rules)</h2>
+      <p>
+        Rollover profiles save a complete set of period-shift + rename rules so you never
+        re-enter them each quarter. They are stored in <code>profiles.json</code> alongside
+        the <code>.exe</code> file.
+      </p>
+
+      <h3>Built-in quarterly profiles</h3>
+      <table>
+        <thead><tr><th>Profile</th><th>Period shift</th><th>Rename rules</th></tr></thead>
+        <tbody>
+          <tr><td>FY 2025 → Q1 2026</td><td>202512 → 202603</td><td>25FY → 26Q1 &nbsp;·&nbsp; &nbsp;FY → Q1</td></tr>
+          <tr><td>Q1 2026 → HY 2026</td><td>202603 → 202606</td><td>26Q1 → 26HY &nbsp;·&nbsp; &nbsp;Q1 → HY</td></tr>
+          <tr><td>HY 2026 → Q3 2026</td><td>202606 → 202609</td><td>26HY → 26Q3 &nbsp;·&nbsp; &nbsp;HY → Q3</td></tr>
+          <tr><td>Q3 2026 → FY 2026</td><td>202609 → 202612</td><td>26Q3 → 26FY &nbsp;·&nbsp; &nbsp;Q3 → FY</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Adding custom profiles</h3>
+      <p>Open <code>profiles.json</code> in any text editor and add an entry:</p>
+      <div class="code-block">{
   "name": "My Custom Roll",
-  "description": "Optional note about this profile",
+  "description": "Optional note",
   "period_shift": { "old": "202512", "new": "202603" },
   "rules": [
     { "find": "25FY",  "replace": "26Q1" },
     { "find": " FY",   "replace": " Q1"  }
   ]
 }</div>
-        <div class="callout">
-          <strong>Tip:</strong> You can have a profile with <em>only</em> rules and no
-          <code>period_shift</code> block — useful for pure find-and-replace scenarios.
-        </div>
-      </section>
+      <p>
+        A profile with only <code>rules</code> and no <code>period_shift</code> is valid —
+        useful for pure find-and-replace scenarios.
+      </p>
+    </section>
 
-      <!-- ── Dependency Map ────────────────────────────────────── -->
-      <section class="section" id="depmap">
-        <h2>Workbook Dependency Map</h2>
-        <p>
-          Click <strong>Build Dependency Map</strong> to scan all open workbooks and produce
-          an expandable tree:
-        </p>
-        <ul>
-          <li><span style="color:#006600;font-weight:600;">Green</span> entries — the linked file is also currently open in Excel</li>
-          <li><span style="color:#666;font-weight:600;">Grey</span> entries — the linked file is external (not open)</li>
-          <li>The <em># Links</em> column shows how many cells in the source workbook point to that target</li>
-        </ul>
-        <p>
-          Use <strong>Export to Excel</strong> to save the full map as a formatted spreadsheet —
-          handy for documentation or reviewing the refresh order before a period-end run.
-        </p>
-      </section>
+    <!-- ── Keyboard Shortcuts ────────────────────────────────────── -->
+    <section class="section" id="shortcuts">
+      <h2>Keyboard Shortcuts</h2>
+      <table>
+        <thead><tr><th>Shortcut</th><th>Active in</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><kbd>Ctrl+Shift+O</kbd></td>
+            <td>Open Links tab</td>
+            <td>Open all external links referenced on the <em>active sheet</em> in the selected workbook.</td>
+          </tr>
+          <tr>
+            <td><kbd>Shift+↑ / ↓</kbd></td>
+            <td>All list views</td>
+            <td>Extend or shrink the selection (anchor-based, like Windows Explorer). Reversing direction shrinks back rather than getting stuck.</td>
+          </tr>
+          <tr>
+            <td><kbd>Ctrl+Shift+↑ / ↓</kbd></td>
+            <td>All list views</td>
+            <td>Same as Shift+Arrow.</td>
+          </tr>
+          <tr>
+            <td><kbd>Double-click</kbd></td>
+            <td>Sheet Navigator</td>
+            <td>Navigate to the selected sheet in Excel.</td>
+          </tr>
+          <tr>
+            <td><kbd>Double-click</kbd></td>
+            <td>Find &amp; Replace results</td>
+            <td>Navigate to the selected cell in Excel.</td>
+          </tr>
+          <tr>
+            <td>Right-click</td>
+            <td>Any list view</td>
+            <td>Opens context menu with the most relevant actions for that list.</td>
+          </tr>
+          <tr>
+            <td>Click column header</td>
+            <td>Any list view</td>
+            <td>Sorts the list by that column ascending; click again for descending. An ↑/↓ arrow is shown in the header.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
 
-      <!-- ── Tab Refresh ───────────────────────────────────────── -->
-      <section class="section" id="tabrefresh">
-        <h2>Tab Refresh — Change Log Options</h2>
-        <p>
-          When <em>Change log</em> is set to anything other than <strong>No</strong>,
-          the tool records every cell whose value changed during the refresh.
-        </p>
-        <table>
-          <thead>
-            <tr><th>Setting</th><th>What happens</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>No</strong></td>
-              <td>Refresh runs silently with no log.</td>
-            </tr>
-            <tr>
-              <td><strong>New File</strong></td>
-              <td>After refresh, a Save dialog appears and the log is saved as a new
-                  colour-coded <code>.xlsx</code> file.</td>
-            </tr>
-            <tr>
-              <td><strong>Add Tab to Workbook</strong></td>
-              <td>A new sheet named <code>ChangeLog_MMDD_HHMMSS</code> is added directly
-                  to the source workbook and activated automatically — no extra file created.</td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
+    <!-- ── Tips & Notes ──────────────────────────────────────────── -->
+    <section class="section" id="tips">
+      <h2>Tips &amp; Notes</h2>
+      <ul>
+        <li>
+          <strong>Always Refresh All Lists</strong> after opening or closing workbooks in Excel.
+          The tool auto-refreshes every 20 seconds but this may lag by up to 20 seconds.
+        </li>
+        <li>
+          <strong>Preview before applying</strong> in the Smart Relinker. The preview is fully
+          editable and shows exactly what will change. Never click Apply Now without reviewing
+          the preview first.
+        </li>
+        <li>
+          <strong>Verify new paths exist</strong> — keep this checkbox on in the Relinker.
+          If a target file is not found on disk you are warned before any link is rewritten.
+        </li>
+        <li>
+          <strong>Folder Match threshold</strong> — default 70%. Lower to 50–60% if you get
+          too many "No Match" rows; raise to 80–90% if wrong files are auto-matched.
+        </li>
+        <li>
+          <strong>Queue All Modified</strong> in the Relinker lets you prepare changes for
+          multiple workbooks before applying them all in one go — useful for batch period rolls.
+        </li>
+        <li>
+          <strong>Smart Refresh profiles</strong> — create one profile per report type (BEL,
+          RA, QRT, etc.). Each profile stores the workbook, linked docs, sheets, audit cells,
+          and interval. Loading a profile takes two seconds; running the full refresh takes
+          as long as Excel needs to recalculate.
+        </li>
+        <li>
+          <strong>Snapshot Export + date suffix</strong> — run Snapshot Export at the end of
+          each period and you automatically build a dated archive trail:
+          <code>Model_20260331.xlsb</code>, <code>Model_20260630.xlsb</code>, etc.
+        </li>
+        <li>
+          <strong>.xlsb format</strong> is recommended for snapshots and archives.
+          It is the most compact Excel format and opens significantly faster than .xlsx for
+          large files.
+        </li>
+        <li>
+          <strong>Dark Mode</strong> — click the moon icon in the bottom bar. Your preference
+          is saved and restored on next launch.
+        </li>
+        <li>
+          <strong>Hide tabs you don't use</strong> via the ⚙ Settings button. Hidden tabs
+          remain fully functional — they just don't appear in the tab bar. Restore them at
+          any time.
+        </li>
+        <li>
+          <strong>profiles.json</strong> — edit this file in Notepad to add custom quarterly
+          rollover rules. Changes take effect next time you open the Relinker or Rollover tab.
+        </li>
+        <li>
+          <strong>Break Links is irreversible</strong> within the same session — save the
+          workbook first before breaking any links.
+        </li>
+        <li>
+          <strong>Replace All in Find &amp; Replace is not Ctrl+Z-able</strong> across all
+          sheets — save the workbook first.
+        </li>
+      </ul>
 
-      <!-- ── Keyboard Shortcuts ───────────────────────────────── -->
-      <section class="section" id="shortcuts">
-        <h2>Keyboard Shortcuts</h2>
-        <table>
-          <thead>
-            <tr><th>Shortcut</th><th>Where</th><th>Action</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><kbd>Ctrl+Shift+O</kbd></td>
-              <td>Open Links tab</td>
-              <td>Open all external links referenced by formulas on the
-                  <em>active sheet</em> in the selected workbook.</td>
-            </tr>
-            <tr>
-              <td><kbd>Shift+Up / Down</kbd></td>
-              <td>All lists</td>
-              <td>Extend or shrink a range selection (anchor-based, like
-                  Windows Explorer).</td>
-            </tr>
-            <tr>
-              <td><kbd>Ctrl+Shift+Up / Down</kbd></td>
-              <td>All lists</td>
-              <td>Same as Shift+Up/Down.</td>
-            </tr>
-            <tr>
-              <td><kbd>Double-click</kbd></td>
-              <td>Sheet Navigator</td>
-              <td>Navigate to the selected sheet in Excel.</td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
+      <div class="callout">
+        <strong>Beta notice:</strong> This is version <strong>Beta v8</strong>.
+        If you encounter unexpected behaviour please report it to Moses directly.
+      </div>
+    </section>
 
-      <!-- ── Excel Instance Picker ────────────────────────────── -->
-      <section class="section" id="instancepicker">
-        <h2>Excel Instance Picker</h2>
-        <p>
-          If you have more than one Excel.exe running simultaneously, the
-          <strong>Excel:</strong> dropdown in the bottom bar lets you control
-          which instance the tool talks to.
-        </p>
-        <ul>
-          <li>
-            <strong>[ALL INSTANCES]</strong> &mdash; the default. Workbook lists
-            aggregate every open file across all instances. When a workbook name
-            exists in only one instance it is shown as-is; when the same name appears
-            in multiple instances the label includes a <code>[PID&nbsp;N]</code> suffix
-            so operations are routed unambiguously.
-          </li>
-          <li>
-            <strong>PID&nbsp;XXXX — Book.xlsx</strong> &mdash; selecting a specific
-            entry locks all operations (open, close, relink, calculate&hellip;) to
-            that Excel process. Useful when you want to relink files in one model
-            without accidentally touching a separate instance.
-          </li>
-          <li>
-            Click <strong>Rescan</strong> next to the dropdown to repopulate the list
-            after launching or closing an Excel instance.
-          </li>
-          <li>
-            Your selection is saved between sessions. If the saved PID is gone when
-            the tool next starts, it automatically falls back to <em>[ALL INSTANCES]</em>.
-          </li>
-        </ul>
-      </section>
+    <!-- ── About ─────────────────────────────────────────────────── -->
+    <section class="section" id="author">
+      <h2>About</h2>
+      <table>
+        <thead><tr><th></th><th></th></tr></thead>
+        <tbody>
+          <tr><td><strong>Tool</strong></td><td>Excel Workbook Manager</td></tr>
+          <tr><td><strong>Author</strong></td><td>Moses</td></tr>
+          <tr><td><strong>Version</strong></td><td>Beta v8</td></tr>
+          <tr><td><strong>Year</strong></td><td>&copy; 2025 – 2026</td></tr>
+          <tr><td><strong>Platform</strong></td><td>Windows 10 / 11, Microsoft Excel (COM automation via xlwings)</td></tr>
+        </tbody>
+      </table>
+      <div class="callout" style="margin-top:16px;">
+        This tool was designed and built by <strong>Moses</strong>.
+        Unauthorised redistribution or claiming of authorship is prohibited.
+      </div>
+    </section>
 
-      <!-- ── Smart Refresh ─────────────────────────────────────── -->
-      <section class="section" id="smart_refresh">
-        <h2>Smart Refresh</h2>
-        <p>
-          This tab automates the full "open dependencies → recalculate → verify" cycle
-          that actuaries repeat at every period-end. It combines link discovery, scheduled
-          execution, and an auditable before/after comparison into a single workflow.
-        </p>
+  </main>
+</div><!-- end body-wrap -->
 
-        <h3>Typical workflow</h3>
-        <ol>
-          <li>Select the <strong>source workbook</strong> (your main model file) and click
-              <strong>Discover Links</strong>. All external workbook references are listed.</li>
-          <li>Tick the linked documents that must be opened before the refresh. Untick any
-              that are already permanently open or that you want to open manually.</li>
-          <li>Click <strong>Load Sheets</strong> on the right pane and select the sheets to
-              recalculate (e.g. your output sheets or reconciliation tabs).</li>
-          <li>Define <strong>Audit Cells</strong> — enter a label, sheet name, and cell or
-              range address (e.g. <code>C5</code> or <code>B2:D10</code>) for every key
-              figure you want tracked. These are read before and after each run.</li>
-          <li>Click <strong>Run Now</strong> to execute immediately, or set an interval and
-              click <strong>Start Schedule</strong> to run automatically every N minutes
-              while the tool is open. A countdown timer is displayed.</li>
-        </ol>
-
-        <h3>Audit Log</h3>
-        <p>
-          Each run appends one row per audit cell to the log at the bottom of the tab.
-          Rows where the value changed are highlighted in orange; unchanged rows are green.
-          The log is kept in memory for the session and can be exported to a colour-coded
-          Excel file via <strong>Export to Excel</strong>, or to CSV via
-          <strong>Export to CSV</strong>.
-        </p>
-
-        <h3>Profiles</h3>
-        <p>
-          Save the entire configuration (workbook, checked links, selected sheets, audit
-          cells, interval) as a named <strong>Profile</strong>. Profiles are stored in
-          <code>settings.json</code> and restored across sessions. Use one profile per
-          report (e.g. "IFRS17 Month-End BEL", "Solvency II QRT").
-        </p>
-
-        <div class="callout warning">
-          <strong>Note:</strong> The scheduled auto-run only fires while the tool is open.
-          It is not a Windows Task Scheduler job. Close the tool and the schedule stops.
-        </div>
-      </section>
-
-      <!-- ── Snapshot Export ───────────────────────────────────── -->
-      <section class="section" id="snapshot_export">
-        <h2>Snapshot Export</h2>
-        <p>
-          Creates a static, formula-free copy of selected sheets from any open workbook.
-          All formulas are replaced with their current values (equivalent to
-          <em>Paste Special &rarr; Values</em> in Excel). This is useful for:
-        </p>
-        <ul>
-          <li>Sending a "locked" version of model outputs to reviewers</li>
-          <li>Creating dated period-end archives (<code>BEL_Model_20260331.xlsb</code>)</li>
-          <li>Reducing file size by stripping formulas from distribution copies</li>
-        </ul>
-
-        <h3>Steps</h3>
-        <ol>
-          <li>Select the source workbook and click <strong>Load Sheets</strong>. All sheets
-              are selected by default.</li>
-          <li>Deselect any sheets you do not want in the snapshot (e.g. helper tabs).</li>
-          <li>Choose a <strong>Save folder</strong> (defaults to the source workbook&rsquo;s
-              own directory).</li>
-          <li>Set the <strong>Suffix</strong> to <em>Date (YYYYMMDD)</em> (the default) or
-              enter a <em>Custom</em> suffix such as <code>_MonthEnd</code> or
-              <code>_v2</code>.</li>
-          <li>Pick the output <strong>Format</strong>: <code>.xlsb</code> (smallest, binary),
-              <code>.xlsx</code>, <code>.xlsm</code>, or <code>.xls</code>.</li>
-          <li>Optionally tick <em>Open in Excel after saving</em> or
-              <em>Save source workbook first</em>.</li>
-          <li>Click <strong>Export Snapshot</strong>. The filename preview above the button
-              shows the exact output path before you commit.</li>
-        </ol>
-
-        <div class="callout info">
-          <strong>Tip:</strong> Use <code>.xlsb</code> format for the smallest file size.
-          It is ideal for archiving large models because binary workbooks are typically
-          30&ndash;50% smaller than equivalent <code>.xlsx</code> files.
-        </div>
-
-        <div class="callout warning">
-          <strong>Note:</strong> Charts, pivot tables, and objects on the copied sheets are
-          preserved. Only <em>formula cells</em> are converted to values. Formatting,
-          named ranges, and sheet structure are retained.
-        </div>
-      </section>
-
-      <!-- ── Tips ──────────────────────────────────────────────── -->
-      <section class="section" id="tips">
-        <h2>Tips &amp; Notes</h2>
-        <ul>
-          <li>
-            <strong>Dark / Light mode</strong> — click the <code>🌙 Dark Mode</code> button
-            in the bottom bar to toggle between themes instantly.
-          </li>
-          <li>
-            <strong>Column widths</strong> — in the Smart Relinker preview, use the
-            <em>Col width</em> spinner to widen path columns, or drag the column header
-            dividers directly.
-          </li>
-          <li>
-            <strong>Preview before applying</strong> — always use <em>Preview Changes</em>
-            before clicking <em>Apply Now</em>. The preview table is fully editable;
-            individual rows can be overridden using the <em>Manual override</em> box.
-          </li>
-          <li>
-            <strong>Verify paths</strong> — keep the <em>Verify new paths exist</em>
-            checkbox on. If a target file is not found on disk, the tool warns you before
-            writing any changes.
-          </li>
-          <li>
-            <strong>Refresh All Lists</strong> — click this whenever you open or close
-            workbooks in Excel so the tool's dropdowns stay in sync. (It also runs
-            automatically every 20 seconds in the background.)
-          </li>
-          <li>
-            <strong>Folder Match threshold</strong> — the fuzzy matcher defaults to
-            70% similarity. If you are getting too many <em>No Match</em> rows on a
-            reorganised folder tree, lower it via the <em>Min score</em> spinner;
-            if too many wrong rows auto-populate, raise it toward 80&ndash;90% so only
-            very confident matches apply and everything else falls into the
-            candidate picker.
-          </li>
-          <li>
-            <strong>Queue All Modified workflow</strong> &mdash; edit the preview grid
-            for one workbook (via any mode), click <em>Queue All Modified</em>, then
-            switch to the next workbook and repeat. When all workbooks are prepared,
-            click <em>Apply Queue</em> once to commit everything in sequence.
-          </li>
-          <li>
-            <strong>Open Current Tab&rsquo;s Links</strong> only detects links written
-            directly as <code>'path\[Book.xlsx]Sheet'!cell</code> formula references.
-            Links that come from defined names, Power Query, or DDE connections are not
-            included &mdash; use <em>List Links</em> + <em>Open Selected</em> for those.
-          </li>
-          <li>
-            <strong>profiles.json</strong> — edit this file in Notepad to customise
-            quarterly rollover rules. Changes take effect next time you click
-            <em>Refresh All Lists</em> or open the relinker.
-          </li>
-        </ul>
-        <div class="callout">
-          <strong>Beta notice:</strong> This is version <strong>Beta v8</strong>.
-          If you encounter unexpected behaviour please report it to Moses directly
-          before sharing the tool further.
-        </div>
-      </section>
-
-      <!-- ── About ──────────────────────────────────────────────── -->
-      <section class="section" id="author">
-        <h2>About</h2>
-        <table>
-          <thead><tr><th></th><th></th></tr></thead>
-          <tbody>
-            <tr><td><strong>Tool</strong></td><td>Excel Workbook Manager</td></tr>
-            <tr><td><strong>Author</strong></td><td>Moses</td></tr>
-            <tr><td><strong>Version</strong></td><td>Beta v8</td></tr>
-            <tr><td><strong>Year</strong></td><td>© 2025</td></tr>
-          </tbody>
-        </table>
-        <div class="callout" style="margin-top:16px;">
-          This tool was designed and built by <strong>Moses</strong>.
-          Unauthorised redistribution or claiming of authorship is prohibited.
-        </div>
-      </section>
-
-    </main>
-  </div><!-- end body-wrap -->
-
-  <!-- ── Footer ───────────────────────────────────────────────── -->
-  <footer class="footer">
-    <strong>Excel Workbook Manager</strong> &nbsp;·&nbsp;
-    Built by <strong>Moses</strong> &nbsp;·&nbsp;
-    Beta v5 &nbsp;·&nbsp; © 2025
-  </footer>
+<footer class="footer">
+  <strong>Excel Workbook Manager</strong> &nbsp;&middot;&nbsp;
+  Built by <strong>Moses</strong> &nbsp;&middot;&nbsp;
+  Beta v8 &nbsp;&middot;&nbsp; &copy; 2025 &ndash; 2026
+</footer>
 
 </div><!-- end page-wrap -->
 </body>
