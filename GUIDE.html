@@ -185,10 +185,10 @@
     <h1>Excel Workbook Manager</h1>
     <p class="subtitle">Detailed User Guide — every tab, every button, every option explained</p>
     <div class="hero-meta">
-      <span class="badge">Beta v8</span>
-      <span class="badge navy">Built by Moses</span>
-      <span class="badge navy">13 Tabs</span>
-      <span class="badge navy">Windows + Excel required</span>
+        <span class="badge">Beta v9</span>
+        <span class="badge navy">Built by Moses</span>
+        <span class="badge navy">13 Tabs</span>
+        <span class="badge navy">Windows + Excel required</span>
     </div>
   </div>
 </header>
@@ -200,6 +200,7 @@
   <nav class="toc">
     <h4>Contents</h4>
     <ol>
+      <li><a href="#whatsnew">What&rsquo;s New (v9)</a></li>
       <li><a href="#overview">Overview</a></li>
       <li><a href="#requirements">Requirements</a></li>
       <li><a href="#quickstart">Quick Start</a></li>
@@ -237,6 +238,101 @@
 
   <!-- Main content -->
   <main class="content">
+
+    <!-- ── What's New v9 ─────────────────────────────────────────── -->
+    <section class="section" id="whatsnew">
+      <h2>What&rsquo;s New in Beta v9</h2>
+      <div class="callout info">
+        <strong>Focus release: performance and multi-instance reliability.</strong>
+        No new tabs were added; all changes are under-the-hood improvements.
+      </div>
+
+      <h3>Performance improvements</h3>
+      <ul>
+        <li>
+          <strong>20-second auto-poll removed.</strong> The tool no longer refreshes
+          Excel data in the background every 20 seconds. Click
+          <span style="font-weight:600;">⟳ Refresh All Lists</span> once after opening
+          or closing workbooks. The bottom bar now shows a
+          <em>Last refreshed: HH:MM:SS</em> timestamp so you always know how fresh
+          the data is.
+        </li>
+        <li>
+          <strong>Lazy tab refresh.</strong> The background worker now only pushes
+          data to tabs you have actually opened in the current session — not all 14
+          at once. The first time you click a tab it receives the cached data
+          immediately; subsequent clicks get the latest snapshot.
+        </li>
+        <li>
+          <strong>Single COM enumeration per refresh.</strong> Previously the worker
+          made three separate passes over <code>app.books</code>. It now does one
+          single pass that produces labels, workbook objects, and sheet/visibility data
+          simultaneously — significantly reducing the number of COM round-trips.
+        </li>
+        <li>
+          <strong>Sheet visibility read in background thread.</strong> The Sheet
+          Navigator&rsquo;s <code>Visible</code> property is now read inside the
+          background worker (no main-thread COM stall), and data is passed as
+          3-tuples <em>(workbook, sheet, visibility)</em> so the tab never needs to
+          call Excel on the UI thread.
+        </li>
+        <li>
+          <strong>No-op refresh when data unchanged.</strong> Close Workbooks and
+          Period Rollover hash their incoming data and skip the Treeview rebuild when
+          nothing has changed — eliminating the visible flicker on manual refreshes.
+        </li>
+        <li>
+          <strong>Instance rescan off the main thread.</strong> The
+          <span style="font-weight:600;">Rescan</span> button and the startup instance
+          scan now run in a background thread, so the window paints immediately on
+          launch without blocking on COM.
+        </li>
+        <li>
+          <strong>Debounced settings save.</strong> Tab-change events now write
+          <code>settings.json</code> at most once per 500 ms instead of on every click.
+        </li>
+      </ul>
+
+      <h3>Multi-instance detection improvements</h3>
+      <ul>
+        <li>
+          <strong>Three-method discovery (<code>instance_detector.py</code>).</strong>
+          Instance detection now combines:
+          <ol>
+            <li><strong>Method A</strong> — xlwings&rsquo; existing <code>xw.apps</code> (ROT-based, primary)</li>
+            <li><strong>Method B</strong> — direct pythoncom ROT enumeration, which catches
+                Excel objects registered under different ROT keys, plus <code>xw.App(pid=pid)</code>
+                attachment for any PID still missed</li>
+            <li><strong>Method C</strong> — psutil EXCEL.EXE PID listing for diagnostics</li>
+          </ol>
+        </li>
+        <li>
+          <strong>Instance Diagnostic Panel (<code>?</code> button).</strong> Click the
+          <span style="font-weight:600;">?</span> button next to the Excel dropdown to open
+          a panel showing every <code>EXCEL.EXE</code> process, its source of discovery,
+          open workbook count, active workbook name, and whether it is reachable via COM.
+          A <span style="font-weight:600;">Launch New Excel Instance</span> button runs
+          <code>excel.exe /x</code> to force a separate process (required on Office 365
+          which defaults to single-instance).
+        </li>
+      </ul>
+
+      <div class="callout">
+        <strong>Office 365 note:</strong> Office 365 / Microsoft 365 opens all workbooks
+        in a single <code>EXCEL.EXE</code> process by default. To get a true second
+        instance, use the <em>Launch New Excel Instance</em> button in the diagnostic
+        panel, or hold <kbd>Alt</kbd> while dragging a file onto Excel, or run
+        <code>excel.exe /x</code> from the command line.
+      </div>
+
+      <h3>Beta v8 highlights (previous release)</h3>
+      <ul>
+        <li><strong>Smart Refresh Orchestrator</strong> &mdash; discover linked docs,
+            open them, recalculate sheets, compare audit cells before/after, scheduled runs.</li>
+        <li><strong>Snapshot Export</strong> &mdash; paste-values copy of selected sheets
+            named <code>originalname_YYYYMMDD.xlsb</code>.</li>
+      </ul>
+    </section>
 
     <!-- ── Overview ─────────────────────────────────────────────── -->
     <section class="section" id="overview">
@@ -445,9 +541,26 @@
       </table>
       <ul>
         <li>Click <span class="btn-label">Rescan</span> after opening a new Excel window.</li>
+        <li>Click <span class="btn-label">?</span> to open the <strong>Instance Diagnostic Panel</strong>
+            — shows every <code>EXCEL.EXE</code> process, its source of discovery, workbook count,
+            and COM reachability. Use the <em>Launch New Excel Instance</em> button to start a
+            truly independent second process with <code>excel.exe /x</code>.</li>
         <li>Your choice is saved in <code>settings.json</code> and restored on next launch.
             If the saved PID no longer exists, the tool falls back to <em>[ALL INSTANCES]</em>.</li>
       </ul>
+
+      <div class="callout info">
+        <strong>Office 365 / Microsoft 365 single-instance behaviour:</strong>
+        By default, opening any Excel file from Windows Explorer or from the taskbar reuses
+        the existing <code>EXCEL.EXE</code> process. This means the tool will show only one
+        instance no matter how many workbooks are open. To force a separate, isolated Excel
+        process, use one of these methods:
+        <ul style="margin-top:6px;">
+          <li>Click <em>Launch New Excel Instance</em> in the <strong>?</strong> diagnostic panel.</li>
+          <li>Hold <kbd>Alt</kbd> while dragging a file onto the Excel taskbar button.</li>
+          <li>Run <code>excel.exe /x</code> from the Run dialog (<kbd>Win+R</kbd>).</li>
+        </ul>
+      </div>
     </section>
 
     <hr class="sep">
@@ -1546,8 +1659,9 @@ After:  I:\IFRS 17\2026\202603\Working\RI Hub\RI Hub AoM 25FY.xlsx</div>
       <h2>Tips &amp; Notes</h2>
       <ul>
         <li>
-          <strong>Always Refresh All Lists</strong> after opening or closing workbooks in Excel.
-          The tool auto-refreshes every 20 seconds but this may lag by up to 20 seconds.
+          <strong>Always click Refresh All Lists</strong> after opening or closing workbooks
+          in Excel. The auto-poll was removed in Beta v9 — the bottom bar now shows a
+          <em>Last refreshed: HH:MM:SS</em> timestamp so you can see how stale the data is.
         </li>
         <li>
           <strong>Preview before applying</strong> in the Smart Relinker. The preview is fully
@@ -1606,7 +1720,7 @@ After:  I:\IFRS 17\2026\202603\Working\RI Hub\RI Hub AoM 25FY.xlsx</div>
       </ul>
 
       <div class="callout">
-        <strong>Beta notice:</strong> This is version <strong>Beta v8</strong>.
+        <strong>Beta notice:</strong> This is version <strong>Beta v9</strong>.
         If you encounter unexpected behaviour please report it to Moses directly.
       </div>
     </section>
@@ -1619,7 +1733,7 @@ After:  I:\IFRS 17\2026\202603\Working\RI Hub\RI Hub AoM 25FY.xlsx</div>
         <tbody>
           <tr><td><strong>Tool</strong></td><td>Excel Workbook Manager</td></tr>
           <tr><td><strong>Author</strong></td><td>Moses</td></tr>
-          <tr><td><strong>Version</strong></td><td>Beta v8</td></tr>
+          <tr><td><strong>Version</strong></td><td>Beta v9</td></tr>
           <tr><td><strong>Year</strong></td><td>&copy; 2025 – 2026</td></tr>
           <tr><td><strong>Platform</strong></td><td>Windows 10 / 11, Microsoft Excel (COM automation via xlwings)</td></tr>
         </tbody>
@@ -1636,7 +1750,7 @@ After:  I:\IFRS 17\2026\202603\Working\RI Hub\RI Hub AoM 25FY.xlsx</div>
 <footer class="footer">
   <strong>Excel Workbook Manager</strong> &nbsp;&middot;&nbsp;
   Built by <strong>Moses</strong> &nbsp;&middot;&nbsp;
-  Beta v8 &nbsp;&middot;&nbsp; &copy; 2025 &ndash; 2026
+  Beta v9 &nbsp;&middot;&nbsp; &copy; 2025 &ndash; 2026
 </footer>
 
 </div><!-- end page-wrap -->

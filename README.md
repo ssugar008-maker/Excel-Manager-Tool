@@ -1,6 +1,15 @@
 # Excel Workbook Manager — Standalone Distribution
 
-**Beta v8** — two new actuarial power tabs: **Smart Refresh Orchestrator** (auto-discover linked docs, open them, recalculate selected sheets, compare audit cells before/after, scheduled auto-run with countdown timer, named profiles, exportable colour-coded audit log) and **Snapshot Export** (copy selected sheets as paste-values-only to a new file automatically named `originalname_YYYYMMDD.xlsb`).
+**Beta v9** — performance and multi-instance reliability release:
+
+- **20-second auto-poll removed** — no more background freezes; a *Last refreshed* timestamp shows when data was last synced.
+- **Lazy tab refresh** — data is only pushed to tabs you actually open, eliminating the fan-out rebuild of all 14 tabs on every manual refresh.
+- **Single COM enumeration** — one pass over `app.books` per refresh (down from three) and sheet visibility read in the background thread.
+- **Hash-based no-op refresh** — Close Workbooks and Period Rollover skip rebuilds when data is unchanged.
+- **Three-method instance detection** (`xw.apps` + pythoncom ROT direct + psutil PID attachment via `xw.App(pid=)`).
+- **Instance Diagnostic Panel** (`?` button) — shows all `EXCEL.EXE` processes, COM reachability, and a *Launch New Excel Instance* button (`excel.exe /x`).
+- **Rescan off main thread** — no UI freeze on startup or on Rescan click.
+- **Sheet Navigator data-shape bug fixed** — visibility info was silently lost on every auto-refresh; now correctly passed as 3-tuples from the background worker.
 
 This repository contains the **standalone Windows build** of Excel Workbook Manager, distributed as **raw binary chunks** of an uncompressed tar archive. No Python install is needed on the end-user PC — just Microsoft Excel.
 
