@@ -1,27 +1,25 @@
 @echo off
-REM ==========================================================
-REM  Excel Workbook Manager - Reassemble launcher (.bat)
-REM  Joins .tar.partNNN chunks, verifies SHA256, and extracts.
-REM  Double-click this file.
-REM ==========================================================
-setlocal
-cd /d "%~dp0"
+REM reassemble.bat — Reassemble ExcelWorkbookManager from .xlsb chunks
+REM Run from the folder that contains this script AND all .xlsb chunk files.
 
-where powershell >nul 2>&1
-if errorlevel 1 (
-    echo ERROR: PowerShell was not found on this PC.
-    pause
-    exit /b 1
+setlocal EnableDelayedExpansion
+set OUTTAR=ExcelWorkbookManager.tar
+set OUTDIR=ExcelWorkbookManager
+
+echo Reassembling chunks into %OUTTAR% ...
+
+if exist "%OUTTAR%" del "%OUTTAR%"
+
+for /f "tokens=*" %%f in ('dir /b /on "*.xlsb" 2^>nul') do (
+    echo   Appending %%f ...
+    copy /b "%OUTTAR%"+"%%f" "%OUTTAR%.tmp" >nul 2>&1 || copy /b "%%f" "%OUTTAR%.tmp" >nul
+    move /y "%OUTTAR%.tmp" "%OUTTAR%" >nul
 )
 
-powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0Reassemble.ps1"
-set RC=%ERRORLEVEL%
+echo Extracting %OUTTAR% ...
+if exist "%OUTDIR%" rmdir /s /q "%OUTDIR%"
+tar -xf "%OUTTAR%"
 
 echo.
-if "%RC%"=="0" (
-    echo Reassembly finished successfully.
-) else (
-    echo Reassembly failed with exit code %RC%.
-)
+echo Done!  Run:  %OUTDIR%\ExcelWorkbookManager.exe
 pause
-exit /b %RC%
