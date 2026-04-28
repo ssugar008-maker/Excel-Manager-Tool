@@ -2,10 +2,10 @@
 REM =====================================================================
 REM   ExcelWorkbookManager  -  Reassemble the .exe from .xlsb chunks
 REM
-REM   The chunks are XOR-scrambled (key 0xAA) so that they do not look
-REM   like an executable on disk and antivirus / SmartScreen never block
-REM   the download. This script un-scrambles them on YOUR machine and
-REM   verifies the SHA-256 of the rebuilt file before letting you use it.
+REM   The chunks are XOR-scrambled (key 0xAA) so they do not look like an
+REM   executable on disk and antivirus / SmartScreen never block the
+REM   download. This script un-scrambles them on YOUR machine and verifies
+REM   the SHA-256 of the rebuilt file before letting you use it.
 REM
 REM   Usage: drop this file together with all
 REM            ExcelWorkbookManager.partNN.xlsb
@@ -16,7 +16,7 @@ setlocal EnableDelayedExpansion
 pushd "%~dp0"
 
 set "OUT=ExcelWorkbookManager.exe"
-set "EXPECTED_SHA=E41CC712ABF5BABAB48253D3D6A5F80A005DC010424437BDC61BB92B443A699C"
+set "EXPECTED_SHA=F154BB6AC05FA038847F6583DB994558A7AC540ED57D62B8D5B28D8A799A9D3E"
 
 REM ---- 1. Make sure every chunk is present ---------------------------
 set MISSING=0
@@ -41,7 +41,7 @@ if exist "%OUT%" del /f /q "%OUT%" >nul 2>&1
 echo Reassembling %OUT% from XOR-scrambled chunks...
 
 REM ---- 3. PowerShell does the XOR un-scramble + concatenation --------
-REM Stream-copy each chunk into the output, XOR-ing every byte with 0xAA.
+REM Stream each chunk into the output, XOR-ing every byte with 0xAA.
 REM Done in one PowerShell process so the 14 MB pass takes about 1 second.
 powershell -NoProfile -ExecutionPolicy Bypass -Command ^
   "$ErrorActionPreference='Stop';" ^
